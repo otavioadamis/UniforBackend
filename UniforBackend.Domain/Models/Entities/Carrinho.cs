@@ -18,5 +18,4 @@ namespace UniforBackend.Domain.Models.Entities
 }
 
 
-//todo -> n/n com itens
-// 1/1 com user
+//todo ( n/n com itens )

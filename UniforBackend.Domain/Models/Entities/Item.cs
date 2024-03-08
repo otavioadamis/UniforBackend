@@ -17,7 +17,5 @@ namespace UniforBackend.Domain.Models.Entities
         public required int Quantidade { get; set; }
         public required string Tamanho {  get; set; }
         public required string Cor { get; set; }
-        
-        // n/1 com user
     }
 }
