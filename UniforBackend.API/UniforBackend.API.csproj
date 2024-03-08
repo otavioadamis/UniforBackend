@@ -12,8 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Authorization\" />
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniforBackend.DAL\UniforBackend.DAL.csproj" />
+    <ProjectReference Include="..\UniforBackend.Domain\UniforBackend.Domain.csproj" />
+    <ProjectReference Include="..\UniforBackend.Service\UniforBackend.Service.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniforBackend.Domain.Models.Entities
 {
-    internal class Class1
+    internal class Status
     {
     }
 }

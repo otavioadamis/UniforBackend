@@ -1,3 +1,6 @@
+using UniforBackend.Domain.Interfaces.IServices;
+using UniforBackend.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
