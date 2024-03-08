@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UniforBackend.Domain.Models.enums;
 
 namespace UniforBackend.Domain.Models.Entities
 {

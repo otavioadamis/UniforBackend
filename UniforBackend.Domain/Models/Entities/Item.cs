@@ -14,9 +14,10 @@ namespace UniforBackend.Domain.Models.Entities
         public required string Nome { get; set; }
         public required string Descricao { get; set; }
         public required decimal Preco { get; set; }
-        public required int quantidade { get; set; }
+        public required int Quantidade { get; set; }
         public required string Tamanho {  get; set; }
         public required string Cor { get; set; }
+        
         // n/1 com user
     }
 }
