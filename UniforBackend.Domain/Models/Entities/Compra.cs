@@ -17,12 +17,14 @@ namespace UniforBackend.Domain.Models.Entities
         public required MetodoPagamento MetodoPagamento { get; set; }
 
 
-        // Mapeacao EntityFramework
-        // n pra 1 com users
-        public User User { get; set; } = null!;
-        public string UserId { get; set; } = null!;
+        
+        //EF Core mapping
+        public User Comprador { get; set; } = null!;
+        public string CompradorId { get; set; } = null!;
 
-        // n/n com itens
+        public User Vendedor { get; set; } = null!;
+        public string VendedorId { get; set; } = null!;
+
         public ICollection<Item> Itens { get; set; } = null!;
     }
 }

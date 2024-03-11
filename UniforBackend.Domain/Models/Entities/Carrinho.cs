@@ -9,9 +9,12 @@ namespace UniforBackend.Domain.Models.Entities
 {
     public class Carrinho
     {
-        //Relacao de 1 pra 1, o Id do carrinho é o próprio Id do usuário.
-        //Mapeação Entity Framework (1 pra 1)
-        
+        [Key]
+        public string Id { get; set; } = null!;
+
+
+
+        //EF Core mapping
         public User User { get; set; } = null!;
         public string UserId { get; set; } = null!;
 

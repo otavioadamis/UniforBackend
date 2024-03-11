@@ -34,7 +34,8 @@ namespace UniforBackend.DAL.Data
                 .HasDefaultValueSql("uuid_generate_v4()");
 
             modelBuilder.Entity<Carrinho>()
-                .HasKey(c => c.UserId);
+                .Property(i => i.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
 
             modelBuilder.Entity<Compra>()
                 .Property(c => c.Id)
@@ -53,28 +54,39 @@ namespace UniforBackend.DAL.Data
             // 1 pra n 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Itens)
-                .WithOne()
+                .WithOne(i => i.User)
                 .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // 1 pra n
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Compras)
-                .WithOne()
-                .HasForeignKey(c => c.UserId);
+                .WithOne(c => c.Comprador)
+                .HasForeignKey(c => c.CompradorId);
+
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Compras)
+                .WithOne(c => c.Vendedor)
+                .HasForeignKey(c => c.VendedorId);
 
             // n pra n
             modelBuilder.Entity<Compra>()
                 .HasMany(c => c.Itens)
                 .WithMany()
-                .UsingEntity<CompraItem>();
+                .UsingEntity<CompraItem>(
+                    j => j.HasOne(e => e.Item).WithMany().HasForeignKey(e => e.ItemId),
+                    j => j.HasOne(e => e.Compra).WithMany().HasForeignKey(e => e.CompraId)
+                );
 
             // n pra n
             modelBuilder.Entity<Carrinho>()
                 .HasMany(c => c.Itens)
                 .WithMany()
-                .UsingEntity<CarrinhoItem>();
-
+                .UsingEntity<CarrinhoItem>(
+                    j => j.HasOne(e => e.Item).WithMany().HasForeignKey(e => e.ItemId),
+                    j => j.HasOne(e => e.Carrinho).WithMany().HasForeignKey(e => e.CarrinhoId)
+                );
         }
     }
 }

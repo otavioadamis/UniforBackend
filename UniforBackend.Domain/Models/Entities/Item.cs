@@ -18,9 +18,8 @@ namespace UniforBackend.Domain.Models.Entities
         public required string Tamanho {  get; set; }
         public required string Cor { get; set; }
         public bool IsVendido { get; set; } = false;
- 
-        //Mapeacao EntityFramework
 
+        //EF Core mapping
         public User User { get; set; } = null!;
         public string UserId { get; set; } = null!;
 
