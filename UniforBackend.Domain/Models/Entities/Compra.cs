@@ -16,6 +16,13 @@ namespace UniforBackend.Domain.Models.Entities
         public required Status Status { get; set; }
         public required MetodoPagamento MetodoPagamento { get; set; }
 
+
+        // Mapeacao EntityFramework
+        // n pra 1 com users
+        public User User { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+
         // n/n com itens
+        public ICollection<Item> Itens { get; set; } = null!;
     }
 }

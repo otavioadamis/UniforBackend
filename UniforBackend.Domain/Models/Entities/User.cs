@@ -16,14 +16,13 @@ namespace UniforBackend.Domain.Models.Entities
         public required string Matricula { get; set; }
         public byte[]? Foto { get; set; }
 
+        
         //Mapeação EntityFramework 
         // (1 pra 1)
         public Carrinho Carrinho { get; set; } = null!;
+
+        // (1 pra n)
+        public ICollection<Item>? Itens { get; set; }
+        public ICollection<Compra>? Compras { get; set; }
     }
 }
-
-
-
-
-
-//todo ( 1 / n com itens )

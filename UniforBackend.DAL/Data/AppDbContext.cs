@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.DAL.Data
@@ -46,12 +42,39 @@ namespace UniforBackend.DAL.Data
 
             //------Setando relacoes de entidades-------//
 
+            // 1 pra 1 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Carrinho)
                 .WithOne(c => c.User)
                 .HasForeignKey<Carrinho>(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
+
+            // 1 pra n 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Itens)
+                .WithOne()
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 1 pra n
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Compras)
+                .WithOne()
+                .HasForeignKey(c => c.UserId);
+
+            // n pra n
+            modelBuilder.Entity<Compra>()
+                .HasMany(c => c.Itens)
+                .WithMany()
+                .UsingEntity<CompraItem>();
+
+            // n pra n
+            modelBuilder.Entity<Carrinho>()
+                .HasMany(c => c.Itens)
+                .WithMany()
+                .UsingEntity<CarrinhoItem>();
+
         }
     }
 }

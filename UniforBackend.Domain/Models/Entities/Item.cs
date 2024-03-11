@@ -17,5 +17,12 @@ namespace UniforBackend.Domain.Models.Entities
         public required int Quantidade { get; set; }
         public required string Tamanho {  get; set; }
         public required string Cor { get; set; }
+        public bool IsVendido { get; set; } = false;
+ 
+        //Mapeacao EntityFramework
+
+        public User User { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+
     }
 }
