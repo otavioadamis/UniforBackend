@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UniforBackend.Domain.Models.Entities
+namespace UniforBackend.Domain.Models.enums
 {
-    internal class Class1
+    public enum Status
     {
+        Confirmado,
+        Pendente,
+        Cancelado
     }
 }
