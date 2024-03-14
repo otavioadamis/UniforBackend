@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniforBackend.DAL.Data;
@@ -11,9 +12,11 @@ using UniforBackend.DAL.Data;
 namespace UniforBackend.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240312135032_migration-#4-addcolumn-datacompra-withdate")]
+    partial class migration4addcolumndatacomprawithdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,15 +87,9 @@ namespace UniforBackend.DAL.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<string>("VendedorId")
-                        .IsRequired()
-                        .HasColumnType("varchar(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompradorId");
-
-                    b.HasIndex("VendedorId");
 
                     b.ToTable("Compras");
                 });
@@ -222,20 +219,12 @@ namespace UniforBackend.DAL.Migrations
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Compra", b =>
                 {
                     b.HasOne("UniforBackend.Domain.Models.Entities.User", "Comprador")
-                        .WithMany()
+                        .WithMany("Compras")
                         .HasForeignKey("CompradorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniforBackend.Domain.Models.Entities.User", "Vendedor")
-                        .WithMany()
-                        .HasForeignKey("VendedorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Comprador");
-
-                    b.Navigation("Vendedor");
                 });
 
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.CompraItem", b =>
@@ -272,6 +261,8 @@ namespace UniforBackend.DAL.Migrations
                 {
                     b.Navigation("Carrinho")
                         .IsRequired();
+
+                    b.Navigation("Compras");
 
                     b.Navigation("Itens");
                 });

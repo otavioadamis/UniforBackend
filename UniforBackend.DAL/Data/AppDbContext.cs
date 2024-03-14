@@ -59,15 +59,14 @@ namespace UniforBackend.DAL.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // 1 pra n
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Compras)
-                .WithOne(c => c.Comprador)
+            modelBuilder.Entity<Compra>()
+                .HasOne(c => c.Comprador)
+                .WithMany()
                 .HasForeignKey(c => c.CompradorId);
 
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Compras)
-                .WithOne(c => c.Vendedor)
+            modelBuilder.Entity<Compra>()
+                .HasOne(c => c.Vendedor)
+                .WithMany()
                 .HasForeignKey(c => c.VendedorId);
 
             // n pra n
