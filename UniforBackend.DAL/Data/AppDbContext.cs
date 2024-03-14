@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.DAL.Data
@@ -38,7 +34,8 @@ namespace UniforBackend.DAL.Data
                 .HasDefaultValueSql("uuid_generate_v4()");
 
             modelBuilder.Entity<Carrinho>()
-                .HasKey(c => c.UserId);
+                .Property(i => i.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
 
             modelBuilder.Entity<Compra>()
                 .Property(c => c.Id)
@@ -46,12 +43,49 @@ namespace UniforBackend.DAL.Data
 
             //------Setando relacoes de entidades-------//
 
+            // 1 pra 1 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Carrinho)
                 .WithOne(c => c.User)
                 .HasForeignKey<Carrinho>(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
+
+            // 1 pra n 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Itens)
+                .WithOne(i => i.User)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 1 pra n
+            modelBuilder.Entity<Compra>()
+                .HasOne(c => c.Comprador)
+                .WithMany()
+                .HasForeignKey(c => c.CompradorId);
+
+            modelBuilder.Entity<Compra>()
+                .HasOne(c => c.Vendedor)
+                .WithMany()
+                .HasForeignKey(c => c.VendedorId);
+
+            // n pra n
+            modelBuilder.Entity<Compra>()
+                .HasMany(c => c.Itens)
+                .WithMany()
+                .UsingEntity<CompraItem>(
+                    j => j.HasOne(e => e.Item).WithMany().HasForeignKey(e => e.ItemId),
+                    j => j.HasOne(e => e.Compra).WithMany().HasForeignKey(e => e.CompraId)
+                );
+
+            // n pra n
+            modelBuilder.Entity<Carrinho>()
+                .HasMany(c => c.Itens)
+                .WithMany()
+                .UsingEntity<CarrinhoItem>(
+                    j => j.HasOne(e => e.Item).WithMany().HasForeignKey(e => e.ItemId),
+                    j => j.HasOne(e => e.Carrinho).WithMany().HasForeignKey(e => e.CarrinhoId)
+                );
         }
     }
 }

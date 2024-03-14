@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Interfaces\IRepositories\" />
     <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\Entities\" />
   </ItemGroup>
 
 </Project>
