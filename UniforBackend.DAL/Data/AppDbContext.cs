@@ -33,23 +33,12 @@ namespace UniforBackend.DAL.Data
                 .Property(i => i.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
-            modelBuilder.Entity<Carrinho>()
-                .Property(i => i.Id)
-                .HasDefaultValueSql("uuid_generate_v4()");
-
             modelBuilder.Entity<Compra>()
                 .Property(c => c.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
             //------Setando relacoes de entidades-------//
 
-            // 1 pra 1 
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Carrinho)
-                .WithOne(c => c.User)
-                .HasForeignKey<Carrinho>(c => c.UserId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired();
 
             // 1 pra n 
             modelBuilder.Entity<User>()
@@ -71,21 +60,9 @@ namespace UniforBackend.DAL.Data
 
             // n pra n
             modelBuilder.Entity<Compra>()
-                .HasMany(c => c.Itens)
-                .WithMany()
-                .UsingEntity<CompraItem>(
-                    j => j.HasOne(e => e.Item).WithMany().HasForeignKey(e => e.ItemId),
-                    j => j.HasOne(e => e.Compra).WithMany().HasForeignKey(e => e.CompraId)
-                );
-
-            // n pra n
-            modelBuilder.Entity<Carrinho>()
-                .HasMany(c => c.Itens)
-                .WithMany()
-                .UsingEntity<CarrinhoItem>(
-                    j => j.HasOne(e => e.Item).WithMany().HasForeignKey(e => e.ItemId),
-                    j => j.HasOne(e => e.Carrinho).WithMany().HasForeignKey(e => e.CarrinhoId)
-                );
+                .HasOne(c => c.Item)
+                .WithOne()
+                .HasForeignKey<Compra>(c => c.ItemId);
         }
     }
 }
