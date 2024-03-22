@@ -15,7 +15,6 @@ namespace UniforBackend.DAL.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Item> Itens { get; set; }
         public DbSet<Compra> Compras { get; set; }
-        public DbSet<Carrinho> Carrinhos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
