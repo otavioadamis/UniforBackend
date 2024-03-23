@@ -35,10 +35,11 @@ namespace UniforBackend.DAL.Repositories
             return user;
         }
 
-        public void Delete(string _id)
+        public User Delete(string _id)
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == _id);
             _dbContext.Users.Remove(user);
+            return user;
         }
     }
 }
