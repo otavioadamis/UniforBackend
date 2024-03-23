@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\IServices\" />
     <Folder Include="Models\enums\" />
   </ItemGroup>
 

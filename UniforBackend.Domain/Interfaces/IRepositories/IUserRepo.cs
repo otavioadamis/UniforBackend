@@ -17,6 +17,6 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
 
         public User GetByEmail(string email);
 
-        public void Delete(string _id);
+        public User Delete(string _id);
     }
 }
