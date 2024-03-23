@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\IRepositories\" />
-    <Folder Include="Models\DTOs\" />
+    <Folder Include="Interfaces\IServices\" />
+    <Folder Include="Models\enums\" />
   </ItemGroup>
 
 </Project>
