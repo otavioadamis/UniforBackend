@@ -43,6 +43,7 @@ namespace UniforBackend.Service
             return response;
         }
 
+
         public ListItemCardResponse GetAllItens(int pagina)
         {
             var itens = _itemRepository.GetAllItens(pagina);
@@ -53,6 +54,32 @@ namespace UniforBackend.Service
         {
             var itens = _itemRepository.GetItensFromUserId(userId);
             return itens;
+        }
+
+        public ItemDTO UpdateItem(UpdateItemDTO newItem, string itemId)
+        {
+            var itemToUpdate = _itemRepository.GetById(itemId);
+
+            newItem.UpdateFields(itemToUpdate);
+            _itemRepository.SaveChanges();
+
+            var response = new ItemDTO()
+            {
+                Id = itemToUpdate.Id,
+                Nome = itemToUpdate.Nome,
+                Preco = itemToUpdate.Preco,
+                Descricao = itemToUpdate.Descricao,
+                Cor = itemToUpdate.Cor,
+                Tamanho = itemToUpdate.Tamanho
+            };
+
+            return response;
+        }
+
+        public void DeleteItem(string itemId)
+        {
+            _itemRepository.Delete(itemId);
+            _itemRepository.SaveChanges();
         }
     }
 }

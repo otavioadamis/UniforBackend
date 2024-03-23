@@ -17,10 +17,10 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpGet("{pagina}")]
-        public ActionResult<ListItemCardResponse> GetItensFromPagina(int pagina) 
+        public ActionResult<ListItemCardResponse> GetItensFromPagina(int pagina)
         {
-            if(pagina < 1) { pagina = 1; }
-            
+            if (pagina < 1) { pagina = 1; }
+
             var itens = _itemService.GetAllItens(pagina);
             return Ok(itens);
         }
@@ -34,7 +34,7 @@ namespace UniforBackend.API.Controllers
 
         // TODO - > o ideal era pegar o userid pelo proprio token de autorização,
         // e não temos menor ideia de como vai ser autorização ainda nesse projeto.
-        
+
         [HttpPost()]
         public ActionResult<ItemCardDTO> AddItem(PostItemDTO item, string userId)
         {
@@ -42,8 +42,18 @@ namespace UniforBackend.API.Controllers
             return Ok(addedItem);
         }
 
-        //Delete Item
+        [HttpPut("{itemId}")]
+        public ActionResult<ItemDTO> UpdateItem(UpdateItemDTO newItem ,string itemId)
+        {
+            var updatedItem = _itemService.UpdateItem(newItem, itemId);
+            return Ok(updatedItem);
+        }
 
-        //Update Item
+        [HttpDelete("{itemId}")]
+        public IActionResult DeleteItem(string itemId) 
+        {
+            _itemService.DeleteItem(itemId);
+            return Ok("Item deletado com sucesso!");
+        }
     }
 }
