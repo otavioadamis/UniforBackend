@@ -1,0 +1,47 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using UniforBackend.Domain.Interfaces.IServices;
+using UniforBackend.Domain.Models.Entities;
+
+namespace UniforBackend.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+        [HttpGet("{userId}")]
+        public ActionResult<User> GetUserById(string userId)
+        {
+            var user = _userService.GetUserById(userId);
+            return Ok(user);
+        }
+
+        [HttpPost()]
+        public ActionResult<User> AddUser(User user)
+        {
+            var addedUser = _userService.AddUser(user);
+            return Ok(addedUser);
+        }
+
+        [HttpPut("{userId}")]
+        public ActionResult<User> UpdateUser(User updatedUser, string userId)
+        {
+            var _updatedUser = _userService.UpdateUser(updatedUser, userId);
+            return Ok(_updatedUser);
+        }
+
+        [HttpDelete("{userId}")]
+        public ActionResult<User> DeleteUser(string userId)
+        {
+            var _deletedUser = _userService.DeleteUser(userId);
+            return Ok(_deletedUser);
+        }
+    }
+}

@@ -36,3 +36,5 @@ namespace UniforBackend.Domain.Models.Entities
 
     }
 }
+
+//TODO -> Adicionar imagens futuramente
