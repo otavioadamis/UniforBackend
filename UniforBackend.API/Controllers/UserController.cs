@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniforBackend.Domain.Interfaces.IServices;
+using UniforBackend.Domain.Models.DTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
@@ -24,24 +25,24 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpPost()]
-        public ActionResult<User> AddUser(User user)
+        public ActionResult<User> AddUser(PostUserDTO user)
         {
             var addedUser = _userService.AddUser(user);
             return Ok(addedUser);
         }
 
         [HttpPut("{userId}")]
-        public ActionResult<User> UpdateUser(User updatedUser, string userId)
+        public ActionResult<UserDTO> UpdateUser(UpdateUserDTO updatedUser, string userId)
         {
             var _updatedUser = _userService.UpdateUser(updatedUser, userId);
             return Ok(_updatedUser);
         }
 
         [HttpDelete("{userId}")]
-        public ActionResult<User> DeleteUser(string userId)
+        public IActionResult DeleteUser(string userId)
         {
-            var _deletedUser = _userService.DeleteUser(userId);
-            return Ok(_deletedUser);
+            _userService.DeleteUser(userId);
+            return Ok("User deletado com sucesso!");
         }
     }
 }

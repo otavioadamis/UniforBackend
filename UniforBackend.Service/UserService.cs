@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
+using UniforBackend.Domain.Models.DTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Service
@@ -18,34 +19,60 @@ namespace UniforBackend.Service
             _userRepository = userRepository;
         }
 
-        public User AddUser(User user)
+        public UserDTO AddUser(PostUserDTO user)
         {
-            _userRepository.Add(user);
+            User newUser = new User()
+            {
+                Nome = user.Nome,
+                Email = user.Email,
+                Matricula = user.Matricula,
+                Foto = user.Foto
+            };
+            _userRepository.Add(newUser);
             _userRepository.SaveChanges();
-            return user;
+            var response = new UserDTO
+            {
+                Nome = newUser.Nome,
+                Email = newUser.Email,
+                Matricula = newUser.Matricula,
+                Foto = newUser.Foto
+            };
+            return response;
         }
 
-        public User DeleteUser(string userId)
+        public void DeleteUser(string userId)
         {
-            var user = _userRepository.Delete(userId);
+            _userRepository.Delete(userId);
             _userRepository.SaveChanges();
-            return user;
         }
 
-        public User GetUserById(string userId)
+        public UserDTO GetUserById(string userId)
         {
             var user = _userRepository.GetById(userId);
-            return user;
+            var response = new UserDTO()
+            {
+                Id = user.Id,
+                Nome = user.Nome,
+                Email = user.Email,
+                Matricula = user.Matricula,
+                Foto = user.Foto
+            };
+            return response;
         }
 
-        public User UpdateUser(User updatedUser, string userId)
+        public UserDTO UpdateUser(UpdateUserDTO updatedUser, string userId)
         {
             var user = _userRepository.GetById(userId);
-            user.Nome = updatedUser.Nome;
-            user.Email = updatedUser.Email;
-            user.Matricula = updatedUser.Matricula;
+            updatedUser.UpdateFields(user);
             _userRepository.SaveChanges();
-            return user;
+            var response = new UserDTO
+            {
+                Nome = user.Nome,
+                Email = user.Email,
+                Matricula = user.Matricula,
+                Foto = user.Foto
+            };
+            return response;
         }
     }
 }
