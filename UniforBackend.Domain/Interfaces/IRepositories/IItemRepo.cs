@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UniforBackend.Domain.Models.DTOs;
+using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Domain.Interfaces.IRepositories

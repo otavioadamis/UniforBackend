@@ -6,19 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UniforBackend.Domain.Models.DTOs
+namespace UniforBackend.Domain.Models.DTOs.ItemTOs
 {
-    public class PostUserDTO
+    public class ItemCardDTO
     {
-        [Required]
+        public string Id { get; set; } = null!;
         public required string Nome { get; set; }
-
-        [Required]
-        public required string Email { get; set; }
-
-        [Required]
-        public required string Matricula { get; set; }
-
-        public byte[]? Foto { get; set; }
+        public required decimal Preco { get; set; }
     }
 }
+
+//TODO -> Adicionar imagens futuramente (card)

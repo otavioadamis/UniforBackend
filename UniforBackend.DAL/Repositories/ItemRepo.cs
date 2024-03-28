@@ -1,6 +1,6 @@
 ﻿using UniforBackend.DAL.Data;
 using UniforBackend.Domain.Interfaces.IRepositories;
-using UniforBackend.Domain.Models.DTOs;
+using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.DAL.Repositories
@@ -46,7 +46,6 @@ namespace UniforBackend.DAL.Repositories
                 Id = item.Id,
                 Nome = item.Nome,
                 Preco = item.Preco,
-                Tamanho = item.Tamanho
             })
             .ToList();
             
@@ -74,7 +73,6 @@ namespace UniforBackend.DAL.Repositories
                     Id = item.Id,
                     Nome = item.Nome,
                     Preco = item.Preco,
-                    Tamanho = item.Tamanho
                 })
                 .ToList();
 

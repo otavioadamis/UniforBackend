@@ -1,6 +1,6 @@
 ﻿using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
-using UniforBackend.Domain.Models.DTOs;
+using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Service
@@ -16,17 +16,12 @@ namespace UniforBackend.Service
 
         public ItemCardDTO AddItem(PostItemDTO item, string userId)
         {
-            // todo -> checar se user existe. 
-
             var addedItem = new Item()
             {
-                Cor = item.Cor,
                 Descricao = item.Descricao,
                 Nome = item.Nome,
                 Preco = item.Preco,
-                Tamanho = item.Tamanho,
                 UserId = userId,
-                Quantidade = 1, // todo -> tenho que tirar quantidade, esqueci
             };
 
             _itemRepository.Add(addedItem);
@@ -37,7 +32,6 @@ namespace UniforBackend.Service
                 Id = addedItem.Id,
                 Nome = addedItem.Nome,
                 Preco = addedItem.Preco,
-                Tamanho= addedItem.Tamanho
             };
 
             return response;
@@ -69,8 +63,6 @@ namespace UniforBackend.Service
                 Nome = itemToUpdate.Nome,
                 Preco = itemToUpdate.Preco,
                 Descricao = itemToUpdate.Descricao,
-                Cor = itemToUpdate.Cor,
-                Tamanho = itemToUpdate.Tamanho
             };
 
             return response;

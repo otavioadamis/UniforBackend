@@ -1,6 +1,6 @@
 ﻿using UniforBackend.Domain.Models.Entities;
 
-namespace UniforBackend.Domain.Models.DTOs
+namespace UniforBackend.Domain.Models.DTOs.ItemTOs
 {
     public class ListItemCardResponse
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UniforBackend.Domain.Models.Entities;
 
-namespace UniforBackend.Domain.Models.DTOs
+namespace UniforBackend.Domain.Models.DTOs.UserTOs
 {
     public class UpdateUserDTO
     {

@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using UniforBackend.API.Authorization;
+using UniforBackend.API.Exceptions;
 using UniforBackend.API.Helpers;
 using UniforBackend.DAL.Data;
 using UniforBackend.DAL.Repositories;
@@ -26,6 +29,7 @@ namespace UniforBackend.API
 
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
             // Adicionando repositorios e suas abstracoes
 
@@ -36,9 +40,39 @@ namespace UniforBackend.API
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
+            // Configurando swagger para usar Token jwt de Auth
+
+            builder.Services.AddSwaggerGen(
+                options =>
+                {
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Description = "Insert Token",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT",
+                        Scheme = "bearer"
+                    });
+
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+
+            var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -46,6 +80,11 @@ namespace UniforBackend.API
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        //Middlewares (Tratamento de excecoes e autorizacao com jwt)
+
+        app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseMiddleware<JwtMiddleware>();
 
         app.UseHttpsRedirection();
 
