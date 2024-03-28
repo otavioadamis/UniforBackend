@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using UniforBackend.Domain.Models.enums;
 
 namespace UniforBackend.Domain.Models.Entities
 {
@@ -14,9 +15,14 @@ namespace UniforBackend.Domain.Models.Entities
 
         [Column(TypeName = "varchar(255)")]
         public required string Email { get; set; }
+        
         [Column(TypeName = "varchar(10)")]
         public required string Matricula { get; set; }
+        
+        [Column(TypeName = "varchar(255)")]
+        public required string Password { get; set; }    
         public byte[]? Foto { get; set; }
+        public Role Tipo { get; set; } 
 
         
         //EF Core mapping

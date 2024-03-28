@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UniforBackend.Domain.Models.DTOs
+namespace UniforBackend.Domain.Models.DTOs.ItemTOs
 {
     public class PostItemDTO
     {
@@ -10,9 +10,5 @@ namespace UniforBackend.Domain.Models.DTOs
         public string Descricao { get; set; } = null!;
         [Required]
         public decimal Preco { get; set; }
-        [Required]
-        public string Tamanho { get; set; } = null!;
-        [Required]
-        public string Cor { get; set; } = null!;
     }
 }

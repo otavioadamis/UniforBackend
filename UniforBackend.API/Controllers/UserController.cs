@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniforBackend.Domain.Interfaces.IServices;
-using UniforBackend.Domain.Models.DTOs;
+using UniforBackend.Domain.Models.DTOs.UserTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
@@ -25,10 +25,17 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpPost()]
-        public ActionResult<User> AddUser(PostUserDTO user)
+        public ActionResult<User> Signup(PostUserDTO user)
         {
-            var addedUser = _userService.AddUser(user);
+            var addedUser = _userService.Signup(user);
             return Ok(addedUser);
+        }
+
+        [HttpPost("login")]
+        public ActionResult<LoginResponseModel> Login(UserLoginDTO request)
+        {
+            var loggedUser = _userService.Login(request);
+            return Ok(loggedUser);
         }
 
         [HttpPut("{userId}")]

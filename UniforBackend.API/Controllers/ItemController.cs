@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniforBackend.Domain.Interfaces.IServices;
-using UniforBackend.Domain.Models.DTOs;
+using UniforBackend.Domain.Models.DTOs.ItemTOs;
 
 namespace UniforBackend.API.Controllers
 {

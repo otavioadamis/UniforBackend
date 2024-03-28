@@ -1,4 +1,4 @@
-﻿using UniforBackend.Domain.Models.DTOs;
+﻿using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Domain.Interfaces.IServices

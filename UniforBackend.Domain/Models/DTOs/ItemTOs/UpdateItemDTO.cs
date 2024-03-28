@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UniforBackend.Domain.Models.Entities;
 
-namespace UniforBackend.Domain.Models.DTOs
+namespace UniforBackend.Domain.Models.DTOs.ItemTOs
 {
     public class UpdateItemDTO
     {
@@ -16,18 +16,12 @@ namespace UniforBackend.Domain.Models.DTOs
         public string NovaDescricao { get; set; } = null!;
         [Required]
         public decimal NovoPreco { get; set; }
-        [Required]
-        public string NovoTamanho { get; set; } = null!;
-        [Required]
-        public string NovaCor { get; set; } = null!;
 
         public void UpdateFields(Item item)
         {
             item.Nome = NovoNome;
             item.Descricao = NovaDescricao;
             item.Preco = NovoPreco;
-            item.Tamanho = NovoTamanho;
-            item.Cor = NovaCor;
         }
 
     }
