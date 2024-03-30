@@ -15,5 +15,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
         public LoginResponseModel Login(UserLoginDTO thisUser);
         public UserDTO UpdateUser(UpdateUserDTO updatedUser, string userId);
         public void DeleteUser(string userId);
+        public User GetById(string userId);
     }
 }
