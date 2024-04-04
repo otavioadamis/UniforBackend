@@ -18,10 +18,12 @@ namespace UniforBackend.Service
         {
             var addedItem = new Item()
             {
-                Descricao = item.Descricao,
                 Nome = item.Nome,
+                Descricao = item.Descricao,
                 Preco = item.Preco,
-                UserId = userId,
+                AceitaTroca = item.AceitaTroca,
+                PostadoEm = DateOnly.FromDateTime(DateTime.UtcNow),
+                UserId = userId
             };
 
             _itemRepository.Add(addedItem);
@@ -32,6 +34,7 @@ namespace UniforBackend.Service
                 Id = addedItem.Id,
                 Nome = addedItem.Nome,
                 Preco = addedItem.Preco,
+                AceitaTroca = addedItem.AceitaTroca
             };
 
             return response;
@@ -63,6 +66,8 @@ namespace UniforBackend.Service
                 Nome = itemToUpdate.Nome,
                 Preco = itemToUpdate.Preco,
                 Descricao = itemToUpdate.Descricao,
+                AceitaTroca = itemToUpdate.AceitaTroca,
+                PostadoEm = itemToUpdate.PostadoEm
             };
 
             return response;

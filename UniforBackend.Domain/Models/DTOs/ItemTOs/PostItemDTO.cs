@@ -10,5 +10,7 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public string Descricao { get; set; } = null!;
         [Required]
         public decimal Preco { get; set; }
+        [Required]
+        public bool AceitaTroca { get; set; }
     }
 }

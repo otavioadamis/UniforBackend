@@ -17,6 +17,7 @@ namespace UniforBackend.API.Controllers
             _itemService = itemService;
         }
 
+
         [HttpGet("{pagina}")]
         public ActionResult<ListItemCardResponse> GetItensFromPagina(int pagina)
         {
@@ -34,8 +35,6 @@ namespace UniforBackend.API.Controllers
         }
 
         // TODO - > o ideal era pegar o userid pelo proprio token de autorização,
-        // e não temos menor ideia de como vai ser autorização ainda nesse projeto.
-
         [HttpPost()]
         public ActionResult<ItemCardDTO> AddItem(PostItemDTO item, string userId)
         {

@@ -18,7 +18,7 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public ActionResult<User> GetUserById(string userId)
+        public ActionResult<UserDTO> GetUserById(string userId)
         {
             var user = _userService.GetUserById(userId);
             return Ok(user);
