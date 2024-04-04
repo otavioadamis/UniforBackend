@@ -4,7 +4,9 @@ using UniforBackend.Domain.Models.DTOs.VendaTOs;
 
 namespace UniforBackend.API.Controllers
 {
-    public class VendaController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class VendaController : ControllerBase
     {
 
         private readonly IVendaService _vendaService;
