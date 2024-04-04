@@ -74,19 +74,25 @@ namespace UniforBackend.API
 
             var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseCors(builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 
         //Middlewares (Tratamento de excecoes e autorizacao com jwt)
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
-
-        app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();

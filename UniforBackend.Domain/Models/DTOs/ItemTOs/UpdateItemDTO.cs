@@ -16,12 +16,16 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public string NovaDescricao { get; set; } = null!;
         [Required]
         public decimal NovoPreco { get; set; }
+        [Required]
+        public bool AceitaTroca { get; set; }
+
 
         public void UpdateFields(Item item)
         {
             item.Nome = NovoNome;
             item.Descricao = NovaDescricao;
             item.Preco = NovoPreco;
+            item.AceitaTroca = AceitaTroca;
         }
 
     }
