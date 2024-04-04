@@ -29,12 +29,14 @@ namespace UniforBackend.API
 
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IVendaService, VendaService>();
             builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
             // Adicionando repositorios e suas abstracoes
 
             builder.Services.AddScoped<IItemRepo, ItemRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
+            builder.Services.AddScoped<IVendaRepo, VendaRepo>();
 
         builder.Services.AddControllers();
         
