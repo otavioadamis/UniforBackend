@@ -65,6 +65,7 @@ namespace UniforBackend.DAL.Repositories
             var itens = _dbContext.Itens
                 .Skip((pagina - 1) * (int)pageResults)
                 .Take((int)pageResults)
+                .Where(i => i.IsVendido == false)
                 .Select(item => new ItemCardDTO
                 {
                     Id = item.Id,

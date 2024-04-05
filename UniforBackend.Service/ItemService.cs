@@ -73,6 +73,13 @@ namespace UniforBackend.Service
             return response;
         }
 
+        public void VendeItem(string itemId)
+        {
+            var item = _itemRepository.GetById(itemId);
+            item.IsVendido = true;
+            _itemRepository.SaveChanges();
+        }
+
         public void DeleteItem(string itemId)
         {
             _itemRepository.Delete(itemId);
