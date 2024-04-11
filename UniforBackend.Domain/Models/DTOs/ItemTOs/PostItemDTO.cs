@@ -12,5 +12,6 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public decimal Preco { get; set; }
         [Required]
         public bool AceitaTroca { get; set; }
+        public byte[]? Foto { get; set; }
     }
 }

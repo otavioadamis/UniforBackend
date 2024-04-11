@@ -8,7 +8,7 @@ namespace UniforBackend.Domain.Models.Entities
         [Key]
         [Column(TypeName = "varchar(36)")]
         public string Id { get; set; } = null!;
-        public required DateTime DataVenda { get; set; }
+        public DateTime DataVenda { get; set; }
 
         //EF Core mapping
         public User Vendedor { get; set; } = null!;

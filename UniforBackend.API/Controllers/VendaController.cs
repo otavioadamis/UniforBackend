@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.VendaTOs;
+using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
 {
@@ -23,10 +25,12 @@ namespace UniforBackend.API.Controllers
             return Ok(allVendas);
         }
 
-        [HttpPost("{userId}/{itemId}")]
-        public ActionResult<VendaDTO> RealizaVenda(string itemId, string userId)
+        [CustomAuthorize]
+        [HttpPost("{itemId}")]
+        public ActionResult<VendaDTO> RealizaVenda(string itemId)
         {
-            var newVenda = _vendaService.RealizaVenda(itemId, userId);
+            var userFromJwt = (User)HttpContext.Items["User"];
+            var newVenda = _vendaService.RealizaVenda(itemId, userFromJwt.Id);
             return Ok(newVenda);
         }
     }
