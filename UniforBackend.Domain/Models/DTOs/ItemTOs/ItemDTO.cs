@@ -15,5 +15,7 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public string Nome { get; set; } = null!;
         public string Descricao { get; set; } = null!;
         public decimal Preco { get; set; }
+        public bool AceitaTroca { get; set; }
+        public DateOnly PostadoEm { get; set; }
     }
 }

@@ -37,7 +37,6 @@ namespace UniforBackend.DAL.Repositories
         }
 
         //TODO -> Paginação aqui também, eu acho? ( Evitar problema no caso do usuario ter postado muitos itens )
-
         public IEnumerable<ItemCardDTO> GetItensFromUserId(string userId)
         {
             var allItens = _dbContext.Itens.Where(item => item.UserId == userId)
@@ -52,9 +51,7 @@ namespace UniforBackend.DAL.Repositories
             return allItens;
         }
 
-        //Retorna 10 itens por pagina (ainda tenho que testar)
-        //TODO -> Não acho que a implementação toda precisa ficar no repositorio
-        
+        //Retorna 10 itens por pagina
         public ListItemCardResponse GetAllItens(int pagina)
         {
             if(_dbContext.Itens == null)
@@ -68,6 +65,7 @@ namespace UniforBackend.DAL.Repositories
             var itens = _dbContext.Itens
                 .Skip((pagina - 1) * (int)pageResults)
                 .Take((int)pageResults)
+                .Where(i => i.IsVendido == false)
                 .Select(item => new ItemCardDTO
                 {
                     Id = item.Id,

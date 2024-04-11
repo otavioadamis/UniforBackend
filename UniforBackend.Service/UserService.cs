@@ -33,6 +33,12 @@ namespace UniforBackend.Service
             return response;
         }
 
+        public User GetById(string userId)
+        {
+            var response = _userRepository.GetById(userId);
+            return response;
+        }
+
         public LoginResponseModel Signup(PostUserDTO thisUser)
         {
             var checkEmail = _userRepository.GetByEmail(thisUser.Email);
@@ -64,13 +70,13 @@ namespace UniforBackend.Service
             var userModel = new UserDTO();
             userModel = userModel.CreateModel(newUser);
 
-            var res = new LoginResponseModel
+            var response = new LoginResponseModel
             {
                 Token = token,
                 User = userModel
             };
 
-            return res;
+            return response;
         }
 
         public LoginResponseModel Login(UserLoginDTO thisUser)
@@ -104,19 +110,13 @@ namespace UniforBackend.Service
             return res;
         }
 
-
         public UserDTO UpdateUser(UpdateUserDTO updatedUser, string userId)
         {
             var user = _userRepository.GetById(userId);
             updatedUser.UpdateFields(user);
             _userRepository.SaveChanges();
-            var response = new UserDTO
-            {
-                Nome = user.Nome,
-                Email = user.Email,
-                Matricula = user.Matricula,
-                Foto = user.Foto
-            };
+            var response = new UserDTO();
+            response.CreateModel(user);
             return response;
         }
 

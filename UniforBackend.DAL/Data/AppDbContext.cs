@@ -14,7 +14,7 @@ namespace UniforBackend.DAL.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Item> Itens { get; set; }
-        public DbSet<Compra> Compras { get; set; }
+        public DbSet<Venda> Vendas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,7 @@ namespace UniforBackend.DAL.Data
                 .Property(i => i.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
-            modelBuilder.Entity<Compra>()
+            modelBuilder.Entity<Venda>()
                 .Property(c => c.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
@@ -47,21 +47,17 @@ namespace UniforBackend.DAL.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // 1 pra n
-            modelBuilder.Entity<Compra>()
-                .HasOne(c => c.Comprador)
-                .WithMany()
-                .HasForeignKey(c => c.CompradorId);
 
-            modelBuilder.Entity<Compra>()
+            modelBuilder.Entity<Venda>()
                 .HasOne(c => c.Vendedor)
                 .WithMany()
                 .HasForeignKey(c => c.VendedorId);
 
             // n pra n
-            modelBuilder.Entity<Compra>()
+            modelBuilder.Entity<Venda>()
                 .HasOne(c => c.Item)
                 .WithOne()
-                .HasForeignKey<Compra>(c => c.ItemId);
+                .HasForeignKey<Venda>(c => c.ItemId);
         }
     }
 }

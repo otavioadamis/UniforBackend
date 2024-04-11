@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using UniforBackend.API.Authorization;
 using UniforBackend.API.Exceptions;
+using UniforBackend.API.Extensions;
 using UniforBackend.API.Helpers;
 using UniforBackend.DAL.Data;
 using UniforBackend.DAL.Repositories;
@@ -18,23 +19,31 @@ namespace UniforBackend.API
 
         var builder = WebApplication.CreateBuilder(args);
 
-        //Configurando conexao do banco de dados
-        var settings = builder.Configuration.GetSection("DatabaseSettings").Get<AppSettings>();
-        var connectionString = settings.ConnectionString;
+            //Configurando conexao do banco de dados
 
-        builder.Services.AddDbContext<AppDbContext>(options =>
+            string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+
+            if(connectionString == null)
+            {
+                var settings = builder.Configuration.GetSection("DatabaseSettings").Get<AppSettings>();
+                connectionString = settings.ConnectionString;
+            }
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
 
             // Adicionando serviços e suas abstracoes
 
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IVendaService, VendaService>();
             builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
             // Adicionando repositorios e suas abstracoes
 
             builder.Services.AddScoped<IItemRepo, ItemRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
+            builder.Services.AddScoped<IVendaRepo, VendaRepo>();
 
         builder.Services.AddControllers();
         
@@ -74,20 +83,28 @@ namespace UniforBackend.API
 
             var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.ApplyMigrations();
         }
+
+        app.UseCors(builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 
         //Middlewares (Tratamento de excecoes e autorizacao com jwt)
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
 
-        app.UseHttpsRedirection();
-
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

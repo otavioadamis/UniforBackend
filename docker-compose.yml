@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  uniforbackend.api: 
+    depends_on:
+      - "uniforbackend_db"
+    container_name: uniforbackend.api
+    ports:
+      - "8080:80"
+      - "443:443"
+    build:
+      context: .
+      dockerfile: ./UniforBackend.API/Dockerfile
+    environment:
+      - DatabaseSettings__ConnectionString=Host=uniforbackend_db; Database=uniforbazar; Username=postgres; Password=1234
+    networks:
+      - uniforbackendNet
+  
+  uniforbackend_db:
+    image: postgres:15.4
+    container_name: uniforbackend_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=uniforbazar
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - uniforbackend_data:/var/lib/postgresql/data
+    networks:
+      - uniforbackendNet
+
+volumes:
+  uniforbackend_data:
+    
+networks:
+  uniforbackendNet:
+    driver: bridge
+

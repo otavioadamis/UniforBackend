@@ -18,14 +18,14 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public ActionResult<User> GetUserById(string userId)
+        public ActionResult<UserDTO> GetUserById(string userId)
         {
             var user = _userService.GetUserById(userId);
             return Ok(user);
         }
 
         [HttpPost()]
-        public ActionResult<User> Signup(PostUserDTO user)
+        public ActionResult<LoginResponseModel> Signup(PostUserDTO user)
         {
             var addedUser = _userService.Signup(user);
             return Ok(addedUser);
