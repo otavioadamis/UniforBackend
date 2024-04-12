@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection.Metadata;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.DAL.Data
@@ -58,6 +59,20 @@ namespace UniforBackend.DAL.Data
                 .HasOne(c => c.Item)
                 .WithOne()
                 .HasForeignKey<Venda>(c => c.ItemId);
+
+            //------Propriedades auto-generadas-------//
+
+            modelBuilder.Entity<Item>()
+                .Property(b => b.PostadoEm)
+                .HasDefaultValueSql("CURRENT_DATE");
+
+            modelBuilder.Entity<Venda>()
+                 .Property(b => b.DataVenda)
+                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
+                .Property(c => c.CriadoEm)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
 }

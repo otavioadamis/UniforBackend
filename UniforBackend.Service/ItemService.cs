@@ -22,8 +22,9 @@ namespace UniforBackend.Service
                 Descricao = item.Descricao,
                 Preco = item.Preco,
                 AceitaTroca = item.AceitaTroca,
-                PostadoEm = DateOnly.FromDateTime(DateTime.UtcNow),
-                UserId = userId
+                /* PostadoEm = DateOnly.FromDateTime(DateTime.UtcNow)*/
+                UserId = userId,
+                Foto = item.Foto,
             };
 
             _itemRepository.Add(addedItem);
@@ -34,7 +35,8 @@ namespace UniforBackend.Service
                 Id = addedItem.Id,
                 Nome = addedItem.Nome,
                 Preco = addedItem.Preco,
-                AceitaTroca = addedItem.AceitaTroca
+                AceitaTroca = addedItem.AceitaTroca,
+                Foto = addedItem.Foto
             };
 
             return response;
@@ -67,9 +69,9 @@ namespace UniforBackend.Service
                 Preco = itemToUpdate.Preco,
                 Descricao = itemToUpdate.Descricao,
                 AceitaTroca = itemToUpdate.AceitaTroca,
-                PostadoEm = itemToUpdate.PostadoEm
+                PostadoEm = itemToUpdate.PostadoEm,
+                Foto = itemToUpdate.Foto
             };
-
             return response;
         }
 
