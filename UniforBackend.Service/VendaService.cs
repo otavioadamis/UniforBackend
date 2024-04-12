@@ -26,7 +26,7 @@ namespace UniforBackend.Service
         {
             var newVenda = new Venda()
             {
-                DataVenda = DateTime.UtcNow,
+                /*DataVenda = DateTime.UtcNow*/
                 ItemId = itemId,
                 VendedorId = userId,
             };
@@ -34,7 +34,6 @@ namespace UniforBackend.Service
             _vendaRepo.Add(newVenda);
             _vendaRepo.SaveChanges();
 
-            //chama servico do item para atualizar status IsVendido;
             _itemService.VendeItem(itemId);
 
             var vendaResponse = _vendaRepo.GetVendaDTOById(newVenda.Id);

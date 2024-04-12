@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
+using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
 {
@@ -34,14 +35,16 @@ namespace UniforBackend.API.Controllers
             return Ok(itens);
         }
 
-        // TODO - > o ideal era pegar o userid pelo proprio token de autorização,
+        [CustomAuthorize]
         [HttpPost()]
-        public ActionResult<ItemCardDTO> AddItem(PostItemDTO item, string userId)
+        public ActionResult<ItemCardDTO> AddItem(PostItemDTO item)
         {
-            var addedItem = _itemService.AddItem(item, userId);
+            var userFromJwt = (User)HttpContext.Items["User"];
+            var addedItem = _itemService.AddItem(item, userFromJwt.Id);
             return Ok(addedItem);
         }
 
+        [CustomAuthorize]
         [HttpPut("{itemId}")]
         public ActionResult<ItemDTO> UpdateItem(UpdateItemDTO newItem ,string itemId)
         {
@@ -49,6 +52,7 @@ namespace UniforBackend.API.Controllers
             return Ok(updatedItem);
         }
 
+        [CustomAuthorize]
         [HttpDelete("{itemId}")]
         public IActionResult DeleteItem(string itemId) 
         {

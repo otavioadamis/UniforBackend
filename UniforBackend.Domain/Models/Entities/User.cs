@@ -20,9 +20,13 @@ namespace UniforBackend.Domain.Models.Entities
         public required string Matricula { get; set; }
         
         [Column(TypeName = "varchar(255)")]
-        public required string Password { get; set; }    
+        public required string Password { get; set; }
+        
+        [Column(TypeName = "varchar(30)")]
+        public required string Contato { get; set; }
         public byte[]? Foto { get; set; }
-        public Role Tipo { get; set; } 
+        public Role Tipo { get; set; }     
+        public DateTime CriadoEm { get; set; }
 
         
         //EF Core mapping

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.UserTOs;
 using UniforBackend.Domain.Models.Entities;
@@ -38,12 +39,16 @@ namespace UniforBackend.API.Controllers
             return Ok(loggedUser);
         }
 
-        [HttpPut("{userId}")]
-        public ActionResult<UserDTO> UpdateUser(UpdateUserDTO updatedUser, string userId)
+        [CustomAuthorize]
+        [HttpPut()]
+        public ActionResult<UserDTO> UpdateUser(UpdateUserDTO updatedUser)
         {
-            var _updatedUser = _userService.UpdateUser(updatedUser, userId);
+            var userFromJwt = (User)HttpContext.Items["User"];
+            var _updatedUser = _userService.UpdateUser(updatedUser, userFromJwt.Id);
             return Ok(_updatedUser);
         }
+
+        //TODO -> Rotas para mudar de senha + esqueci minha senha
 
         [HttpDelete("{userId}")]
         public IActionResult DeleteUser(string userId)

@@ -21,6 +21,8 @@ namespace UniforBackend.Domain.Models.DTOs.UserTOs
 
         [Required]
         public string Password { get; set; } = null!;
+        [Required]
+        public string Contato { get; set; } = null!;
 
         public byte[]? Foto { get; set; }
     }

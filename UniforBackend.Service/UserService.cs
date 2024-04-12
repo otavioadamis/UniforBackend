@@ -58,6 +58,7 @@ namespace UniforBackend.Service
              Nome = thisUser.Nome,
              Email = thisUser.Email,
              Matricula = thisUser.Matricula,
+             Contato = thisUser.Contato,
              Password = thisUser.Password,
              Foto = thisUser.Foto,
             };
