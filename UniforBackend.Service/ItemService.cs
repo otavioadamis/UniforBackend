@@ -72,7 +72,6 @@ namespace UniforBackend.Service
                 PostadoEm = itemToUpdate.PostadoEm,
                 Foto = itemToUpdate.Foto
             };
-
             return response;
         }
 
