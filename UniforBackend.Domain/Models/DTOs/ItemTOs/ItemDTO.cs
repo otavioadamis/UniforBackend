@@ -18,5 +18,18 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public byte[]? Foto { get; set; }
         public bool AceitaTroca { get; set; }
         public DateOnly PostadoEm { get; set; }
+
+        public ItemDTO() { }
+
+        public ItemDTO(Item item)
+        {
+            Id = item.Id;
+            Nome = item.Nome;
+            Descricao = item.Descricao;
+            Preco = item.Preco;
+            Foto = item.Foto;
+            AceitaTroca = item.AceitaTroca;
+            PostadoEm = item.PostadoEm;
+        }
     }
 }
