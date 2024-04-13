@@ -28,6 +28,13 @@ namespace UniforBackend.API.Controllers
             return Ok(itens);
         }
 
+        [HttpGet("categorias/{categoria}")]
+        public ActionResult<List<ItemCardDTO>> GetItensByCategory(string categoria)
+        {
+            var allItems = _itemService.GetItensByCategory(categoria);
+            return Ok(allItems);
+        }
+
         [HttpGet("user/{userId}")]
         public ActionResult<ItemCardDTO> GetItensFromUserId(string userId)
         {

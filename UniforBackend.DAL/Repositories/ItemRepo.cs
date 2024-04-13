@@ -48,20 +48,20 @@ namespace UniforBackend.DAL.Repositories
                 Preco = item.Preco,
             })
             .ToList();
-            
+
             return allItens;
         }
 
         public ListItemCardResponse GetAllItens(string? search, int pagina)
         {
-            if(_dbContext.Itens == null)
+            if (_dbContext.Itens == null)
             {
                 return null;
             }
 
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
-            if(search != null)
+            if (search != null)
             {
                 itemQuery = itemQuery.Where(i => EF.Functions.ILike(i.Nome, $"%{search}%"));
             }
@@ -88,6 +88,25 @@ namespace UniforBackend.DAL.Repositories
                 Pages = (int)pageCount
             };
             return response;
+        }
+
+        public IEnumerable<ItemCardDTO> GetItensByCategoryOrSub(string name)
+        {
+            var allItens = (
+                from item in _dbContext.Itens
+                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
+                join category in _dbContext.Categorias on subcategory.CategoriaId equals category.Id
+                where subcategory.Nome == name || category.Nome == name
+                select new ItemCardDTO
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    AceitaTroca = item.AceitaTroca,
+                    Foto = item.Foto,
+                    Preco = item.Preco
+                }).ToList();
+
+            return allItens;
         }
     }
 }

@@ -30,8 +30,8 @@ namespace UniforBackend.Domain.Models.Entities
         public User User { get; set; } = null!;
         public string UserId { get; set; } = null!;
 
-        public Categoria Categoria { get; set; } = null!;
-        public string CategoriaId { get; set; } = null!;
+        public SubCategoria SubCategoria { get; set; } = null!;
+        public string SubCategoriaId { get; set; } = null!;
     }
 }
 

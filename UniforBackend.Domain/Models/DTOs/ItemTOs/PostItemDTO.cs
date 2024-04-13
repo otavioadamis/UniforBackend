@@ -13,5 +13,8 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         [Required]
         public bool AceitaTroca { get; set; }
         public byte[]? Foto { get; set; }
+
+        [Required]
+        public string SubCategoria { get; set; } = null!;
     }
 }

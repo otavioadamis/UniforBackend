@@ -8,23 +8,27 @@ namespace UniforBackend.Service
     public class ItemService : IItemService
     {
         private readonly IItemRepo _itemRepository;
+        private readonly ICategoriaRepo _categoriaRepo;
 
-        public ItemService(IItemRepo itemRepository)
+        public ItemService(IItemRepo itemRepository, ICategoriaRepo categoriaRepo)
         {
             _itemRepository = itemRepository;
+            _categoriaRepo = categoriaRepo;
         }
 
         public ItemCardDTO AddItem(PostItemDTO item, string userId)
         {
+            var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
+            
             var addedItem = new Item()
             {
                 Nome = item.Nome,
                 Descricao = item.Descricao,
                 Preco = item.Preco,
                 AceitaTroca = item.AceitaTroca,
-                /* PostadoEm = DateOnly.FromDateTime(DateTime.UtcNow)*/
                 UserId = userId,
                 Foto = item.Foto,
+                SubCategoriaId = subCategoria.Id,
             };
 
             _itemRepository.Add(addedItem);
@@ -53,6 +57,12 @@ namespace UniforBackend.Service
         {
             var itens = _itemRepository.GetItensFromUserId(userId);
             return itens;
+        }
+
+        public IEnumerable<ItemCardDTO> GetItensByCategory(string category)
+        {
+            var allItens = _itemRepository.GetItensByCategoryOrSub(category);
+            return allItens;
         }
 
         public ItemDTO UpdateItem(UpdateItemDTO newItem, string itemId)
