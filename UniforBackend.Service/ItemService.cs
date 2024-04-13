@@ -43,9 +43,9 @@ namespace UniforBackend.Service
         }
 
 
-        public ListItemCardResponse GetAllItens(int pagina)
+        public ListItemCardResponse GetAllItens(string? search, int pagina)
         {
-            var itens = _itemRepository.GetAllItens(pagina);
+            var itens = _itemRepository.GetAllItens(search, pagina);
             return itens;
         }
 

@@ -1,4 +1,5 @@
-﻿using UniforBackend.DAL.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using UniforBackend.DAL.Data;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.Entities;
@@ -51,18 +52,24 @@ namespace UniforBackend.DAL.Repositories
             return allItens;
         }
 
-        //Retorna 10 itens por pagina
-        public ListItemCardResponse GetAllItens(int pagina)
+        public ListItemCardResponse GetAllItens(string? search, int pagina)
         {
             if(_dbContext.Itens == null)
             {
                 return null;
             }
 
-            var pageResults = 10f;
-            var pageCount = Math.Ceiling(_dbContext.Itens.Count() / pageResults);
+            IQueryable<Item> itemQuery = _dbContext.Itens;
 
-            var itens = _dbContext.Itens
+            if(search != null)
+            {
+                itemQuery = itemQuery.Where(i => EF.Functions.ILike(i.Nome, $"%{search}%"));
+            }
+
+            var pageResults = 10f; //Retorna 10 itens por pagina
+            var pageCount = Math.Ceiling(itemQuery.Count() / pageResults);
+
+            var itens = itemQuery
                 .Skip((pagina - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .Where(i => i.IsVendido == false)

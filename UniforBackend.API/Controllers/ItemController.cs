@@ -20,11 +20,11 @@ namespace UniforBackend.API.Controllers
 
 
         [HttpGet("{pagina}")]
-        public ActionResult<ListItemCardResponse> GetItensFromPagina(int pagina)
+        public ActionResult<ListItemCardResponse> GetItensFromPagina(string? search, int pagina)
         {
             if (pagina < 1) { pagina = 1; }
 
-            var itens = _itemService.GetAllItens(pagina);
+            var itens = _itemService.GetAllItens(search, pagina);
             return Ok(itens);
         }
 

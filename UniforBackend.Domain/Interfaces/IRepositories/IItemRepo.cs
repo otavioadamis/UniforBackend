@@ -15,6 +15,6 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
         public Item GetById(string _id);
         public void Delete(string _id);
         public IEnumerable<ItemCardDTO> GetItensFromUserId(string userId);
-        public ListItemCardResponse GetAllItens(int pagina);
+        public ListItemCardResponse GetAllItens(string? search, int pagina);
     }
 }
