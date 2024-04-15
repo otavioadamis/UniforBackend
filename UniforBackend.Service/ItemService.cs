@@ -1,6 +1,7 @@
 ﻿using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
+using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Service
@@ -47,7 +48,7 @@ namespace UniforBackend.Service
         }
 
 
-        public ListItemCardResponse GetAllItens(string? search, int pagina)
+        public PagedResult<ItemCardDTO> GetAllItens(string? search, int pagina)
         {
             var itens = _itemRepository.GetAllItens(search, pagina);
             return itens;

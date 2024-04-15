@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
+using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
@@ -20,7 +21,7 @@ namespace UniforBackend.API.Controllers
 
 
         [HttpGet("{pagina}")]
-        public ActionResult<ListItemCardResponse> GetItensFromPagina(string? search, int pagina)
+        public ActionResult<PagedResult<ItemCardDTO>> GetItensFromPagina(string? search, int pagina)
         {
             if (pagina < 1) { pagina = 1; }
 

@@ -2,6 +2,7 @@
 using UniforBackend.DAL.Data;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
+using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.DAL.Repositories
@@ -52,7 +53,8 @@ namespace UniforBackend.DAL.Repositories
             return allItens;
         }
 
-        public ListItemCardResponse GetAllItens(string? search, int pagina)
+        //Retorna 10 itens por pagina
+        public PagedResult<ItemCardDTO> GetAllItens(string? search,int pagina)
         {
             if (_dbContext.Itens == null)
             {
@@ -72,7 +74,7 @@ namespace UniforBackend.DAL.Repositories
             var itens = itemQuery
                 .Skip((pagina - 1) * (int)pageResults)
                 .Take((int)pageResults)
-                .Where(i => i.IsVendido == false)
+                .Where(i => i.IsVendido == false && i.isAprovado)
                 .Select(item => new ItemCardDTO
                 {
                     Id = item.Id,
@@ -81,7 +83,33 @@ namespace UniforBackend.DAL.Repositories
                 })
                 .ToList();
 
-            var response = new ListItemCardResponse()
+            var response = new PagedResult<ItemCardDTO>()
+            {
+                Items = itens,
+                PageAtual = pagina,
+                Pages = (int)pageCount
+            };
+            return response;
+        }
+
+        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina)
+        {
+            if(_dbContext.Itens == null)
+            {
+                return null;
+            }
+
+            var pageResults = 10f;
+            var pageCount = Math.Ceiling(_dbContext.Itens.Count() / pageResults);
+
+            var itens = _dbContext.Itens
+                .Skip((pagina - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .Where(i => i.isAprovado == false)
+                .Select(item => new ItemDTO(item))
+                .ToList();
+
+            var response = new PagedResult<ItemDTO>()
             {
                 Items = itens,
                 PageAtual = pagina,
