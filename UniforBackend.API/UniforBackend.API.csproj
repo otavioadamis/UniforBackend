@@ -25,4 +25,10 @@
     <ProjectReference Include="..\UniforBackend.Service\UniforBackend.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="DatabaseInit.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

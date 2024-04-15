@@ -10,7 +10,7 @@ namespace UniforBackend.DAL.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
+            InitializeDatabase();
         }
 
         public DbSet<User> Users { get; set; }
@@ -18,6 +18,19 @@ namespace UniforBackend.DAL.Data
         public DbSet<Venda> Vendas { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<SubCategoria> SubCategorias { get; set; }
+
+        private void InitializeDatabase()
+        {
+            // Check if the Categories table exists
+            if (!Categorias.Any())
+            {
+                // Read SQL script file
+                string script = File.ReadAllText("DatabaseInit.sql");
+
+                // Execute SQL commands
+                Database.ExecuteSqlRaw(script);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
