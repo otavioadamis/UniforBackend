@@ -17,6 +17,7 @@ namespace UniforBackend.Domain.Models.Entities
         [Column(TypeName = "varchar(60)")]
         public string Nome { get; set; } = null!;
 
+        // EF Core mapping
         public Categoria Categoria { get; set; } = null!;
         public string CategoriaId { get; set; } = null!;
 

@@ -12,4 +12,4 @@ INSERT INTO "SubCategorias"(
 
 INSERT INTO "Users"(
 	"Id", "Nome", "Email", "Matricula", "Foto", "Password", "Tipo", "Contato", "CriadoEm")
-	VALUES ('Admin1', 'UsuarioAdminSQLscript', 'adminteste@teste', '1234', '', '1234', 1, '1234', CURRENT_TIMESTAMP);
+	VALUES ('Admin1', 'UsuarioAdminSQLscript', 'admin@admin', '123456789', '', '$2a$11$AFDxQBUYbazjRGIRW9yrQe4lIzfKoHWgd1OSWT9D6oBiQsC/Dhq36', 1, '123456789', CURRENT_TIMESTAMP);
