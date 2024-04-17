@@ -17,11 +17,13 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public decimal Preco { get; set; }
         public byte[]? Foto { get; set; }
         public bool AceitaTroca { get; set; }
+        public string VendedorId { get; set; }
+        public string NomeVendedor { get; set; }
         public DateOnly PostadoEm { get; set; }
 
         public ItemDTO() { }
 
-        public ItemDTO(Item item)
+        public ItemDTO(Item item, User user)
         {
             Id = item.Id;
             Nome = item.Nome;
@@ -30,6 +32,8 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
             Foto = item.Foto;
             AceitaTroca = item.AceitaTroca;
             PostadoEm = item.PostadoEm;
+            VendedorId = user.Id;
+            NomeVendedor = user.Nome;
         }
     }
 }

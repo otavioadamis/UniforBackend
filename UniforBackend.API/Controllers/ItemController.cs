@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
@@ -19,33 +20,43 @@ namespace UniforBackend.API.Controllers
             _itemService = itemService;
         }
 
-
         [HttpGet("{pagina}")]
-        public ActionResult<PagedResult<ItemCardDTO>> GetItensFromPagina(string? search, int pagina)
+        public ActionResult<PagedResult<ItemDTO>> GetItensFromPagina(string? search, int pagina)
         {
             if (pagina < 1) { pagina = 1; }
-
             var itens = _itemService.GetAllItens(search, pagina);
             return Ok(itens);
         }
 
         [HttpGet("categorias/{categoria}")]
-        public ActionResult<List<ItemCardDTO>> GetItensByCategory(string categoria)
+        public ActionResult<PagedResult<ItemDTO>> GetItensByCategory(string categoria, int pagina)
         {
-            var allItems = _itemService.GetItensByCategory(categoria);
+            if (pagina < 1) { pagina = 1; }
+            var allItems = _itemService.GetItensByCategory(categoria, pagina);
             return Ok(allItems);
         }
 
         [HttpGet("user/{userId}")]
-        public ActionResult<ItemCardDTO> GetItensFromUserId(string userId)
+        public ActionResult<UserItensDTO> GetItensFromUserId(string userId, int pagina)
         {
-            var itens = _itemService.GetItensFromUserId(userId);
+            if (pagina < 1) { pagina = 1; }
+            var itens = _itemService.GetItensFromUserId(userId, pagina);
             return Ok(itens);
         }
 
         [CustomAuthorize]
+        [HttpGet("pendentes")]
+        public ActionResult<UserItensDTO> GetItensPendentes(int pagina)
+        {
+            if (pagina < 1) { pagina = 1; }
+            var userFromJwt = (User)HttpContext.Items["User"];
+            var itensPendentes = _itemService.GetItensPendentes(userFromJwt.Id, pagina);
+            return Ok(itensPendentes);
+        }
+
+        [CustomAuthorize]
         [HttpPost()]
-        public ActionResult<ItemCardDTO> AddItem(PostItemDTO item)
+        public ActionResult<ItemDTO> AddItem(PostItemDTO item)
         {
             var userFromJwt = (User)HttpContext.Items["User"];
             var addedItem = _itemService.AddItem(item, userFromJwt.Id);
@@ -54,7 +65,7 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpPut("{itemId}")]
-        public ActionResult<ItemDTO> UpdateItem(UpdateItemDTO newItem ,string itemId)
+        public ActionResult<ItemDTO> UpdateItem(UpdateItemDTO newItem, string itemId)
         {
             var updatedItem = _itemService.UpdateItem(newItem, itemId);
             return Ok(updatedItem);
