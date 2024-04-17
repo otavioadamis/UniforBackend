@@ -1,4 +1,5 @@
-﻿using UniforBackend.DAL.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using UniforBackend.DAL.Data;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
@@ -48,22 +49,29 @@ namespace UniforBackend.DAL.Repositories
                 Preco = item.Preco,
             })
             .ToList();
-            
+
             return allItens;
         }
 
         //Retorna 10 itens por pagina
-        public PagedResult<ItemCardDTO> GetAllItens(int pagina)
+        public PagedResult<ItemCardDTO> GetAllItens(string? search,int pagina)
         {
-            if(_dbContext.Itens == null)
+            if (_dbContext.Itens == null)
             {
                 return null;
             }
 
-            var pageResults = 10f;
-            var pageCount = Math.Ceiling(_dbContext.Itens.Count() / pageResults);
+            IQueryable<Item> itemQuery = _dbContext.Itens;
 
-            var itens = _dbContext.Itens
+            if (search != null)
+            {
+                itemQuery = itemQuery.Where(i => EF.Functions.ILike(i.Nome, $"%{search}%"));
+            }
+
+            var pageResults = 10f; //Retorna 10 itens por pagina
+            var pageCount = Math.Ceiling(itemQuery.Count() / pageResults);
+
+            var itens = itemQuery
                 .Skip((pagina - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .Where(i => i.IsVendido == false && i.isAprovado)
@@ -108,6 +116,25 @@ namespace UniforBackend.DAL.Repositories
                 Pages = (int)pageCount
             };
             return response;
+        }
+
+        public IEnumerable<ItemCardDTO> GetItensByCategoryOrSub(string name)
+        {
+            var allItens = (
+                from item in _dbContext.Itens
+                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
+                join category in _dbContext.Categorias on subcategory.CategoriaId equals category.Id
+                where subcategory.Nome == name || category.Nome == name
+                select new ItemCardDTO
+                {
+                    Id = item.Id,
+                    Nome = item.Nome,
+                    AceitaTroca = item.AceitaTroca,
+                    Foto = item.Foto,
+                    Preco = item.Preco
+                }).ToList();
+
+            return allItens;
         }
     }
 }

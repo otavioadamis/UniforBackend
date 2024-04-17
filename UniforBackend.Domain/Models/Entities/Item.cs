@@ -29,6 +29,9 @@ namespace UniforBackend.Domain.Models.Entities
         //EF Core mapping
         public User User { get; set; } = null!;
         public string UserId { get; set; } = null!;
+
+        public SubCategoria SubCategoria { get; set; } = null!;
+        public string SubCategoriaId { get; set; } = null!;
     }
 }
 

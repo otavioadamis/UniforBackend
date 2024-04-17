@@ -21,12 +21,19 @@ namespace UniforBackend.API.Controllers
 
 
         [HttpGet("{pagina}")]
-        public ActionResult<PagedResult<ItemCardDTO>> GetItensFromPagina(int pagina)
+        public ActionResult<PagedResult<ItemCardDTO>> GetItensFromPagina(string? search, int pagina)
         {
             if (pagina < 1) { pagina = 1; }
 
-            var itens = _itemService.GetAllItens(pagina);
+            var itens = _itemService.GetAllItens(search, pagina);
             return Ok(itens);
+        }
+
+        [HttpGet("categorias/{categoria}")]
+        public ActionResult<List<ItemCardDTO>> GetItensByCategory(string categoria)
+        {
+            var allItems = _itemService.GetItensByCategory(categoria);
+            return Ok(allItems);
         }
 
         [HttpGet("user/{userId}")]

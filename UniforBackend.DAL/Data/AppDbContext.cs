@@ -10,12 +10,27 @@ namespace UniforBackend.DAL.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
+            InitializeDatabase();
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Item> Itens { get; set; }
         public DbSet<Venda> Vendas { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<SubCategoria> SubCategorias { get; set; }
+
+        private void InitializeDatabase()
+        {
+            // Check if the Categories table exists
+            if (!Categorias.Any())
+            {
+                // Read SQL script file
+                string script = File.ReadAllText("DatabaseInit.sql");
+
+                // Execute SQL commands
+                Database.ExecuteSqlRaw(script);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,6 +74,17 @@ namespace UniforBackend.DAL.Data
                 .HasOne(c => c.Item)
                 .WithOne()
                 .HasForeignKey<Venda>(c => c.ItemId);
+
+            // 1 pra n
+            modelBuilder.Entity<SubCategoria>()
+                .HasOne(s => s.Categoria)
+                .WithMany(c => c.SubCategorias)
+                .HasForeignKey(s => s.CategoriaId);
+
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.SubCategoria)
+                .WithMany(s => s.Items)
+                .HasForeignKey(i => i.SubCategoriaId);
 
             //------Propriedades auto-generadas-------//
 
