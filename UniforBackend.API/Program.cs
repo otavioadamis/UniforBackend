@@ -21,7 +21,7 @@ namespace UniforBackend.API
 
             //Configurando conexao do banco de dados
 
-            string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+            string connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");
 
             if(connectionString == null)
             {
@@ -92,6 +92,7 @@ namespace UniforBackend.API
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
+            InitialDataHelper.InitializeDatabase(app.Services);
         }
 
         app.UseCors(builder =>
