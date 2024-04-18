@@ -92,6 +92,7 @@ namespace UniforBackend.API
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
+            InitialDataHelper.InitializeDatabase(app.Services);
         }
 
         app.UseCors(builder =>
