@@ -21,7 +21,7 @@ namespace UniforBackend.API
 
             //Configurando conexao do banco de dados
 
-            string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+            string connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");
 
             if(connectionString == null)
             {
