@@ -15,6 +15,7 @@ namespace UniforBackend.Domain.Models.DTOs.UserTOs
         public string Nome { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Matricula { get; set; } = null!;
+        public string Contato { get; set; } = null!;
         public byte[]? Foto { get; set; }
 
         public UserDTO CreateModel(User user)
@@ -25,6 +26,7 @@ namespace UniforBackend.Domain.Models.DTOs.UserTOs
                 Nome = user.Nome,
                 Email = user.Email,
                 Matricula = user.Matricula,
+                Contato = user.Contato,
                 Foto = user.Foto,
             };
             return userModel;
