@@ -44,7 +44,7 @@ namespace UniforBackend.DAL.Repositories
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = (from item in itemQuery
-                               where item.UserId == userId
+                               where item.UserId == userId && item.isAprovado == true
                                select new ItemCardDTO()
                                {
                                    Id = item.Id,
