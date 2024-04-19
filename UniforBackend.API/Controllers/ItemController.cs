@@ -20,6 +20,13 @@ namespace UniforBackend.API.Controllers
             _itemService = itemService;
         }
 
+        [HttpGet]
+        public ActionResult<ItemDTO> GetItemById(string itemId) 
+        {
+            var item = _itemService.GetItemById(itemId);
+            return Ok(item);
+        }
+
         [HttpGet("{pagina}")]
         public ActionResult<PagedResult<ItemDTO>> GetItensFromPagina(string? search, int pagina)
         {

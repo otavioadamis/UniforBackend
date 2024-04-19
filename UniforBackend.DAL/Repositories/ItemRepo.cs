@@ -39,6 +39,27 @@ namespace UniforBackend.DAL.Repositories
             _dbContext.Itens.Remove(item);
         }
 
+        public ItemDTO GetItemDTOById(string _id)
+        {
+            var itemDTO = (from Item item in _dbContext.Itens
+                           where item.Id == _id
+                           join user in _dbContext.Users on item.UserId equals user.Id
+                           select new ItemDTO()
+                           {
+                               Id = item.Id,
+                               Nome = item.Nome,
+                               Descricao = item.Descricao,
+                               Preco = item.Preco,
+                               AceitaTroca = item.AceitaTroca,
+                               Foto = item.Foto,
+                               PostadoEm = item.PostadoEm,
+                               NomeVendedor = user.Nome,
+                               VendedorId = user.Id
+                           }
+                ).FirstOrDefault();
+            return itemDTO;
+        }
+
         public UserItensDTO GetItensFromUserId(string userId, int pagina)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;

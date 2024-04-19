@@ -6,6 +6,7 @@ namespace UniforBackend.Domain.Interfaces.IServices
 {
     public interface IItemService
     {
+        public ItemDTO GetItemById(string itemId);
         public PagedResult<ItemDTO> GetAllItens(string? search, int pagina);
         public UserItensDTO GetItensFromUserId(string userId, int pagina);
         public PagedResult<ItemDTO> GetItensByCategory(string category, int pagina);

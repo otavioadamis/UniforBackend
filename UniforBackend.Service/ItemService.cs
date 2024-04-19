@@ -19,6 +19,12 @@ namespace UniforBackend.Service
             _userRepo = userRepo;
         }
 
+        public ItemDTO GetItemById(string itemId)
+        {
+            var itemDTO = _itemRepository.GetItemDTOById(itemId);
+            return itemDTO;
+        }
+
         public ItemDTO AddItem(PostItemDTO item, string userId)
         {
             var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
@@ -92,5 +98,7 @@ namespace UniforBackend.Service
             _itemRepository.Delete(itemId);
             _itemRepository.SaveChanges();
         }
+
+
     }
 }
