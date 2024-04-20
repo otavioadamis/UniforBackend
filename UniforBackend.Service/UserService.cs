@@ -53,31 +53,32 @@ namespace UniforBackend.Service
 
             thisUser.Password = BCrypt.Net.BCrypt.HashPassword(thisUser.Password);
 
+            string codigoVerificacao = Guid.NewGuid().ToString();
+
             var newUser = new User()
             {
-             Nome = thisUser.Nome,
-             Email = thisUser.Email,
-             Matricula = thisUser.Matricula,
-             Contato = thisUser.Contato,
-             Password = thisUser.Password,
-             Foto = thisUser.Foto,
+                Nome = thisUser.Nome,
+                Email = thisUser.Email,
+                Matricula = thisUser.Matricula,
+                Contato = thisUser.Contato,
+                Password = thisUser.Password,
+                Foto = thisUser.Foto,
+                CodigoVerificacao = codigoVerificacao,
             };
 
             _userRepository.Add(newUser);
             _userRepository.SaveChanges();
 
-            string token = _authorizationService.CreateToken(newUser);
-
+            //envia codigo de verificao + userid em uma rota para o email do usuario.
             var userModel = new UserDTO();
             userModel = userModel.CreateModel(newUser);
 
-            var response = new LoginResponseModel
+            var res = new LoginResponseModel
             {
-                Token = token,
+                Token = "enviar por email, mas so pra teste: " + codigoVerificacao,
                 User = userModel
             };
-
-            return response;
+            return res;
         }
 
         public LoginResponseModel Login(UserLoginDTO thisUser)
@@ -95,6 +96,15 @@ namespace UniforBackend.Service
                 {
                     Message = "Senha incorreta.",
                     StatusCode = (int)HttpStatusCode.BadRequest
+                });
+            }
+
+            if(user.IsVerificado == false)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Email ainda não confirmado!",
+                    StatusCode = (int)HttpStatusCode.Unauthorized
                 });
             }
 
