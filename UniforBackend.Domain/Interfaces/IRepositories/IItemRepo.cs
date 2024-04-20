@@ -15,9 +15,11 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
         public Item Add(Item thisItem);
         public Item GetById(string _id);
         public void Delete(string _id);
-        public IEnumerable<ItemCardDTO> GetItensFromUserId(string userId);
-        public PagedResult<ItemCardDTO> GetAllItens(string? search,int pagina);
+        public ItemDTO GetItemDTOById(string _id);
+        public UserItensDTO GetItensFromUserId(string userId, int pagina);
+        public PagedResult<ItemDTO> GetAllItens(string? search,int pagina);
         public PagedResult<ItemDTO> GetAllUnauthorized(int pagina);
-        public IEnumerable<ItemCardDTO> GetItensByCategoryOrSub(string name);
+        public PagedResult<ItemDTO> GetItensByCategoryOrSub(string name, int pagina);
+        public UserItensDTO GetItensPendentesFromUserId(string userId, int pagina);
     }
 }
