@@ -1,9 +1,10 @@
 version: '3.4'
 
 services:
-  uniforbackend.api: 
+  uniforbackend.api:
     depends_on:
-      - "uniforbackend_db"
+      uniforbackend_db:
+        condition: service_healthy
     container_name: uniforbackend.api
     ports:
       - "8080:80"
@@ -15,6 +16,11 @@ services:
       - DatabaseSettings__ConnectionString=Host=uniforbackend_db; Database=uniforbazar; Username=postgres; Password=1234
     networks:
       - uniforbackendNet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://uniforbackend_db:5432"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
   
   uniforbackend_db:
     image: postgres:15.4
@@ -30,11 +36,15 @@ services:
       - uniforbackend_data:/var/lib/postgresql/data
     networks:
       - uniforbackendNet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
 volumes:
   uniforbackend_data:
-    
+
 networks:
   uniforbackendNet:
     driver: bridge
-

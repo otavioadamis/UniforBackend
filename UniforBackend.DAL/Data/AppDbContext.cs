@@ -16,6 +16,8 @@ namespace UniforBackend.DAL.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Item> Itens { get; set; }
         public DbSet<Venda> Vendas { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<SubCategoria> SubCategorias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,6 +61,17 @@ namespace UniforBackend.DAL.Data
                 .HasOne(c => c.Item)
                 .WithOne()
                 .HasForeignKey<Venda>(c => c.ItemId);
+
+            // 1 pra n
+            modelBuilder.Entity<SubCategoria>()
+                .HasOne(s => s.Categoria)
+                .WithMany(c => c.SubCategorias)
+                .HasForeignKey(s => s.CategoriaId);
+
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.SubCategoria)
+                .WithMany(s => s.Items)
+                .HasForeignKey(i => i.SubCategoriaId);
 
             //------Propriedades auto-generadas-------//
 

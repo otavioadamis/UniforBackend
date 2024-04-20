@@ -11,10 +11,12 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
     public class ItemCardDTO
     {
         public string Id { get; set; } = null!;
-        public required string Nome { get; set; }
-        public required decimal Preco { get; set; }
+        public string Nome { get; set; } = null!;
+        public string Descricao { get; set; } = null!;
+        public decimal Preco { get; set; }
         public byte[]? Foto { get; set; }
         public bool AceitaTroca { get; set; }
+        public DateOnly PostadoEm { get; set; }
     }
 }
 

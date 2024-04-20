@@ -21,7 +21,7 @@ namespace UniforBackend.API
 
             //Configurando conexao do banco de dados
 
-            string connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+            string connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");
 
             if(connectionString == null)
             {
@@ -38,12 +38,14 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IVendaService, VendaService>();
             builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
             // Adicionando repositorios e suas abstracoes
 
             builder.Services.AddScoped<IItemRepo, ItemRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IVendaRepo, VendaRepo>();
+            builder.Services.AddScoped<ICategoriaRepo, CategoriaRepo>();
 
         builder.Services.AddControllers();
         
@@ -90,6 +92,7 @@ namespace UniforBackend.API
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
+            InitialDataHelper.InitializeDatabase(app.Services);
         }
 
         app.UseCors(builder =>
