@@ -18,7 +18,7 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public decimal NovoPreco { get; set; }
         [Required]
         public bool AceitaTroca { get; set; }
-        public byte[]? NovaFoto { get; set; }
+        public string NovaFoto { get; set; }
 
 
         public void UpdateFields(Item item)
