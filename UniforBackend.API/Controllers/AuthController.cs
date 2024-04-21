@@ -26,5 +26,5 @@ namespace UniforBackend.API.Controllers
         }
 
         //todo -> rota pra re-enviar codigo de verificacao
-    }
+    } 
 }

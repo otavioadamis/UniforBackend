@@ -70,8 +70,8 @@ namespace UniforBackend.Service
             //envia codigo de verificao + userid em uma rota para o email do usuario.
             var body = "http://localhost:8080/api/Auth/confirmar-email/" + newUser.Id + "/" + codigoVerificacao;
             var status = _emailService.SendEmailAsync(newUser.Email, body, "Bazar - Verifique seu email.");
-            
-            if(status.IsCompletedSuccessfully)
+
+            if (status.IsCompletedSuccessfully)
             {
                 var userModel = new UserDTO();
                 userModel = userModel.CreateModel(newUser);
@@ -84,12 +84,14 @@ namespace UniforBackend.Service
                 };
                 return res;
             }
-            
-            throw new CustomException(new ErrorResponse
+            else
             {
-                Message = "Erro no envio de email",
-                StatusCode = (int)HttpStatusCode.Conflict,
-            });
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Erro no envio de email",
+                    StatusCode = (int)HttpStatusCode.Conflict,
+                });
+            }
         }
 
         public LoginResponseModel Login(UserLoginDTO thisUser)
