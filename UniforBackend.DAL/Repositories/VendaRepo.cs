@@ -29,6 +29,7 @@ namespace UniforBackend.DAL.Repositories
             return thisVenda;
         }
 
+        //todo -> retornar informacoes do vendedor
         public VendaDTO GetVendaDTOById(string vendaId)
         {
             var vendaDTO = (
@@ -45,6 +46,7 @@ namespace UniforBackend.DAL.Repositories
             return vendaDTO;
         }
 
+        //todo -> paginação
         public IEnumerable<VendaDTO> GetAllVendasFromUser(string userId)
         {
             var allVendasDTO = (
