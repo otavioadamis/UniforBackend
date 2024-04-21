@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniforBackend.DAL.Data;
 using UniforBackend.DAL.Helpers;
+using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
@@ -80,6 +81,8 @@ namespace UniforBackend.DAL.Repositories
 
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
+            if (user == null) { return null; }
+
             UserItensDTO response = new UserItensDTO()
             {
                 UserId = user.Id,
@@ -110,6 +113,8 @@ namespace UniforBackend.DAL.Repositories
 
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
+            if (user == null) { return null; }
+
             UserItensDTO response = new UserItensDTO()
             {
                 UserId = user.Id,
@@ -122,11 +127,6 @@ namespace UniforBackend.DAL.Repositories
 
         public PagedResult<ItemDTO> GetAllItens(string? search, int pagina)
         {
-            if (_dbContext.Itens == null)
-            {
-                return null;
-            }
-
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             if (search != null)
@@ -156,11 +156,6 @@ namespace UniforBackend.DAL.Repositories
 
         public PagedResult<ItemDTO> GetAllUnauthorized(int pagina)
         {
-            if(_dbContext.Itens == null)
-            {
-                return null;
-            }
-
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = from item in itemQuery
@@ -185,11 +180,6 @@ namespace UniforBackend.DAL.Repositories
 
         public PagedResult<ItemDTO> GetItensByCategoryOrSub(string name, int pagina)
         {
-            if (_dbContext.Itens == null)
-            {
-                return null;
-            }
-
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = (

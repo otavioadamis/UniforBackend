@@ -1,4 +1,6 @@
-﻿using UniforBackend.Domain.Interfaces.IRepositories;
+﻿using System.Net;
+using UniforBackend.Domain.Exceptions;
+using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
@@ -22,14 +24,29 @@ namespace UniforBackend.Service
         public ItemDTO GetItemById(string itemId)
         {
             var itemDTO = _itemRepository.GetItemDTOById(itemId);
+            if(itemDTO == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Item não encontrado.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
             return itemDTO;
         }
 
         public ItemDTO AddItem(PostItemDTO item, string userId)
         {
             var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
+            if(subCategoria == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Categoria inexistente",
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                });
+            }
             var vendedor = _userRepo.GetById(userId);
-            
             var addedItem = new Item()
             {
                 Nome = item.Nome,
@@ -58,8 +75,16 @@ namespace UniforBackend.Service
 
         public UserItensDTO GetItensFromUserId(string userId, int pagina)
         {
-            var itens = _itemRepository.GetItensFromUserId(userId, pagina);
-            return itens;
+            var itensFromUser = _itemRepository.GetItensFromUserId(userId, pagina);
+            if (itensFromUser == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Não foi possível encontrar itens deste usuário.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
+            return itensFromUser;
         }
 
         public PagedResult<ItemDTO> GetItensByCategory(string category, int pagina)
@@ -71,12 +96,29 @@ namespace UniforBackend.Service
         public UserItensDTO GetItensPendentes(string userId, int pagina)
         {
             var itensPendentes = _itemRepository.GetItensPendentesFromUserId(userId, pagina);
+            if(itensPendentes == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Não foi possível encontrar itens pendentes deste usuário.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
             return itensPendentes;
         }
 
         public ItemDTO UpdateItem(UpdateItemDTO newItem, string itemId)
         {
             var itemToUpdate = _itemRepository.GetById(itemId);
+            if (itemToUpdate == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Item não encontrado.",
+                    StatusCode = (int)HttpStatusCode.NotFound
+                });
+            }
+
             var vendedor = _userRepo.GetById(itemToUpdate.UserId);
 
             newItem.UpdateFields(itemToUpdate);
@@ -89,6 +131,16 @@ namespace UniforBackend.Service
         public void VendeItem(string itemId)
         {
             var item = _itemRepository.GetById(itemId);
+            
+            if (item == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Item não encontrado.",
+                    StatusCode = (int)HttpStatusCode.NotFound
+                });
+            }
+
             item.IsVendido = true;
             _itemRepository.SaveChanges();
         }
@@ -98,7 +150,5 @@ namespace UniforBackend.Service
             _itemRepository.Delete(itemId);
             _itemRepository.SaveChanges();
         }
-
-
     }
 }

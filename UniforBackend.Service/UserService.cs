@@ -22,14 +22,10 @@ namespace UniforBackend.Service
         public UserDTO GetUserById(string userId)
         {
             var user = _userRepository.GetById(userId);
-            var response = new UserDTO()
-            {
-                Id = user.Id,
-                Nome = user.Nome,
-                Email = user.Email,
-                Matricula = user.Matricula,
-                Foto = user.Foto
-            };
+            
+            var response = new UserDTO();
+            response.CreateModel(user);
+            
             return response;
         }
 
@@ -124,10 +120,13 @@ namespace UniforBackend.Service
         public UserDTO UpdateUser(UpdateUserDTO updatedUser, string userId)
         {
             var user = _userRepository.GetById(userId);
+            
             updatedUser.UpdateFields(user);
             _userRepository.SaveChanges();
+            
             var response = new UserDTO();
             response.CreateModel(user);
+            
             return response;
         }
 
