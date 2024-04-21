@@ -12,11 +12,13 @@ namespace UniforBackend.Service
     {
         private readonly IUserRepo _userRepository;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IEmailService _emailService;
 
-        public UserService(IUserRepo userRepository, IAuthorizationService authorizationService)
+        public UserService(IUserRepo userRepository, IAuthorizationService authorizationService, IEmailService emailService)
         {
             _userRepository = userRepository;
             _authorizationService = authorizationService;
+            _emailService = emailService;
         }
 
         public UserDTO GetUserById(string userId)
@@ -66,6 +68,9 @@ namespace UniforBackend.Service
             _userRepository.SaveChanges();
 
             //envia codigo de verificao + userid em uma rota para o email do usuario.
+            var body = "http://localhost:8080/api/Auth/confirmar-email/" + newUser.Id + "/" + codigoVerificacao;
+            _emailService.SendEmailAsync(newUser.Email, body);
+
             var userModel = new UserDTO();
             userModel = userModel.CreateModel(newUser);
 
