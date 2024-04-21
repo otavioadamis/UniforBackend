@@ -67,15 +67,15 @@ namespace UniforBackend.Service
         }
 
 
-        public PagedResult<ItemDTO> GetAllItens(string? search, int pagina)
+        public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize)
         {
-            var itens = _itemRepository.GetAllItens(search, pagina);
+            var itens = _itemRepository.GetAllItens(search, pagina, pageSize);
             return itens;
         }
 
-        public UserItensDTO GetItensFromUserId(string userId, int pagina)
+        public UserItensDTO GetItensFromUserId(string userId)
         {
-            var itensFromUser = _itemRepository.GetItensFromUserId(userId, pagina);
+            var itensFromUser = _itemRepository.GetItensFromUserId(userId);
             if (itensFromUser == null)
             {
                 throw new CustomException(new ErrorResponse
@@ -87,15 +87,15 @@ namespace UniforBackend.Service
             return itensFromUser;
         }
 
-        public PagedResult<ItemDTO> GetItensByCategory(string category, int pagina)
+        public PagedResult<ItemDTO> GetItensByCategory(string category, int pagina, int pageSize)
         {
-            var allItens = _itemRepository.GetItensByCategoryOrSub(category, pagina);
+            var allItens = _itemRepository.GetItensByCategoryOrSub(category, pagina, pageSize);
             return allItens;
         }
 
-        public UserItensDTO GetItensPendentes(string userId, int pagina)
+        public UserItensDTO GetItensPendentes(string userId)
         {
-            var itensPendentes = _itemRepository.GetItensPendentesFromUserId(userId, pagina);
+            var itensPendentes = _itemRepository.GetItensPendentesFromUserId(userId);
             if(itensPendentes == null)
             {
                 throw new CustomException(new ErrorResponse

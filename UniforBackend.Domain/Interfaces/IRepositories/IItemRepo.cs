@@ -16,10 +16,10 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
         public Item GetById(string _id);
         public void Delete(string _id);
         public ItemDTO GetItemDTOById(string _id);
-        public UserItensDTO GetItensFromUserId(string userId, int pagina);
-        public PagedResult<ItemDTO> GetAllItens(string? search,int pagina);
-        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina);
-        public PagedResult<ItemDTO> GetItensByCategoryOrSub(string name, int pagina);
-        public UserItensDTO GetItensPendentesFromUserId(string userId, int pagina);
+        public UserItensDTO GetItensFromUserId(string userId);
+        public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize);
+        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina, int pageSize);
+        public PagedResult<ItemDTO> GetItensByCategoryOrSub(string name, int pagina, int pageSize);
+        public UserItensDTO GetItensPendentesFromUserId(string userId);
     }
 }

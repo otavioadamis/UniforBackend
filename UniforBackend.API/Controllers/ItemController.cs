@@ -20,44 +20,42 @@ namespace UniforBackend.API.Controllers
             _itemService = itemService;
         }
 
-        [HttpGet]
+        [HttpGet("{itemId}")]
         public ActionResult<ItemDTO> GetItemById(string itemId) 
         {
             var item = _itemService.GetItemById(itemId);
             return Ok(item);
         }
 
-        [HttpGet("{pagina}")]
-        public ActionResult<PagedResult<ItemDTO>> GetItensFromPagina(string? search, int pagina)
+        [HttpGet("itens/{pagina}")]
+        public ActionResult<PagedResult<ItemDTO>> GetItensFromPagina(string? search, int pagina = 1, int pageSize = 10)
         {
             if (pagina < 1) { pagina = 1; }
-            var itens = _itemService.GetAllItens(search, pagina);
+            var itens = _itemService.GetAllItens(search, pagina, pageSize);
             return Ok(itens);
         }
 
         [HttpGet("categorias/{categoria}")]
-        public ActionResult<PagedResult<ItemDTO>> GetItensByCategory(string categoria, int pagina)
+        public ActionResult<PagedResult<ItemDTO>> GetItensByCategory(string categoria, int pagina = 1, int pageSize = 10)
         {
             if (pagina < 1) { pagina = 1; }
-            var allItems = _itemService.GetItensByCategory(categoria, pagina);
+            var allItems = _itemService.GetItensByCategory(categoria, pagina, pageSize);
             return Ok(allItems);
         }
 
         [HttpGet("user/{userId}")]
-        public ActionResult<UserItensDTO> GetItensFromUserId(string userId, int pagina)
+        public ActionResult<UserItensDTO> GetItensFromUserId(string userId)
         {
-            if (pagina < 1) { pagina = 1; }
-            var itens = _itemService.GetItensFromUserId(userId, pagina);
+            var itens = _itemService.GetItensFromUserId(userId);
             return Ok(itens);
         }
 
         [CustomAuthorize]
         [HttpGet("pendentes")]
-        public ActionResult<UserItensDTO> GetItensPendentes(int pagina)
+        public ActionResult<UserItensDTO> GetItensPendentes()
         {
-            if (pagina < 1) { pagina = 1; }
             var userFromJwt = (User)HttpContext.Items["User"];
-            var itensPendentes = _itemService.GetItensPendentes(userFromJwt.Id, pagina);
+            var itensPendentes = _itemService.GetItensPendentes(userFromJwt.Id);
             return Ok(itensPendentes);
         }
 

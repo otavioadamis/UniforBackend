@@ -61,7 +61,7 @@ namespace UniforBackend.DAL.Repositories
             return itemDTO;
         }
 
-        public UserItensDTO GetItensFromUserId(string userId, int pagina)
+        public UserItensDTO GetItensFromUserId(string userId)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
@@ -76,8 +76,7 @@ namespace UniforBackend.DAL.Repositories
                                    PostadoEm = item.PostadoEm,
                                    AceitaTroca = item.AceitaTroca,
                                    Foto = item.Foto,
-                               }).OrderByDescending(x => x.PostadoEm);
-            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, 5f);
+                               }).OrderByDescending(x => x.PostadoEm).ToList();
 
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
@@ -87,13 +86,13 @@ namespace UniforBackend.DAL.Repositories
             {
                 UserId = user.Id,
                 Nome = user.Nome,
-                PagedResult = pagedResult,
+                Itens = queryResult,
             };
 
             return response;
         }
 
-        public UserItensDTO GetItensPendentesFromUserId(string userId, int pagina)
+        public UserItensDTO GetItensPendentesFromUserId(string userId)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
@@ -108,8 +107,7 @@ namespace UniforBackend.DAL.Repositories
                                    PostadoEm = item.PostadoEm,
                                    AceitaTroca = item.AceitaTroca,
                                    Foto = item.Foto,
-                               }).OrderByDescending(x => x.PostadoEm);
-            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, 5f);
+                               }).OrderByDescending(x => x.PostadoEm).ToList();
 
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
@@ -119,13 +117,13 @@ namespace UniforBackend.DAL.Repositories
             {
                 UserId = user.Id,
                 Nome = user.Nome,
-                PagedResult = pagedResult,
+                Itens = queryResult,
             };
 
             return response;
         }
 
-        public PagedResult<ItemDTO> GetAllItens(string? search, int pagina)
+        public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
@@ -149,12 +147,12 @@ namespace UniforBackend.DAL.Repositories
                                    VendedorId = user.Id,
                                    NomeVendedor = user.Nome,
                                }).OrderByDescending(x => x.PostadoEm);
-            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, 5f);
+            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
            
             return pagedResult;
         }
 
-        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina)
+        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina, int pageSize)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
@@ -173,12 +171,12 @@ namespace UniforBackend.DAL.Repositories
                                   VendedorId = user.Id,
                                   NomeVendedor = user.Nome,
                               };
-            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, 5f);
+            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
             
             return pagedResult;
         }
 
-        public PagedResult<ItemDTO> GetItensByCategoryOrSub(string name, int pagina)
+        public PagedResult<ItemDTO> GetItensByCategoryOrSub(string name, int pagina, int pageSize)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
@@ -201,7 +199,7 @@ namespace UniforBackend.DAL.Repositories
                     VendedorId = user.Id,
                     NomeVendedor = user.Nome,
                 }).OrderByDescending(x => x.PostadoEm);
-            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, 5f);
+            var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
 
             return pagedResult;
         }

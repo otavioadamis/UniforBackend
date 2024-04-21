@@ -11,6 +11,6 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
     {
         public string UserId { get; set; }
         public string Nome {  get; set; }
-        public PagedResult<ItemCardDTO> PagedResult { get; set; }
+        public IEnumerable<ItemCardDTO> Itens { get; set; }
     }
 }

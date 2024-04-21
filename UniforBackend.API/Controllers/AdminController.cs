@@ -37,10 +37,10 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize(Role.Admin)]
         [HttpGet("{pagina}")]
-        public ActionResult<PagedResult<ItemDTO>> GetUnauthorizedFromPagina(int pagina)
+        public ActionResult<PagedResult<ItemDTO>> GetUnauthorizedFromPagina(int pagina, int pageSize = 10)
         {
             if (pagina < 1) { pagina = 1; }
-            var response = _adminService.GetAllUnauthorized(pagina);
+            var response = _adminService.GetAllUnauthorized(pagina, pageSize);
             return Ok(response);
         }
     }
