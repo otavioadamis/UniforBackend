@@ -46,7 +46,6 @@ namespace UniforBackend.DAL.Repositories
             return vendaDTO;
         }
 
-        //todo -> paginação
         public IEnumerable<VendaDTO> GetAllVendasFromUser(string userId)
         {
             var allVendasDTO = (

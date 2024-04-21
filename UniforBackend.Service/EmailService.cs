@@ -9,21 +9,19 @@ namespace UniforBackend.Service
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
 
-        public EmailService(IConfiguration configuration, IUserService userService)
+        public EmailService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _userService = userService;
         }
 
-        public async Task SendEmailAsync(string userEmail, string body)
+        public async Task SendEmailAsync(string userEmail, string body, string subject)
         {
             var emailSettings = _configuration.GetSection("EmailSettings");
 
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_configuration.GetSection("EmailSettings:Email").Value);
-            email.Subject = "A deadline is coming!";
+            email.Subject = subject;
 
             using var smtp = new SmtpClient();
             smtp.Connect(emailSettings["Host"], int.Parse(emailSettings["Port"]), SecureSocketOptions.StartTls);

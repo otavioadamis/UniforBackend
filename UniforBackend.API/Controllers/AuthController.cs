@@ -3,6 +3,8 @@ using UniforBackend.Domain.Interfaces.IServices;
 
 namespace UniforBackend.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IAuthorizationService _authorizationService;
@@ -12,7 +14,7 @@ namespace UniforBackend.API.Controllers
             _authorizationService = authorizationService;
         }
 
-        [HttpGet("confirmar-email")]
+        [HttpGet("confirmar-email/{userId}/{codigoVerificacao}")]
         public ActionResult ConfirmarEmail(string userId, string codigoVerificacao)
         {
             var status = _authorizationService.ValidarEmail(userId, codigoVerificacao);
@@ -22,5 +24,7 @@ namespace UniforBackend.API.Controllers
                 return BadRequest("Falha na confirmação de email.");
             }
         }
+
+        //todo -> rota pra re-enviar codigo de verificacao
     }
 }

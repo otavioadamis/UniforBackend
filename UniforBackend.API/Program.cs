@@ -46,6 +46,7 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IVendaRepo, VendaRepo>();
             builder.Services.AddScoped<ICategoriaRepo, CategoriaRepo>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
         builder.Services.AddControllers();
         

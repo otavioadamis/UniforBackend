@@ -8,6 +8,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
 {
     public interface IEmailService
     {
-        public Task SendEmailAsync(string userEmail, string body);
+        public Task SendEmailAsync(string userEmail, string body, string subject);
     }
 }
