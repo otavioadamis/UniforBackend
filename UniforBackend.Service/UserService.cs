@@ -37,7 +37,7 @@ namespace UniforBackend.Service
             return response;
         }
 
-        public LoginResponseModel Signup(PostUserDTO thisUser)
+        public LoginResponseModel Signup(PostUserDTO thisUser, string callback_url)
         {
             var checkEmail = _userRepository.GetByEmail(thisUser.Email);
             if (checkEmail != null)
@@ -67,8 +67,8 @@ namespace UniforBackend.Service
             _userRepository.Add(newUser);
             _userRepository.SaveChanges();
 
-            //envia codigo de verificao + userid em uma rota para o email do usuario.
-            var body = "http://localhost:8080/api/Auth/confirmar-email/" + newUser.Id + "/" + codigoVerificacao;
+            string body = $"{callback_url}/api/Auth/confirmar-email/{newUser.Id}/{codigoVerificacao}";
+            /*var body = "http://localhost:8080/api/Auth/confirmar-email/" + newUser.Id + "/" + codigoVerificacao;*/
             var status = _emailService.SendEmailAsync(newUser.Email, body, "Bazar - Verifique seu email.");
 
             if (status.IsCompletedSuccessfully)
@@ -83,14 +83,6 @@ namespace UniforBackend.Service
                     User = userModel
                 };
                 return res;
-            }
-            else
-            {
-                throw new CustomException(new ErrorResponse
-                {
-                    Message = "Erro no envio de email",
-                    StatusCode = (int)HttpStatusCode.Conflict,
-                });
             }
         }
 

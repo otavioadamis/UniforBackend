@@ -28,7 +28,8 @@ namespace UniforBackend.API.Controllers
         [HttpPost()]
         public ActionResult<LoginResponseModel> Signup(PostUserDTO user)
         {
-            var addedUser = _userService.Signup(user);
+            string callback_url = $"{Request.Scheme}://{Request.Host}";       
+            var addedUser = _userService.Signup(user, callback_url);
             return Ok(addedUser);
         }
 
