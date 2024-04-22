@@ -69,21 +69,18 @@ namespace UniforBackend.Service
 
             string body = $"{callback_url}/api/Auth/confirmar-email/{newUser.Id}/{codigoVerificacao}";
             /*var body = "http://localhost:8080/api/Auth/confirmar-email/" + newUser.Id + "/" + codigoVerificacao;*/
-            var status = _emailService.SendEmailAsync(newUser.Email, body, "Bazar - Verifique seu email.");
+            _emailService.SendEmailAsync(newUser.Email, body, "Bazar - Verifique seu email.");
+    
+            var userModel = new UserDTO();
+            userModel = userModel.CreateModel(newUser);
 
-            if (status.IsCompletedSuccessfully)
+            //todo -> ajustar response signup
+            var res = new LoginResponseModel
             {
-                var userModel = new UserDTO();
-                userModel = userModel.CreateModel(newUser);
-
-                //todo -> ajustar response signup
-                var res = new LoginResponseModel
-                {
-                    Token = "enviar por email, mas so pra teste: " + codigoVerificacao,
-                    User = userModel
-                };
-                return res;
-            }
+               Token = "enviar por email, mas so pra teste: " + codigoVerificacao,
+               User = userModel
+            };
+            return res;
         }
 
         public LoginResponseModel Login(UserLoginDTO thisUser)
