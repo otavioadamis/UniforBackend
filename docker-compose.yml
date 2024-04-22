@@ -14,6 +14,8 @@ services:
       dockerfile: ./UniforBackend.API/Dockerfile
     environment:
       - DatabaseSettings__ConnectionString=Host=uniforbackend_db; Database=uniforbazar; Username=postgres; Password=1234
+    env_file:
+      - .env
     networks:
       - uniforbackendNet
     healthcheck:

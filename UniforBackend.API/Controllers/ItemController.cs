@@ -6,6 +6,7 @@ using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UniforBackend.API.Controllers
 {
@@ -62,8 +63,9 @@ namespace UniforBackend.API.Controllers
         [CustomAuthorize]
         [HttpPost()]
         public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
-        {
+        {   
             var userFromJwt = (User)HttpContext.Items["User"];
+            
             var addedItem = _itemService.AddItem(item, userFromJwt.Id);
             return Ok(addedItem);
         }

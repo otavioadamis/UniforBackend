@@ -19,6 +19,12 @@ namespace UniforBackend.API
 
         var builder = WebApplication.CreateBuilder(args);
 
+            var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+            var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+
+            builder.Configuration["AwsConfiguration:AWSAccessKey"] = awsAccessKey;
+            builder.Configuration["AwsConfiguration:AWSSecretKey"] = awsSecretKey;
+
             //Configurando conexao do banco de dados
 
             string connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");

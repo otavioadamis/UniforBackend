@@ -13,7 +13,8 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public decimal Preco { get; set; }
         [Required]
         public bool AceitaTroca { get; set; }
-        public IFormFile? Foto { get; set; }
+        [Required]
+        public IFormFile Foto { get; set; } = null!;
         [Required]
         public string SubCategoria { get; set; } = null!;
     }
