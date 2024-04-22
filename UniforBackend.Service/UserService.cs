@@ -24,9 +24,9 @@ namespace UniforBackend.Service
             var user = _userRepository.GetById(userId);
             
             var response = new UserDTO();
-            response.CreateModel(user);
+            var userDTO = response.CreateModel(user);
             
-            return response;
+            return userDTO;
         }
 
         public User GetById(string userId)
@@ -115,9 +115,9 @@ namespace UniforBackend.Service
             _userRepository.SaveChanges();
             
             var response = new UserDTO();
-            response.CreateModel(user);
+            var userDTO = response.CreateModel(user);
             
-            return response;
+            return userDTO;
         }
 
         public void DeleteUser(string userId)
