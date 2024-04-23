@@ -68,11 +68,10 @@ namespace UniforBackend.API.Controllers
         public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
         {
             using var memoryStream = new MemoryStream();
-            item.Foto.CopyTo(memoryStream);
-            
+            item.Foto.CopyTo(memoryStream);                  
             string fileExt = Path.GetExtension(item.Foto.FileName);
+
             var userFromJwt = (User)HttpContext.Items["User"];                
-            
             var addedItem = _itemService.AddItem(item, userFromJwt.Id, fileExt);
             
             _storageService.UploadFileAsync(memoryStream, addedItem.Id, fileExt); 

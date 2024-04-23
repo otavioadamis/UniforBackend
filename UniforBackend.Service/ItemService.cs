@@ -70,7 +70,6 @@ namespace UniforBackend.Service
             return response;
         }
 
-
         public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize)
         {
             var itens = _itemRepository.GetAllItens(search, pagina, pageSize);
