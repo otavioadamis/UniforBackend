@@ -15,7 +15,7 @@ services:
     environment:
       - DatabaseSettings__ConnectionString=Host=uniforbackend_db; Database=uniforbazar; Username=postgres; Password=1234
     env_file:
-      - .env
+      - ./UniforBackend.API/.env
     networks:
       - uniforbackendNet
     healthcheck:
