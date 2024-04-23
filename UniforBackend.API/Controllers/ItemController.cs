@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
-using UniforBackend.Service;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UniforBackend.API.Controllers
 {
