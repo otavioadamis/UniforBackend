@@ -64,14 +64,11 @@ namespace UniforBackend.Service
             _itemRepository.Add(addedItem);
             _itemRepository.SaveChanges();
 
-            using var memoryStream = new MemoryStream();
-            item.Foto.CopyTo(memoryStream);
             string fileExt = Path.GetExtension(item.Foto.FileName);
-
             addedItem.Foto = $"https://uniforbackend-test.s3.amazonaws.com/{addedItem.Id}{fileExt}";          
+            
             _itemRepository.SaveChanges();
-
-            _storageService.UploadFileAsync(memoryStream, addedItem.Id, fileExt);
+            _storageService.UploadFileAsync(item.Foto, addedItem.Id, fileExt);
 
             var response = new ItemDTO(addedItem, vendedor);
 

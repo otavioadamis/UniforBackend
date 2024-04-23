@@ -22,7 +22,7 @@ namespace UniforBackend.Service
             _configuration = configuration;
         }
 
-        public async Task<S3ResponseDTO> UploadFileAsync(MemoryStream memoryStream, string nome, string fileExt)
+        public async Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt)
         {
 
             var awsCredentials = new AwsCredentials()
@@ -41,6 +41,9 @@ namespace UniforBackend.Service
             };
 
             var response = new S3ResponseDTO();
+
+            await using var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream);
 
             S3Object s3obj = new S3Object()
             {
