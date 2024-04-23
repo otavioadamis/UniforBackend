@@ -12,7 +12,7 @@ namespace UniforBackend.Domain.Interfaces.IServices
         public UserItensDTO GetItensFromUserId(string userId);
         public PagedResult<ItemDTO> GetItensByCategory(string category, int pagina, int pageSize);
         public UserItensDTO GetItensPendentes(string userId);
-        public ItemDTO AddItem(PostItemDTO item, string userId, string fileExt);
+        public ItemDTO AddItem(PostItemDTO item, string userId);
         public ItemDTO UpdateItem(UpdateItemDTO newItem, string itemId);
         public void VendeItem(string itemId);
         void DeleteItem(string itemId);

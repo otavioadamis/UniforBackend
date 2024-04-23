@@ -16,12 +16,10 @@ namespace UniforBackend.API.Controllers
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
-        private readonly IStorageService _storageService;
 
-        public ItemController(IItemService itemService, IStorageService storageService)
+        public ItemController(IItemService itemService)
         {
             _itemService = itemService;
-            _storageService = storageService;
         }
 
         [HttpGet("{itemId}")]
@@ -67,14 +65,9 @@ namespace UniforBackend.API.Controllers
         [HttpPost()]
         public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
         {
-            using var memoryStream = new MemoryStream();
-            item.Foto.CopyTo(memoryStream);                  
-            string fileExt = Path.GetExtension(item.Foto.FileName);
-
             var userFromJwt = (User)HttpContext.Items["User"];                
-            var addedItem = _itemService.AddItem(item, userFromJwt.Id, fileExt);
+            var addedItem = _itemService.AddItem(item, userFromJwt.Id);
             
-            _storageService.UploadFileAsync(memoryStream, addedItem.Id, fileExt); 
             return Ok(addedItem);
         }
 
