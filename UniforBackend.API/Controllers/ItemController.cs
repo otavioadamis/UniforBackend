@@ -6,6 +6,7 @@ using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
+using UniforBackend.Service;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace UniforBackend.API.Controllers
@@ -15,10 +16,12 @@ namespace UniforBackend.API.Controllers
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
+        private readonly IStorageService _storageService;
 
-        public ItemController(IItemService itemService)
+        public ItemController(IItemService itemService, IStorageService storageService)
         {
             _itemService = itemService;
+            _storageService = storageService;
         }
 
         [HttpGet("{itemId}")]
@@ -63,10 +66,16 @@ namespace UniforBackend.API.Controllers
         [CustomAuthorize]
         [HttpPost()]
         public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
-        {   
-            var userFromJwt = (User)HttpContext.Items["User"];
+        {
+            using var memoryStream = new MemoryStream();
+            item.Foto.CopyTo(memoryStream);
             
-            var addedItem = _itemService.AddItem(item, userFromJwt.Id);
+            string fileExt = Path.GetExtension(item.Foto.FileName);
+            var userFromJwt = (User)HttpContext.Items["User"];                
+            
+            var addedItem = _itemService.AddItem(item, userFromJwt.Id, fileExt);
+            
+            _storageService.UploadFileAsync(memoryStream, addedItem.Id, fileExt); 
             return Ok(addedItem);
         }
 

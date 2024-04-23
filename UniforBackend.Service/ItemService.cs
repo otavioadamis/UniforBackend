@@ -14,14 +14,12 @@ namespace UniforBackend.Service
         private readonly IItemRepo _itemRepository;
         private readonly ICategoriaRepo _categoriaRepo;
         private readonly IUserRepo _userRepo;
-        private readonly IStorageService _storageService;
 
-        public ItemService(IItemRepo itemRepository, ICategoriaRepo categoriaRepo, IUserRepo userRepo, IStorageService storageService)
+        public ItemService(IItemRepo itemRepository, ICategoriaRepo categoriaRepo, IUserRepo userRepo)
         {
             _itemRepository = itemRepository;
             _categoriaRepo = categoriaRepo;
             _userRepo = userRepo;
-            _storageService = storageService;
         }
 
         public ItemDTO GetItemById(string itemId)
@@ -38,7 +36,7 @@ namespace UniforBackend.Service
             return itemDTO;
         }
 
-        public ItemDTO AddItem(PostItemDTO item, string userId)
+        public ItemDTO AddItem(PostItemDTO item, string userId, string fileExt)
         {
             var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
             if(subCategoria == null)
@@ -63,16 +61,9 @@ namespace UniforBackend.Service
 
             _itemRepository.Add(addedItem);
             _itemRepository.SaveChanges();
-
-            MemoryStream memoryStream = new MemoryStream();
-            item.Foto.CopyTo(memoryStream);          
             
-            string fileExt = Path.GetExtension(item.Foto.Name);
-
-            addedItem.Foto = $"https://uniforbackend-test.s3.amazonaws.com/{addedItem.Id}.{fileExt}";     
+            addedItem.Foto = $"https://uniforbackend-test.s3.amazonaws.com/{addedItem.Id}{fileExt}";          
             _itemRepository.SaveChanges();
-
-            _storageService.UploadFileAsync(item.Foto, addedItem.Id, fileExt);
 
             var response = new ItemDTO(addedItem, vendedor);
 

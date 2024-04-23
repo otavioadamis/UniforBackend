@@ -22,13 +22,15 @@ namespace UniforBackend.Service
             _configuration = configuration;
         }
 
-        public async Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt)
+        public async Task<S3ResponseDTO> UploadFileAsync(MemoryStream memoryStream, string nome, string fileExt)
         {
+
             var awsCredentials = new AwsCredentials()
             {
                 AwsKey = _configuration["AwsConfiguration:AWSAccessKey"],
                 AwsSecret = _configuration["AwsConfiguration:AWSSecretKey"]
             };
+
             // Credenciais para acesso
             var credentials = new BasicAWSCredentials(awsCredentials.AwsKey, awsCredentials.AwsSecret);
 
@@ -40,12 +42,11 @@ namespace UniforBackend.Service
 
             var response = new S3ResponseDTO();
 
-            MemoryStream memoryStream = new MemoryStream();
             S3Object s3obj = new S3Object()
             {
                 BucketName = "uniforbackend-test",
                 InputStream = memoryStream,
-                Name = $"{nome}.{fileExt}"
+                Name = $"{nome}{fileExt}"
             };
 
             try
