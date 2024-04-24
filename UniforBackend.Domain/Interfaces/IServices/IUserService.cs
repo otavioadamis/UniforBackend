@@ -11,7 +11,7 @@ namespace UniforBackend.Domain.Interfaces.IServices
     public interface IUserService
     {
         public UserDTO GetUserById(string userId);
-        public LoginResponseModel Signup(PostUserDTO thisUser, string callback_url);
+        public UserDTO Signup(PostUserDTO thisUser, string callback_url);
         public LoginResponseModel Login(UserLoginDTO thisUser);
         public UserDTO UpdateUser(UpdateUserDTO updatedUser, string userId);
         public void DeleteUser(string userId);
