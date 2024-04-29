@@ -62,8 +62,7 @@ namespace UniforBackend.API.Controllers
         public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
         {
             var userFromJwt = (User)HttpContext.Items["User"];                
-            var addedItem = _itemService.AddItem(item, userFromJwt.Id);
-            
+            var addedItem = _itemService.AddItem(item, userFromJwt.Id);       
             return Ok(addedItem);
         }
 
