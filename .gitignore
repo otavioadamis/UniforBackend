@@ -275,8 +275,7 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # AppSettings files
+.env
 
 # vs file
 .vs
-
-.env
