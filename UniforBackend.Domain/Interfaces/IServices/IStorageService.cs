@@ -10,6 +10,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
 {
     public interface IStorageService
     {
-        Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt);
+        public Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt, int index);
     }
 }

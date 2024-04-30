@@ -15,13 +15,19 @@ namespace UniforBackend.Service
         private readonly ICategoriaRepo _categoriaRepo;
         private readonly IUserRepo _userRepo;
         private readonly IStorageService _storageService;
+        private readonly IImagemRepo _imagemRepo;
 
-        public ItemService(IItemRepo itemRepository, ICategoriaRepo categoriaRepo, IUserRepo userRepo, IStorageService storageService)
+        public ItemService(IItemRepo itemRepository, 
+            ICategoriaRepo categoriaRepo, 
+            IUserRepo userRepo, 
+            IStorageService storageService, 
+            IImagemRepo imagemRepo)
         {
             _itemRepository = itemRepository;
             _categoriaRepo = categoriaRepo;
             _userRepo = userRepo;
             _storageService = storageService;
+            _imagemRepo = imagemRepo;
         }
 
         public ItemDTO GetItemById(string itemId)
@@ -38,8 +44,17 @@ namespace UniforBackend.Service
             return itemDTO;
         }
 
-        public ItemDTO AddItem(PostItemDTO item, string userId)
+        public async Task<ItemDTO> AddItem(PostItemDTO item, string userId)
         {
+            if (item.Foto.Count() > 5)
+            {
+                throw new CustomException(new ErrorResponse()
+                {
+                    Message = "Limite máximo de imagens ultrapassado, apenas 5 imagens!",
+                    StatusCode= (int)HttpStatusCode.BadRequest,
+                });
+            }
+
             var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
             if(subCategoria == null)
             {
@@ -65,12 +80,21 @@ namespace UniforBackend.Service
             _itemRepository.Add(addedItem);
             _itemRepository.SaveChanges();
 
-            string fileExt = Path.GetExtension(item.Foto.FileName);
-            addedItem.Foto = $"https://uniforbackend-test.s3.amazonaws.com/{addedItem.Id}{fileExt}";          
-            
-            _itemRepository.SaveChanges();
-            _storageService.UploadFileAsync(item.Foto, addedItem.Id, fileExt);
-
+            for(int i = 0; i < item.Foto.Count(); i++)
+            {
+                string fileExt = Path.GetExtension(item.Foto[i].FileName);
+                var newImagem = new Imagem()
+                {
+                    ItemId = addedItem.Id,
+                    Extensao = fileExt,
+                    Index = i + 1,
+                };
+                
+                _imagemRepo.Add(newImagem);
+                _imagemRepo.SaveChanges();
+                
+                await _storageService.UploadFileAsync(item.Foto[i], addedItem.Id, fileExt, i+1);
+            }
             var response = _itemRepository.GetItemDTOById(addedItem.Id);
             return response;
         }

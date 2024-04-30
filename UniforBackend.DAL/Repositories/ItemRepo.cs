@@ -53,7 +53,6 @@ namespace UniforBackend.DAL.Repositories
                                Descricao = item.Descricao,
                                Preco = item.Preco,
                                AceitaTroca = item.AceitaTroca,
-                               Foto = item.Foto,
                                PostadoEm = item.PostadoEm,
                                NomeVendedor = user.Nome,
                                VendedorId = user.Id,
@@ -82,7 +81,6 @@ namespace UniforBackend.DAL.Repositories
                                    Descricao = item.Descricao,
                                    PostadoEm = item.PostadoEm,
                                    AceitaTroca = item.AceitaTroca,
-                                   Foto = item.Foto,
                                    SubCategoria = subcategory.Nome,
                                }).OrderByDescending(x => x.PostadoEm).ToList();
 
@@ -116,7 +114,6 @@ namespace UniforBackend.DAL.Repositories
                                    Descricao = item.Descricao,
                                    PostadoEm = item.PostadoEm,
                                    AceitaTroca = item.AceitaTroca,
-                                   Foto = item.Foto,
                                    SubCategoria = subcategory.Nome,
                                }).OrderByDescending(x => x.PostadoEm).ToList();
 
@@ -156,7 +153,6 @@ namespace UniforBackend.DAL.Repositories
                                    Descricao = item.Descricao,
                                    Preco = item.Preco,
                                    AceitaTroca = item.AceitaTroca,
-                                   Foto = item.Foto,
                                    PostadoEm = item.PostadoEm,
                                    NomeVendedor = user.Nome,
                                    VendedorId = user.Id,
@@ -183,7 +179,6 @@ namespace UniforBackend.DAL.Repositories
                                   Descricao = item.Descricao,
                                   Preco = item.Preco,
                                   AceitaTroca = item.AceitaTroca,
-                                  Foto = item.Foto,
                                   PostadoEm = item.PostadoEm,
                                   NomeVendedor = user.Nome,
                                   VendedorId = user.Id,
@@ -215,7 +210,6 @@ namespace UniforBackend.DAL.Repositories
                                     Descricao = item.Descricao,
                                     PostadoEm = item.PostadoEm,
                                     AceitaTroca = item.AceitaTroca,
-                                    Foto = item.Foto,
                                     VendedorId = user.Id,
                                     NomeVendedor = user.Nome,
                                     MostrarContato = item.MostrarContato,

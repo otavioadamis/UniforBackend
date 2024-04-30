@@ -59,10 +59,10 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpPost()]
-        public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
+        public async Task<ActionResult<ItemDTO>> AddItem([FromForm] PostItemDTO item)
         {
             var userFromJwt = (User)HttpContext.Items["User"];                
-            var addedItem = _itemService.AddItem(item, userFromJwt.Id);       
+            var addedItem = await _itemService.AddItem(item, userFromJwt.Id);       
             return Ok(addedItem);
         }
 

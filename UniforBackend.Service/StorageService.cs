@@ -22,7 +22,7 @@ namespace UniforBackend.Service
             _configuration = configuration;
         }
 
-        public async Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt)
+        public async Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt, int index)
         {
 
             var awsCredentials = new AwsCredentials()
@@ -49,7 +49,7 @@ namespace UniforBackend.Service
             {
                 BucketName = "uniforbackend-test",
                 InputStream = memoryStream,
-                Name = $"{nome}{fileExt}"
+                Name = $"{nome}_{index}{fileExt}"
             };
 
             try
