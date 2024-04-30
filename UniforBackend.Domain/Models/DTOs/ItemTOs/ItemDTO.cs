@@ -15,25 +15,12 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public string Nome { get; set; } = null!;
         public string Descricao { get; set; } = null!;
         public decimal Preco { get; set; }
-        public byte[]? Foto { get; set; }
+        public string? Foto { get; set; }
         public bool AceitaTroca { get; set; }
-        public string VendedorId { get; set; }
-        public string NomeVendedor { get; set; }
+        public bool MostrarContato { get; set; }
+        public string VendedorId { get; set; } = null!;
+        public string NomeVendedor { get; set; } = null!;
+        public string SubCategoria { get; set; } = null!;
         public DateOnly PostadoEm { get; set; }
-
-        public ItemDTO() { }
-
-        public ItemDTO(Item item, User user)
-        {
-            Id = item.Id;
-            Nome = item.Nome;
-            Descricao = item.Descricao;
-            Preco = item.Preco;
-            Foto = item.Foto;
-            AceitaTroca = item.AceitaTroca;
-            PostadoEm = item.PostadoEm;
-            VendedorId = user.Id;
-            NomeVendedor = user.Nome;
-        }
     }
 }

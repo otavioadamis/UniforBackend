@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
@@ -21,7 +19,7 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpGet("{itemId}")]
-        public ActionResult<ItemDTO> GetItemById(string itemId) 
+        public ActionResult<ItemDTO> GetItemById(string itemId)
         {
             var item = _itemService.GetItemById(itemId);
             return Ok(item);
@@ -61,10 +59,10 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpPost()]
-        public ActionResult<ItemDTO> AddItem(PostItemDTO item)
+        public ActionResult<ItemDTO> AddItem([FromForm] PostItemDTO item)
         {
-            var userFromJwt = (User)HttpContext.Items["User"];
-            var addedItem = _itemService.AddItem(item, userFromJwt.Id);
+            var userFromJwt = (User)HttpContext.Items["User"];                
+            var addedItem = _itemService.AddItem(item, userFromJwt.Id);       
             return Ok(addedItem);
         }
 

@@ -19,6 +19,12 @@ namespace UniforBackend.API
 
         var builder = WebApplication.CreateBuilder(args);
 
+            var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+            var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+
+            builder.Configuration["AwsConfiguration:AWSAccessKey"] = awsAccessKey;
+            builder.Configuration["AwsConfiguration:AWSSecretKey"] = awsSecretKey;
+
             //Configurando conexao do banco de dados
 
             string connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");
@@ -39,6 +45,7 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IVendaService, VendaService>();
             builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IStorageService, StorageService>();
 
             // Adicionando repositorios e suas abstracoes
 
@@ -85,7 +92,7 @@ namespace UniforBackend.API
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseHttpsRedirection();

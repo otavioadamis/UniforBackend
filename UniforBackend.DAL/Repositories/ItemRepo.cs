@@ -45,6 +45,7 @@ namespace UniforBackend.DAL.Repositories
             var itemDTO = (from Item item in _dbContext.Itens
                            where item.Id == _id
                            join user in _dbContext.Users on item.UserId equals user.Id
+                           join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                            select new ItemDTO()
                            {
                                Id = item.Id,
@@ -55,7 +56,9 @@ namespace UniforBackend.DAL.Repositories
                                Foto = item.Foto,
                                PostadoEm = item.PostadoEm,
                                NomeVendedor = user.Nome,
-                               VendedorId = user.Id
+                               VendedorId = user.Id,
+                               MostrarContato = item.MostrarContato,
+                               SubCategoria = subcategory.Nome,
                            }
                 ).FirstOrDefault();
             return itemDTO;
@@ -66,7 +69,11 @@ namespace UniforBackend.DAL.Repositories
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = (from item in itemQuery
-                               where item.UserId == userId && item.isAprovado == true
+                               where 
+                               item.UserId == userId 
+                               && item.isAprovado == true 
+                               && item.IsVendido == false
+                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                select new ItemCardDTO()
                                {
                                    Id = item.Id,
@@ -76,6 +83,7 @@ namespace UniforBackend.DAL.Repositories
                                    PostadoEm = item.PostadoEm,
                                    AceitaTroca = item.AceitaTroca,
                                    Foto = item.Foto,
+                                   SubCategoria = subcategory.Nome,
                                }).OrderByDescending(x => x.PostadoEm).ToList();
 
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
@@ -88,7 +96,6 @@ namespace UniforBackend.DAL.Repositories
                 Nome = user.Nome,
                 Itens = queryResult,
             };
-
             return response;
         }
 
@@ -97,7 +104,10 @@ namespace UniforBackend.DAL.Repositories
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = (from item in itemQuery
-                               where item.UserId == userId && item.isAprovado == false
+                               where 
+                               item.UserId == userId 
+                               && item.isAprovado == false
+                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                select new ItemCardDTO()
                                {
                                    Id = item.Id,
@@ -107,6 +117,7 @@ namespace UniforBackend.DAL.Repositories
                                    PostadoEm = item.PostadoEm,
                                    AceitaTroca = item.AceitaTroca,
                                    Foto = item.Foto,
+                                   SubCategoria = subcategory.Nome,
                                }).OrderByDescending(x => x.PostadoEm).ToList();
 
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
@@ -133,19 +144,24 @@ namespace UniforBackend.DAL.Repositories
             }
 
             var queryResult = (from item in itemQuery
-                               where item.IsVendido == false && item.isAprovado == true
+                               where 
+                               item.IsVendido == false 
+                               && item.isAprovado == true
                                join user in _dbContext.Users on item.UserId equals user.Id
+                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                select new ItemDTO()
                                {
                                    Id = item.Id,
                                    Nome = item.Nome,
-                                   Preco = item.Preco,
                                    Descricao = item.Descricao,
-                                   PostadoEm = item.PostadoEm,
+                                   Preco = item.Preco,
                                    AceitaTroca = item.AceitaTroca,
                                    Foto = item.Foto,
-                                   VendedorId = user.Id,
+                                   PostadoEm = item.PostadoEm,
                                    NomeVendedor = user.Nome,
+                                   VendedorId = user.Id,
+                                   MostrarContato = item.MostrarContato,
+                                   SubCategoria = subcategory.Nome,
                                }).OrderByDescending(x => x.PostadoEm);
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
            
@@ -159,17 +175,20 @@ namespace UniforBackend.DAL.Repositories
             var queryResult = from item in itemQuery
                               where item.isAprovado == false
                               join user in _dbContext.Users on item.UserId equals user.Id
+                              join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                               select new ItemDTO()
                               {
                                   Id = item.Id,
                                   Nome = item.Nome,
-                                  Preco = item.Preco,
                                   Descricao = item.Descricao,
-                                  PostadoEm = item.PostadoEm,
+                                  Preco = item.Preco,
                                   AceitaTroca = item.AceitaTroca,
                                   Foto = item.Foto,
-                                  VendedorId = user.Id,
+                                  PostadoEm = item.PostadoEm,
                                   NomeVendedor = user.Nome,
+                                  VendedorId = user.Id,
+                                  MostrarContato = item.MostrarContato,
+                                  SubCategoria = subcategory.Nome,
                               };
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
             
@@ -180,25 +199,28 @@ namespace UniforBackend.DAL.Repositories
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
-            var queryResult = (
-                from item in itemQuery
-                where item.IsVendido == false && item.isAprovado == true
-                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
-                join category in _dbContext.Categorias on subcategory.CategoriaId equals category.Id
-                where subcategory.Nome == name || category.Nome == name
-                join user in _dbContext.Users on item.UserId equals user.Id
-                select new ItemDTO()
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Preco = item.Preco,
-                    Descricao = item.Descricao,
-                    PostadoEm = item.PostadoEm,
-                    AceitaTroca = item.AceitaTroca,
-                    Foto = item.Foto,
-                    VendedorId = user.Id,
-                    NomeVendedor = user.Nome,
-                }).OrderByDescending(x => x.PostadoEm);
+            var queryResult =  (from item in itemQuery
+                                where 
+                                item.IsVendido == false 
+                                && item.isAprovado == true
+                                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
+                                join category in _dbContext.Categorias on subcategory.CategoriaId equals category.Id
+                                where subcategory.Nome == name || category.Nome == name
+                                join user in _dbContext.Users on item.UserId equals user.Id
+                                select new ItemDTO()
+                                {
+                                    Id = item.Id,
+                                    Nome = item.Nome,
+                                    Preco = item.Preco,
+                                    Descricao = item.Descricao,
+                                    PostadoEm = item.PostadoEm,
+                                    AceitaTroca = item.AceitaTroca,
+                                    Foto = item.Foto,
+                                    VendedorId = user.Id,
+                                    NomeVendedor = user.Nome,
+                                    MostrarContato = item.MostrarContato,
+                                    SubCategoria = subcategory.Nome,
+                                }).OrderByDescending(x => x.PostadoEm);
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
 
             return pagedResult;

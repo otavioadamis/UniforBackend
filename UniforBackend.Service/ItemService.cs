@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http;
+using System.Net;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
@@ -13,12 +14,14 @@ namespace UniforBackend.Service
         private readonly IItemRepo _itemRepository;
         private readonly ICategoriaRepo _categoriaRepo;
         private readonly IUserRepo _userRepo;
+        private readonly IStorageService _storageService;
 
-        public ItemService(IItemRepo itemRepository, ICategoriaRepo categoriaRepo, IUserRepo userRepo)
+        public ItemService(IItemRepo itemRepository, ICategoriaRepo categoriaRepo, IUserRepo userRepo, IStorageService storageService)
         {
             _itemRepository = itemRepository;
             _categoriaRepo = categoriaRepo;
             _userRepo = userRepo;
+            _storageService = storageService;
         }
 
         public ItemDTO GetItemById(string itemId)
@@ -47,25 +50,30 @@ namespace UniforBackend.Service
                 });
             }
             var vendedor = _userRepo.GetById(userId);
+
             var addedItem = new Item()
             {
                 Nome = item.Nome,
                 Descricao = item.Descricao,
                 Preco = item.Preco,
                 AceitaTroca = item.AceitaTroca,
+                MostrarContato = item.MostrarContato,
                 UserId = userId,
-                Foto = item.Foto,
                 SubCategoriaId = subCategoria.Id,
             };
 
             _itemRepository.Add(addedItem);
             _itemRepository.SaveChanges();
 
-            var response = new ItemDTO(addedItem, vendedor);
+            string fileExt = Path.GetExtension(item.Foto.FileName);
+            addedItem.Foto = $"https://uniforbackend-test.s3.amazonaws.com/{addedItem.Id}{fileExt}";          
+            
+            _itemRepository.SaveChanges();
+            _storageService.UploadFileAsync(item.Foto, addedItem.Id, fileExt);
 
+            var response = _itemRepository.GetItemDTOById(addedItem.Id);
             return response;
         }
-
 
         public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize)
         {
@@ -119,12 +127,10 @@ namespace UniforBackend.Service
                 });
             }
 
-            var vendedor = _userRepo.GetById(itemToUpdate.UserId);
-
             newItem.UpdateFields(itemToUpdate);
             _itemRepository.SaveChanges();
 
-            var response = new ItemDTO(itemToUpdate, vendedor);
+            var response = _itemRepository.GetItemDTOById(itemToUpdate.Id);
             return response;
         }
 
