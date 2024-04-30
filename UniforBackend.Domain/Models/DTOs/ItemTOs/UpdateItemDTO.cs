@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,23 +12,23 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
     public class UpdateItemDTO
     {
         [Required]
-        public string NovoNome { get; set; } = null!;
+        public string Nome { get; set; } = null!;
         [Required]
-        public string NovaDescricao { get; set; } = null!;
+        public string Descricao { get; set; } = null!;
         [Required]
-        public decimal NovoPreco { get; set; }
+        public decimal Preco { get; set; }
         [Required]
         public bool AceitaTroca { get; set; }
-        public string NovaFoto { get; set; }
-
+        [Required]
+        public bool MostrarContato { get; set; }
 
         public void UpdateFields(Item item)
         {
-            item.Nome = NovoNome;
-            item.Descricao = NovaDescricao;
-            item.Preco = NovoPreco;
+            item.Nome = Nome;
+            item.Descricao = Descricao;
+            item.Preco = Preco;
             item.AceitaTroca = AceitaTroca;
-            item.Foto = NovaFoto;
+            item.MostrarContato = MostrarContato;
         }
 
     }

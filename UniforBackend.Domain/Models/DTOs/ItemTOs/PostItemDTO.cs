@@ -17,5 +17,7 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public IFormFile Foto { get; set; } = null!;
         [Required]
         public string SubCategoria { get; set; } = null!;
+        [Required]
+        public bool MostrarContato { get; set; }
     }
 }

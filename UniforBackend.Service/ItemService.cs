@@ -57,6 +57,7 @@ namespace UniforBackend.Service
                 Descricao = item.Descricao,
                 Preco = item.Preco,
                 AceitaTroca = item.AceitaTroca,
+                MostrarContato = item.MostrarContato,
                 UserId = userId,
                 SubCategoriaId = subCategoria.Id,
             };
@@ -70,8 +71,7 @@ namespace UniforBackend.Service
             _itemRepository.SaveChanges();
             _storageService.UploadFileAsync(item.Foto, addedItem.Id, fileExt);
 
-            var response = new ItemDTO(addedItem, vendedor);
-
+            var response = _itemRepository.GetItemDTOById(addedItem.Id);
             return response;
         }
 
@@ -127,12 +127,10 @@ namespace UniforBackend.Service
                 });
             }
 
-            var vendedor = _userRepo.GetById(itemToUpdate.UserId);
-
             newItem.UpdateFields(itemToUpdate);
             _itemRepository.SaveChanges();
 
-            var response = new ItemDTO(itemToUpdate, vendedor);
+            var response = _itemRepository.GetItemDTOById(itemToUpdate.Id);
             return response;
         }
 

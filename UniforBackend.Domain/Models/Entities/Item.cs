@@ -23,9 +23,11 @@ namespace UniforBackend.Domain.Models.Entities
         [Column(TypeName = "varchar(255)")]
         public string? Foto { get; set; }
         public bool AceitaTroca { get; set; }
+        public bool MostrarContato { get; set; }
         public bool isAprovado { get; set; } = false;
         public bool IsVendido { get; set; } = false;
         public DateOnly PostadoEm { get; set; }
+        
         
         //EF Core mapping
         public User User { get; set; } = null!;
