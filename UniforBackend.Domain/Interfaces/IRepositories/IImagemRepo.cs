@@ -12,6 +12,8 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
     {
         public void SaveChanges();
         public Imagem Add(Imagem thisImagem);
+        public ImagemDTO GetById(string imagemId);
         public IEnumerable<ImagemDTO> GetAllByItemId(string itemId);
+        public void Delete(string imageId);
     }
 }

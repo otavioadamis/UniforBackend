@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniforBackend.Domain.Models.DTOs.S3TOs
 {
-    public class S3Object
+    public class S3Objeto
     {
         public string Name { get; set; } = null!;
         public MemoryStream InputStream { get; set; } = null!;

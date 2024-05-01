@@ -8,6 +8,7 @@ namespace UniforBackend.Domain.Models.DTOs.ImageTOs
 {
     public class ImagemDTO
     {
+        public string Id { get; set; } = null!;
         public string URL { get; set; } = null!;
         public int Index { get; set; }
     }
