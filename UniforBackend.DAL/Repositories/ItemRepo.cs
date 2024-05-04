@@ -3,6 +3,7 @@ using UniforBackend.DAL.Data;
 using UniforBackend.DAL.Helpers;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
+using UniforBackend.Domain.Models.DTOs.ImageTOs;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
@@ -12,9 +13,11 @@ namespace UniforBackend.DAL.Repositories
     public class ItemRepo : IItemRepo
     {
         private readonly AppDbContext _dbContext;
-        public ItemRepo(AppDbContext appDbContext)
+        private readonly IImagemRepo _imagemRepo;
+        public ItemRepo(AppDbContext appDbContext, IImagemRepo imagemRepo)
         {
             _dbContext = appDbContext;
+            _imagemRepo = imagemRepo;
         }
 
         public void SaveChanges()
@@ -46,6 +49,7 @@ namespace UniforBackend.DAL.Repositories
                            where item.Id == _id
                            join user in _dbContext.Users on item.UserId equals user.Id
                            join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
+                           join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
                            select new ItemDTO()
                            {
                                Id = item.Id,
@@ -58,6 +62,7 @@ namespace UniforBackend.DAL.Repositories
                                VendedorId = user.Id,
                                MostrarContato = item.MostrarContato,
                                SubCategoria = subcategory.Nome,
+                               Imagens = imagensgroup.Select(x => new ImagemDTO() { Id = x.Id, Index = x.Index, URL = "" }).ToArray(),
                            }
                 ).FirstOrDefault();
             return itemDTO;
@@ -146,6 +151,7 @@ namespace UniforBackend.DAL.Repositories
                                && item.isAprovado == true
                                join user in _dbContext.Users on item.UserId equals user.Id
                                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
+                               join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
                                select new ItemDTO()
                                {
                                    Id = item.Id,
@@ -158,6 +164,7 @@ namespace UniforBackend.DAL.Repositories
                                    VendedorId = user.Id,
                                    MostrarContato = item.MostrarContato,
                                    SubCategoria = subcategory.Nome,
+                                   Imagens = imagensgroup.Select(x => new ImagemDTO() { Id = x.Id, Index = x.Index, URL = "" }).ToArray(),
                                }).OrderByDescending(x => x.PostadoEm);
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
            
@@ -167,6 +174,7 @@ namespace UniforBackend.DAL.Repositories
         public PagedResult<ItemDTO> GetAllUnauthorized(int pagina, int pageSize)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
+            IQueryable<Imagem> imagemQuery = _dbContext.Imagens;
 
             var queryResult = from item in itemQuery
                               where item.isAprovado == false
@@ -184,6 +192,7 @@ namespace UniforBackend.DAL.Repositories
                                   VendedorId = user.Id,
                                   MostrarContato = item.MostrarContato,
                                   SubCategoria = subcategory.Nome,
+                                  Imagens = _imagemRepo.GetAllByItemId(item.Id).ToArray(),
                               };
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
             
@@ -214,6 +223,7 @@ namespace UniforBackend.DAL.Repositories
                                     NomeVendedor = user.Nome,
                                     MostrarContato = item.MostrarContato,
                                     SubCategoria = subcategory.Nome,
+                                    Imagens = _imagemRepo.GetAllByItemId(item.Id).ToArray(),
                                 }).OrderByDescending(x => x.PostadoEm);
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
 

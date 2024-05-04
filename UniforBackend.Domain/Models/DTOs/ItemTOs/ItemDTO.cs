@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UniforBackend.Domain.Models.Entities;
+using UniforBackend.Domain.Models.DTOs.ImageTOs;
 
 namespace UniforBackend.Domain.Models.DTOs.ItemTOs
 {
@@ -22,5 +23,6 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public string NomeVendedor { get; set; } = null!;
         public string SubCategoria { get; set; } = null!;
         public DateOnly PostadoEm { get; set; }
+        public ImagemDTO[] Imagens { get; set; } = null!;
     }
 }
