@@ -180,6 +180,7 @@ namespace UniforBackend.DAL.Repositories
                               where item.isAprovado == false
                               join user in _dbContext.Users on item.UserId equals user.Id
                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
+                              join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
                               select new ItemDTO()
                               {
                                   Id = item.Id,
@@ -192,7 +193,7 @@ namespace UniforBackend.DAL.Repositories
                                   VendedorId = user.Id,
                                   MostrarContato = item.MostrarContato,
                                   SubCategoria = subcategory.Nome,
-                                  Imagens = _imagemRepo.GetAllByItemId(item.Id).ToArray(),
+                                  Imagens = imagensgroup.Select(x => new ImagemDTO() { Id = x.Id, Index = x.Index, URL = "" }).ToArray(),
                               };
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
             
