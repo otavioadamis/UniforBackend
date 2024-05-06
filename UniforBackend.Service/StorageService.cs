@@ -20,12 +20,9 @@ namespace UniforBackend.Service
     public class StorageService : IStorageService
     {
         private readonly IConfiguration _configuration;
-        private readonly IImagemRepo _imagemRepo;
 
-        public StorageService(IConfiguration configuration, IImagemRepo imagemRepo)
+        public StorageService(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _imagemRepo = imagemRepo;
             _configuration = configuration;
         }
 
@@ -89,10 +86,8 @@ namespace UniforBackend.Service
             return response;
         }
 
-        public async Task<S3ResponseDTO> DeleteFileAsync(string ImageId)
+        public async Task<S3ResponseDTO> DeleteFileAsync(string key)
         {
-            ImagemDTO imagem = _imagemRepo.GetById(ImageId);
-            string key = imagem.URL.Split("/").Last(); // solução temporária, ajustar o DTO para conter essa informação
             
             var awsCredentials = new AwsCredentials()
             {
@@ -135,9 +130,6 @@ namespace UniforBackend.Service
                 response.StatusCode = 500;
                 response.Message = ex.Message;
             }
-            _imagemRepo.Delete(imagem.Id);
-            _imagemRepo.SaveChanges();
-
             return response;
         }
     }
