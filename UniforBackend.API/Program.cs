@@ -46,6 +46,7 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IStorageService, StorageService>();
+            builder.Services.AddScoped<IImagemService, ImagemService>();
 
             // Adicionando repositorios e suas abstracoes
 

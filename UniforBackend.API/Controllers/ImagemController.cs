@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ImageTOs;
 using UniforBackend.Domain.Models.DTOs.S3TOs;
-using UniforBackend.Service;
 
 namespace UniforBackend.API.Controllers
 {
@@ -12,12 +12,12 @@ namespace UniforBackend.API.Controllers
     public class ImagemController : ControllerBase
     {
         private readonly IImagemRepo _imagemRepo;
-        private readonly IStorageService _storageService;
+        private readonly IImagemService _imagemService;
 
-        public ImagemController(IImagemRepo imagemRepo, IStorageService storageService)
+        public ImagemController(IImagemRepo imagemRepo, IImagemService imagemService)
         {
             _imagemRepo = imagemRepo;
-            _storageService = storageService;
+            _imagemService = imagemService;
         }
 
         [HttpGet("{itemId}")]
@@ -27,12 +27,12 @@ namespace UniforBackend.API.Controllers
             return Ok(allImages);
         }
 
-        // delete image
+        [CustomAuthorize]
         [HttpDelete("{imageId}")]
         public async Task<ActionResult<S3ResponseDTO>> Delete(string imageId)
         {
-            var res = await _storageService.DeleteFileAsync(imageId);
-            return Ok(res);
+            await _imagemService.DeleteImageAsync(imageId);
+            return Ok("Imagem deletada.");
         }
     }
 }
