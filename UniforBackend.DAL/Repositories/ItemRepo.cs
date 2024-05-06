@@ -61,7 +61,7 @@ namespace UniforBackend.DAL.Repositories
                                ContatoVendedor = user.Contato,
                                MostrarContato = item.MostrarContato,
                                SubCategoria = subcategory.Nome,
-                               Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index)).ToArray(),
+                               Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray(),
                            }
                 ).FirstOrDefault();
             return itemDTO;
@@ -164,14 +164,14 @@ namespace UniforBackend.DAL.Repositories
                                    VendedorId = user.Id,
                                    MostrarContato = item.MostrarContato,
                                    SubCategoria = subcategory.Nome,
-                                   Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index)).ToArray(),
+                                   Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray(),
                                }).OrderByDescending(x => x.PostadoEm);
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
            
             return pagedResult;
         }
 
-        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina, int pageSize)
+        public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
             IQueryable<Imagem> imagemQuery = _dbContext.Imagens;
@@ -181,7 +181,7 @@ namespace UniforBackend.DAL.Repositories
                               join user in _dbContext.Users on item.UserId equals user.Id
                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                               join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
-                              select new ItemDTO()
+                              select new ItemReviewDTO()
                               {
                                   Id = item.Id,
                                   Nome = item.Nome,
@@ -192,9 +192,10 @@ namespace UniforBackend.DAL.Repositories
                                   NomeVendedor = user.Nome,
                                   VendedorId = user.Id,
                                   ContatoVendedor = user.Contato,
+                                  EmailVendedor = user.Email,
                                   MostrarContato = item.MostrarContato,
                                   SubCategoria = subcategory.Nome,
-                                  Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index)).ToArray(),
+                                  Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray(),
                               };
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
             
@@ -227,7 +228,7 @@ namespace UniforBackend.DAL.Repositories
                                     ContatoVendedor = user.Contato,
                                     MostrarContato = item.MostrarContato,
                                     SubCategoria = subcategory.Nome,
-                                    Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index)).ToArray(),
+                                    Imagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray(),
                                 }).OrderByDescending(x => x.PostadoEm);
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
 

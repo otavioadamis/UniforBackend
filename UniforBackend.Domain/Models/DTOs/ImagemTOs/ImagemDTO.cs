@@ -16,11 +16,11 @@ namespace UniforBackend.Domain.Models.DTOs.ImageTOs
         {
         }
 
-        public ImagemDTO(string id, string ItemId, int index)
+        public ImagemDTO(string id, string ItemId, int index, string fileExt)
         {
             Id = id;
             Index = index;
-            URL = "https://uniforbackend-test.s3.amazonaws.com/" + ItemId + "_" + index + ".jpg";
+            URL = "https://uniforbackend-test.s3.amazonaws.com/" + ItemId + "_" + index + fileExt;
         }
     }
 }
