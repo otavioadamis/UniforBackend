@@ -12,8 +12,9 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
     {
         public void SaveChanges();
         public Chat Add(Chat thisChat);
-        public IEnumerable<ChatDTO> GetChatsWithUsersIds(string chatId, string senderUserId);
         public IEnumerable<ChatDTO> GetRecentChatsFromUserId(string userId);
         public Chat GetById(string _id);
+        public void Delete(string _id);
+        public ChatDTO GetDTOByUsers(string senderUserId, string receiverId);
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
+using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ChatTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Service
 {
-    public class ChatService
+    public class ChatService : IChatService
     {
         private readonly IUserRepo _userRepo;
         private readonly IChatRepo _chatRepo;
@@ -33,6 +34,12 @@ namespace UniforBackend.Service
                 });
             }
 
+            var existingChat = _chatRepo.GetDTOByUsers(senderUserId, receiverId);
+            if (existingChat != null)
+            {
+                return existingChat;
+            }
+
             var newChat = new Chat()
             {
                 Users = new List<User>() { currentUser, chatUser },
@@ -43,9 +50,9 @@ namespace UniforBackend.Service
 
             var newChatDTO = new ChatDTO()
             {
+                Id = newChat.Id,
                 ChatName = chatUser.Nome,
             };
-            
             return newChatDTO;
         }
 
@@ -61,8 +68,7 @@ namespace UniforBackend.Service
             return allMessages;
         }
 
-        //todo -> precisa retornar algo? acho que pode ser só void mesmo.
-        public void SaveMessage(string toChatId, string message, string senderId)
+        public async Task SaveMessageAsync(string toChatId, string message, string senderId)
         {
             var senderUser = _userRepo.GetById(senderId);
 

@@ -47,6 +47,7 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IStorageService, StorageService>();
             builder.Services.AddScoped<IImagemService, ImagemService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
 
             // Adicionando repositorios e suas abstracoes
 
@@ -55,8 +56,12 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IVendaRepo, VendaRepo>();
             builder.Services.AddScoped<ICategoriaRepo, CategoriaRepo>();
             builder.Services.AddScoped<IImagemRepo, ImagemRepo>();
+            builder.Services.AddScoped<IChatRepo, ChatRepo>();
+            builder.Services.AddScoped<IMensagemRepo, MensagemRepo>();
 
-        builder.Services.AddControllers();
+            builder.Services.AddSignalR();
+
+            builder.Services.AddControllers();
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -120,6 +125,7 @@ namespace UniforBackend.API
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<ChatHubService>("/chatHub");
 
         app.Run();
         

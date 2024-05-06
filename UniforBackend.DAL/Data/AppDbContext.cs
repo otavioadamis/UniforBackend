@@ -21,6 +21,7 @@ namespace UniforBackend.DAL.Data
         public DbSet<Imagem> Imagens { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Mensagem> Mensagens { get; set; }
+        public DbSet<UserChat> UsersChats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +53,10 @@ namespace UniforBackend.DAL.Data
 
             modelBuilder.Entity<Mensagem>()
                 .Property(c => c.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            modelBuilder.Entity<UserChat>()
+                .Property(uc => uc.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
             //------Setando relacoes de entidades-------//
