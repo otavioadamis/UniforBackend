@@ -25,7 +25,7 @@ namespace UniforBackend.Service
         public async Task DeleteImageAsync(string imageId)
         {
             ImagemDTO imagem = _imagemRepo.GetById(imageId);
-            if(imageId  == null)
+            if(imagem  == null)
             {
                 throw new CustomException(new ErrorResponse
                 {
