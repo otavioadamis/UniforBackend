@@ -14,7 +14,7 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         [Required]
         public bool AceitaTroca { get; set; }
         [Required]
-        public IFormFile Foto { get; set; } = null!;
+        public List<IFormFile> Foto { get; set; } = null!;
         [Required]
         public string SubCategoria { get; set; } = null!;
         [Required]

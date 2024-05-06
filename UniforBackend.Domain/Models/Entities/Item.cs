@@ -21,13 +21,11 @@ namespace UniforBackend.Domain.Models.Entities
         public required string Descricao { get; set; }
         public required decimal Preco { get; set; }
         [Column(TypeName = "varchar(255)")]
-        public string? Foto { get; set; }
         public bool AceitaTroca { get; set; }
         public bool MostrarContato { get; set; }
         public bool isAprovado { get; set; } = false;
         public bool IsVendido { get; set; } = false;
         public DateOnly PostadoEm { get; set; }
-        
         
         //EF Core mapping
         public User User { get; set; } = null!;
