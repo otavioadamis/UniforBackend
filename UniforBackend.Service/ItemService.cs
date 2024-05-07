@@ -30,7 +30,7 @@ namespace UniforBackend.Service
             _imagemRepo = imagemRepo;
         }
 
-        public ItemDTO GetItemById(string itemId)
+        public ItemComImagensDTO GetItemById(string itemId)
         {
             var itemDTO = _itemRepository.GetItemDTOById(itemId);
             if(itemDTO == null)
@@ -44,7 +44,7 @@ namespace UniforBackend.Service
             return itemDTO;
         }
 
-        public async Task<ItemDTO> AddItem(PostItemDTO item, string userId)
+        public async Task<ItemComImagensDTO> AddItem(PostItemDTO item, string userId)
         {
             if (item.Foto.Count() > 5)
             {
@@ -139,7 +139,7 @@ namespace UniforBackend.Service
             return itensPendentes;
         }
 
-        public ItemDTO UpdateItem(UpdateItemDTO newItem, string itemId)
+        public ItemComImagensDTO UpdateItem(UpdateItemDTO newItem, string itemId)
         {
             var itemToUpdate = _itemRepository.GetById(itemId);
             if (itemToUpdate == null)

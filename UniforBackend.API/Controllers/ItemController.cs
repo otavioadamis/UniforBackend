@@ -19,7 +19,7 @@ namespace UniforBackend.API.Controllers
         }
 
         [HttpGet("{itemId}")]
-        public ActionResult<ItemDTO> GetItemById(string itemId)
+        public ActionResult<ItemComImagensDTO> GetItemById(string itemId)
         {
             var item = _itemService.GetItemById(itemId);
             return Ok(item);
@@ -59,7 +59,7 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpPost()]
-        public async Task<ActionResult<ItemDTO>> AddItem([FromForm] PostItemDTO item)
+        public async Task<ActionResult<ItemComImagensDTO>> AddItem([FromForm] PostItemDTO item)
         {
             var userFromJwt = (User)HttpContext.Items["User"];                
             var addedItem = await _itemService.AddItem(item, userFromJwt.Id);       
@@ -68,7 +68,7 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpPut("{itemId}")]
-        public ActionResult<ItemDTO> UpdateItem(UpdateItemDTO newItem, string itemId)
+        public ActionResult<ItemComImagensDTO> UpdateItem(UpdateItemDTO newItem, string itemId)
         {
             var updatedItem = _itemService.UpdateItem(newItem, itemId);
             return Ok(updatedItem);
