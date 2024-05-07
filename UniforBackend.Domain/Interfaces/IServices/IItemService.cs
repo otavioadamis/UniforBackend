@@ -7,13 +7,13 @@ namespace UniforBackend.Domain.Interfaces.IServices
 {
     public interface IItemService
     {
-        public ItemDTO GetItemById(string itemId);
+        public ItemComImagensDTO GetItemById(string itemId);
         public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize);
         public UserItensDTO GetItensFromUserId(string userId);
         public PagedResult<ItemDTO> GetItensByCategory(string category, int pagina, int pageSize);
         public UserItensDTO GetItensPendentes(string userId);
-        public Task<ItemDTO> AddItem(PostItemDTO item, string userId);
-        public ItemDTO UpdateItem(UpdateItemDTO newItem, string itemId);
+        public Task<ItemComImagensDTO> AddItem(PostItemDTO item, string userId);
+        public ItemComImagensDTO UpdateItem(UpdateItemDTO newItem, string itemId);
         public void VendeItem(string itemId);
         void DeleteItem(string itemId);
     }

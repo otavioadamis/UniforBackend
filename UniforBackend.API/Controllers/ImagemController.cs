@@ -11,19 +11,16 @@ namespace UniforBackend.API.Controllers
     [ApiController]
     public class ImagemController : ControllerBase
     {
-        private readonly IImagemRepo _imagemRepo;
         private readonly IImagemService _imagemService;
-
-        public ImagemController(IImagemRepo imagemRepo, IImagemService imagemService)
+        public ImagemController(IImagemService imagemService)
         {
-            _imagemRepo = imagemRepo;
             _imagemService = imagemService;
         }
 
         [HttpGet("{itemId}")]
         public ActionResult<ImagemDTO> Get(string itemId) 
         {
-            var allImages = _imagemRepo.GetAllByItemId(itemId);
+            var allImages = _imagemService.GetAllImagesFromItem(itemId);
             return Ok(allImages);
         }
 
