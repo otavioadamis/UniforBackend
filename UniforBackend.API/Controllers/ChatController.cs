@@ -21,8 +21,7 @@ namespace UniforBackend.API.Controllers
         [HttpPost("{receiverId}")]
         public ActionResult<ChatDTO> CreateChat(string receiverId)
         {
-            var user = (User)HttpContext.Items["User"];
-            
+            var user = (User)HttpContext.Items["User"];           
             var createdChat = _chatService.CreateChat(user.Id, receiverId);
             return Ok(createdChat);
         }
@@ -31,8 +30,7 @@ namespace UniforBackend.API.Controllers
         [HttpGet("recentchats")]
         public ActionResult<IEnumerable<ChatDTO>> GetRecentChats()
         {
-            var user = (User)HttpContext.Items["User"];
-            
+            var user = (User)HttpContext.Items["User"];           
             var recentChats = _chatService.GetRecentChats(user.Id);
             return Ok(recentChats);
         }

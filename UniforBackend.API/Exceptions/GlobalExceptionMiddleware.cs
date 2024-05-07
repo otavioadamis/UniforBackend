@@ -35,7 +35,6 @@ namespace UniforBackend.API.Exceptions
 
             if (exception is CustomException customException)
             {
-                // Handle UserFriendlyException with custom error message.
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 var errorResponse = new ErrorResponse
                 {
@@ -51,7 +50,7 @@ namespace UniforBackend.API.Exceptions
                 //return a generic error response.
                 var errorResponse = new ErrorResponse
                 {
-                    Message = "Oops! Something went wrong!",
+                    Message = "Algo deu errado no servidor.",
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
                 var json = JsonSerializer.Serialize(errorResponse);

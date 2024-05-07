@@ -71,19 +71,27 @@ namespace UniforBackend.Service
         public async Task SaveMessageAsync(string toChatId, string message, string senderId)
         {
             var senderUser = _userRepo.GetById(senderId);
+            var chat = _chatRepo.GetById(toChatId);
+
+            if (senderUser == null || chat == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Erro ao enviar mensagem",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
 
             var newMessage = new Mensagem()
             {
                 ChatId = toChatId,
                 Content = message,
                 Sender = senderId,
-                SendedAt = DateTime.UtcNow, //todo -> deixar o banco fazer isso
             };
 
             _mensagemRepo.Add(newMessage);
             _mensagemRepo.SaveChanges();
 
-            var chat = _chatRepo.GetById(toChatId);
             chat.UpdatedAt = newMessage.SendedAt;
             _chatRepo.SaveChanges();
         }

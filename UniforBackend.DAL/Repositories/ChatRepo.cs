@@ -46,15 +46,16 @@ namespace UniforBackend.DAL.Repositories
             var recentChats = (from usersChat in _dbContext.UsersChats
                                where usersChat.UserId == userId
                                join chat in _dbContext.Chats
-                                   on usersChat.Id equals chat.Id
+                                   on usersChat.ChatId equals chat.Id
                                join otherUsersChat in _dbContext.UsersChats
-                                   on chat.Id equals otherUsersChat.Id
-                               where otherUsersChat.UserId != userId // Exclude the logged-in user
+                                   on chat.Id equals otherUsersChat.ChatId
+                               where otherUsersChat.UserId != userId // Nao quero retornar o proprio usuario logado na query
                                join otherUser in _dbContext.Users
                                    on otherUsersChat.UserId equals otherUser.Id
                                orderby chat.UpdatedAt descending
                                select new ChatDTO
                                {
+                                   Id = chat.Id,
                                    LastMessage = chat.LatestMessage.Content,
                                    ChatName = otherUser.Nome,
                                }).Distinct().ToList();
