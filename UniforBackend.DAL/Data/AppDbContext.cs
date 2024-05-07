@@ -18,6 +18,7 @@ namespace UniforBackend.DAL.Data
         public DbSet<Venda> Vendas { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<SubCategoria> SubCategorias { get; set; }
+        public DbSet<Imagem> Imagens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,8 +40,11 @@ namespace UniforBackend.DAL.Data
                 .Property(c => c.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
-            //------Setando relacoes de entidades-------//
+            modelBuilder.Entity<Imagem>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
 
+            //------Setando relacoes de entidades-------//
 
             // 1 pra n 
             modelBuilder.Entity<User>()
@@ -72,6 +76,11 @@ namespace UniforBackend.DAL.Data
                 .HasOne(i => i.SubCategoria)
                 .WithMany(s => s.Items)
                 .HasForeignKey(i => i.SubCategoriaId);
+
+            modelBuilder.Entity<Imagem>()
+                .HasOne(i => i.Item)
+                .WithMany()
+                .HasForeignKey(i => i.ItemId);
 
             //------Propriedades auto-generadas-------//
 

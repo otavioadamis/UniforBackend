@@ -22,15 +22,18 @@ namespace UniforBackend.Service
         public UserDTO GetUserById(string userId)
         {
             var user = _userRepository.GetById(userId);
-            var response = new UserDTO()
+            if (user == null)
             {
-                Id = user.Id,
-                Nome = user.Nome,
-                Email = user.Email,
-                Matricula = user.Matricula,
-                Foto = user.Foto
-            };
-            return response;
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Usuário não encontrado.",
+                    StatusCode = (int)HttpStatusCode.NotFound,   
+                });
+            }      
+            var response = new UserDTO();
+            var userDTO = response.CreateModel(user);
+            
+            return userDTO;
         }
 
         public User GetById(string userId)
@@ -114,11 +117,21 @@ namespace UniforBackend.Service
         public UserDTO UpdateUser(UpdateUserDTO updatedUser, string userId)
         {
             var user = _userRepository.GetById(userId);
+            if (user == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Usuário não encontrado.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
             updatedUser.UpdateFields(user);
             _userRepository.SaveChanges();
+            
             var response = new UserDTO();
-            response.CreateModel(user);
-            return response;
+            var userDTO = response.CreateModel(user);
+            
+            return userDTO;
         }
 
         public void DeleteUser(string userId)

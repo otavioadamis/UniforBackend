@@ -20,8 +20,9 @@ namespace UniforBackend.Domain.Models.Entities
         [Column(TypeName = "varchar(255)")]
         public required string Descricao { get; set; }
         public required decimal Preco { get; set; }
-        public byte[]? Foto { get; set; }
+        [Column(TypeName = "varchar(255)")]
         public bool AceitaTroca { get; set; }
+        public bool MostrarContato { get; set; }
         public bool isAprovado { get; set; } = false;
         public bool IsVendido { get; set; } = false;
         public DateOnly PostadoEm { get; set; }
