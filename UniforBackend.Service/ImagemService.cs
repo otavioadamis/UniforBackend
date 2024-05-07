@@ -22,6 +22,12 @@ namespace UniforBackend.Service
             _storageService = storageService;
         }
 
+        public IEnumerable<ImagemDTO> GetAllImagesFromItem(string itemId)
+        {
+            var allImages = _imagemRepo.GetAllByItemId(itemId);
+            return allImages;
+        }
+
         public async Task DeleteImageAsync(string imageId)
         {
             ImagemDTO imagem = _imagemRepo.GetById(imageId);

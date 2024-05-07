@@ -15,7 +15,7 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
         public Item Add(Item thisItem);
         public Item GetById(string _id);
         public void Delete(string _id);
-        public ItemDTO GetItemDTOById(string _id);
+        public ItemComImagensDTO GetItemDTOById(string _id);
         public UserItensDTO GetItensFromUserId(string userId);
         public PagedResult<ItemDTO> GetAllItens(string? search, int pagina, int pageSize);
         public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize);

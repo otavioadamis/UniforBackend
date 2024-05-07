@@ -9,8 +9,8 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
 {
     public class UserItensDTO
     {
-        public string UserId { get; set; }
-        public string Nome {  get; set; }
-        public IEnumerable<ItemCardDTO> Itens { get; set; }
+        public string UserId { get; set; } = null!;
+        public string Nome {  get; set; } = null!;
+        public IEnumerable<ItemCardDTO>? Itens { get; set; }
     }
 }
