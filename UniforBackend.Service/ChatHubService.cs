@@ -29,3 +29,7 @@ namespace UniforBackend.Service
         }
     }
 }
+
+//{"type":1, "target":"JoinChat", "arguments":["354e170c-dec1-499c-90e9-ead300396da1"]}
+//{"type":1, "target":"SendMessageToChat", "arguments":["354e170c-dec1-499c-90e9-ead300396da1", "mensagem", "User1"]}
+//{"protocol":"json","version":1}

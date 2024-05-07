@@ -119,10 +119,6 @@ namespace UniforBackend.DAL.Data
             modelBuilder.Entity<User>()
                 .Property(c => c.CriadoEm)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-            modelBuilder.Entity<Mensagem>()
-                .Property(m => m.SendedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
 }

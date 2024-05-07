@@ -87,6 +87,7 @@ namespace UniforBackend.Service
                 ChatId = toChatId,
                 Content = message,
                 Sender = senderId,
+                SendedAt = DateTime.UtcNow,
             };
 
             _mensagemRepo.Add(newMessage);
