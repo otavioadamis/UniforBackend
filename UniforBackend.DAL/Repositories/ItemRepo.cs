@@ -181,14 +181,13 @@ namespace UniforBackend.DAL.Repositories
         public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
-            IQueryable<Imagem> imagemQuery = _dbContext.Imagens;
 
             var queryResult = from item in itemQuery
                               where item.isAprovado == false
                               join user in _dbContext.Users on item.UserId equals user.Id
                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
-                              join imagens in _dbContext.Imagens.Where(img => img.Index == 1) on item.Id equals imagens.ItemId into imagem
-                              let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).FirstOrDefault()
+                              join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
+                              let allImagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray()
                               select new ItemReviewDTO()
                               {
                                   Id = item.Id,
@@ -203,7 +202,7 @@ namespace UniforBackend.DAL.Repositories
                                   EmailVendedor = user.Email,
                                   MostrarContato = item.MostrarContato,
                                   SubCategoria = subcategory.Nome,
-                                  ImagemPrincipal = imagemDTO,
+                                  Imagens = allImagens,
                               };
             var pagedResult = PaginationHelper.Paginate(queryResult, pagina, pageSize);
             

@@ -21,6 +21,6 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
         public string ContatoVendedor { get; set; } = null!;
         public string SubCategoria { get; set; } = null!;
         public DateOnly PostadoEm { get; set; }
-        public ImagemDTO ImagemPrincipal { get; set; } = null!;
+        public ImagemDTO[] Imagens { get; set; } = null!;
     }
 }
