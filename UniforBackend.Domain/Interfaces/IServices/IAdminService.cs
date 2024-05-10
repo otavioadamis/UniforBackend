@@ -8,6 +8,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
     {
         public void AvaliarItem(AvaliarItemDTO avaliacao);
         public void DeleteItem(string itemId);
-        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina);
+        public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize);
     }
 }

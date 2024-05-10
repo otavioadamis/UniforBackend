@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
@@ -20,59 +18,57 @@ namespace UniforBackend.API.Controllers
             _itemService = itemService;
         }
 
-        [HttpGet]
-        public ActionResult<ItemDTO> GetItemById(string itemId) 
+        [HttpGet("{itemId}")]
+        public ActionResult<ItemComImagensDTO> GetItemById(string itemId)
         {
             var item = _itemService.GetItemById(itemId);
             return Ok(item);
         }
 
-        [HttpGet("{pagina}")]
-        public ActionResult<PagedResult<ItemDTO>> GetItensFromPagina(string? search, int pagina)
+        [HttpGet("itens/{pagina}")]
+        public ActionResult<PagedResult<ItemDTO>> GetItensFromPagina(string? search, int pagina = 1, int pageSize = 10)
         {
             if (pagina < 1) { pagina = 1; }
-            var itens = _itemService.GetAllItens(search, pagina);
+            var itens = _itemService.GetAllItens(search, pagina, pageSize);
             return Ok(itens);
         }
 
         [HttpGet("categorias/{categoria}")]
-        public ActionResult<PagedResult<ItemDTO>> GetItensByCategory(string categoria, int pagina)
+        public ActionResult<PagedResult<ItemDTO>> GetItensByCategory(string categoria, int pagina = 1, int pageSize = 10)
         {
             if (pagina < 1) { pagina = 1; }
-            var allItems = _itemService.GetItensByCategory(categoria, pagina);
+            var allItems = _itemService.GetItensByCategory(categoria, pagina, pageSize);
             return Ok(allItems);
         }
 
         [HttpGet("user/{userId}")]
-        public ActionResult<UserItensDTO> GetItensFromUserId(string userId, int pagina)
+        public ActionResult<UserItensDTO> GetItensFromUserId(string userId)
         {
-            if (pagina < 1) { pagina = 1; }
-            var itens = _itemService.GetItensFromUserId(userId, pagina);
+            var itens = _itemService.GetItensFromUserId(userId);
             return Ok(itens);
         }
 
         [CustomAuthorize]
         [HttpGet("pendentes")]
-        public ActionResult<UserItensDTO> GetItensPendentes(int pagina)
+        public ActionResult<UserItensDTO> GetItensPendentes()
         {
-            if (pagina < 1) { pagina = 1; }
             var userFromJwt = (User)HttpContext.Items["User"];
-            var itensPendentes = _itemService.GetItensPendentes(userFromJwt.Id, pagina);
+            var itensPendentes = _itemService.GetItensPendentes(userFromJwt.Id);
             return Ok(itensPendentes);
         }
 
         [CustomAuthorize]
         [HttpPost()]
-        public ActionResult<ItemDTO> AddItem(PostItemDTO item)
+        public async Task<ActionResult<ItemComImagensDTO>> AddItem([FromForm] PostItemDTO item)
         {
-            var userFromJwt = (User)HttpContext.Items["User"];
-            var addedItem = _itemService.AddItem(item, userFromJwt.Id);
+            var userFromJwt = (User)HttpContext.Items["User"];                
+            var addedItem = await _itemService.AddItem(item, userFromJwt.Id);       
             return Ok(addedItem);
         }
 
         [CustomAuthorize]
         [HttpPut("{itemId}")]
-        public ActionResult<ItemDTO> UpdateItem(UpdateItemDTO newItem, string itemId)
+        public ActionResult<ItemComImagensDTO> UpdateItem(UpdateItemDTO newItem, string itemId)
         {
             var updatedItem = _itemService.UpdateItem(newItem, itemId);
             return Ok(updatedItem);

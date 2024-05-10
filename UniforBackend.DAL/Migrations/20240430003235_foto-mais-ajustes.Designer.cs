@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniforBackend.DAL.Data;
@@ -11,9 +12,11 @@ using UniforBackend.DAL.Data;
 namespace UniforBackend.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430003235_foto-mais-ajustes")]
+    partial class fotomaisajustes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,31 +40,6 @@ namespace UniforBackend.DAL.Migrations
                     b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Imagem", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(36)")
-                        .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<string>("Extensao")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<int>("Index")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ItemId")
-                        .IsRequired()
-                        .HasColumnType("varchar(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("Imagens");
-                });
-
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Item", b =>
                 {
                     b.Property<string>("Id")
@@ -69,12 +47,14 @@ namespace UniforBackend.DAL.Migrations
                         .HasColumnType("varchar(36)")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<string>("AceitaTroca")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<bool>("AceitaTroca")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Foto")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("IsVendido")
@@ -142,10 +122,6 @@ namespace UniforBackend.DAL.Migrations
                         .HasColumnType("varchar(36)")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<string>("CodigoVerificacao")
-                        .IsRequired()
-                        .HasColumnType("varchar(36)");
-
                     b.Property<string>("Contato")
                         .IsRequired()
                         .HasColumnType("varchar(30)");
@@ -161,9 +137,6 @@ namespace UniforBackend.DAL.Migrations
 
                     b.Property<byte[]>("Foto")
                         .HasColumnType("bytea");
-
-                    b.Property<bool>("IsVerificado")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Matricula")
                         .IsRequired()
@@ -213,17 +186,6 @@ namespace UniforBackend.DAL.Migrations
                     b.HasIndex("VendedorId");
 
                     b.ToTable("Vendas");
-                });
-
-            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Imagem", b =>
-                {
-                    b.HasOne("UniforBackend.Domain.Models.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Item", b =>

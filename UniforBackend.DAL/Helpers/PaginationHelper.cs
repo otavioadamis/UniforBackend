@@ -9,13 +9,13 @@ namespace UniforBackend.DAL.Helpers
 {
     public class PaginationHelper
     {
-        public static PagedResult<T> Paginate<T>(IQueryable<T> query, int pageNumber, float pageSize)
+        public static PagedResult<T> Paginate<T>(IQueryable<T> query, int pageNumber, int pageSize)
         {
             var totalItems = query.Count();
-            var pageCount = (int)Math.Ceiling(totalItems / pageSize);
+            var pageCount = (int)Math.Ceiling(totalItems / (float)pageSize);
 
-            var items = query.Skip((pageNumber - 1) * (int)pageSize)
-                             .Take((int)pageSize)
+            var items = query.Skip((pageNumber - 1) * pageSize)
+                             .Take(pageSize)
                              .ToList();
 
             return new PagedResult<T>

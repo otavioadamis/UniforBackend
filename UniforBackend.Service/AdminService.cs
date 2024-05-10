@@ -41,9 +41,9 @@ namespace UniforBackend.Service
             _itemRepository.SaveChanges();
         }
 
-        public PagedResult<ItemDTO> GetAllUnauthorized(int pagina)
+        public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize)
         {
-            var itens = _itemRepository.GetAllUnauthorized(pagina);
+            var itens = _itemRepository.GetAllUnauthorized(pagina, pageSize);
             return itens;
         }
     }
