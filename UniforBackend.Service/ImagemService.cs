@@ -81,8 +81,36 @@ namespace UniforBackend.Service
             return response;
         }
 
-        public async Task DeleteImageAsync(string imageId)
+        public async Task DeleteImageAsync(string itemId, int index, string anuncianteId)
         {
+            Item item = _itemRepo.GetById(itemId);
+            if(item == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Item não encontrado.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
+            if(item.UserId != anuncianteId)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Você não tem permissão para deletar essa imagem.",
+                    StatusCode = (int)HttpStatusCode.Forbidden,
+                });
+            }
+
+            ImagemDTO _imagem = _imagemRepo.GetByIndex(itemId, index);
+            if(_imagem == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Imagem não encontrada.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
+            string imageId = _imagem.Id;
             ImagemDTO imagem = _imagemRepo.GetById(imageId);
             if(imagem == null)
             {

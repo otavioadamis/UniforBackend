@@ -35,10 +35,11 @@ namespace UniforBackend.API.Controllers
         }
 
         [CustomAuthorize]
-        [HttpDelete("{imageId}")]
-        public async Task<ActionResult<S3ResponseDTO>> Delete(string imageId)
+        [HttpDelete("{itemId}/{index}")]
+        public async Task<ActionResult<S3ResponseDTO>> Delete(string itemId, int index)
         {
-            await _imagemService.DeleteImageAsync(imageId);
+            var userFromJwt = (User)HttpContext.Items["User"];
+            await _imagemService.DeleteImageAsync(itemId, index, userFromJwt.Id);
             return Ok("Imagem deletada.");
         }
     }
