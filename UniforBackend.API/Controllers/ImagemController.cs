@@ -25,6 +25,15 @@ namespace UniforBackend.API.Controllers
         }
 
         [CustomAuthorize]
+        [HttpPut("{imageId}")]
+        public async Task<ActionResult<UpdateImagemDTO>> Update(string imageId, IFormFile imagem)
+        {
+            var userFromJwt = (User)HttpContext.Items["User"];
+            var response = await _imagemService.UpdateImageAsync(imageId, imagem);
+            return Ok(response);
+        }
+
+        [CustomAuthorize]
         [HttpDelete("{imageId}")]
         public async Task<ActionResult<S3ResponseDTO>> Delete(string imageId)
         {

@@ -86,6 +86,65 @@ namespace UniforBackend.Service
             return response;
         }
 
+        public async Task<S3ResponseDTO> UpdateFileAsync(IFormFile image, string key)
+        {
+            var awsCredentials = new AwsCredentials()
+            {
+                AwsKey = _configuration["AwsConfiguration:AWSAccessKey"],
+                AwsSecret = _configuration["AwsConfiguration:AWSSecretKey"]
+            };
+
+            // Credenciais para acesso
+            var credentials = new BasicAWSCredentials(awsCredentials.AwsKey, awsCredentials.AwsSecret);
+
+            // Definindo a região do bucket
+            var config = new AmazonS3Config()
+            {
+                RegionEndpoint = Amazon.RegionEndpoint.USEast1
+            };
+
+            var response = new S3ResponseDTO();
+
+            await using var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream);
+
+            S3Objeto s3obj = new S3Objeto()
+            {
+                BucketName = "uniforbackend-test",
+                InputStream = memoryStream,
+                Name = key
+            };
+
+            try
+            {
+                var uploadRequest = new TransferUtilityUploadRequest()
+                {
+                    InputStream = s3obj.InputStream,
+                    Key = s3obj.Name,
+                    BucketName = s3obj.BucketName,
+                    CannedACL = S3CannedACL.NoACL
+                };
+
+                using var client = new AmazonS3Client(credentials, config);
+                var transferUtility = new TransferUtility(client);
+                await transferUtility.UploadAsync(uploadRequest);
+                response.StatusCode = 200;
+                response.Message = $"{s3obj.Name} atualizado com sucesso.";
+            }
+            catch (AmazonS3Exception ex)
+            {
+                response.StatusCode = (int)ex.StatusCode;
+                response.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
         public async Task<S3ResponseDTO> DeleteFileAsync(string key)
         {
             

@@ -24,6 +24,13 @@ namespace UniforBackend.DAL.Repositories
             return thisImagem;
         }
 
+        public Imagem UpdateExtensao(string imagemId, string extensao)
+        {
+            var imagem = _dbContext.Imagens.FirstOrDefault(x => x.Id == imagemId);
+            imagem.Extensao = extensao;
+            return imagem;
+        }
+
         public ImagemDTO GetById(string imagemId)
         {
             var imagem = _dbContext.Imagens.FirstOrDefault(x => x.Id == imagemId);
