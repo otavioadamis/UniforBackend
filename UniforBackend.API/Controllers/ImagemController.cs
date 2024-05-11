@@ -4,6 +4,7 @@ using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ImageTOs;
 using UniforBackend.Domain.Models.DTOs.S3TOs;
+using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
 {
@@ -25,11 +26,11 @@ namespace UniforBackend.API.Controllers
         }
 
         [CustomAuthorize]
-        [HttpPut("{imageId}")]
-        public async Task<ActionResult<UpdateImagemDTO>> Update(string imageId, IFormFile imagem)
+        [HttpPut("{itemId}/{index}")]
+        public async Task<ActionResult<UpdateImagemDTO>> Update(string itemId, int index, IFormFile imagem)
         {
             var userFromJwt = (User)HttpContext.Items["User"];
-            var response = await _imagemService.UpdateImageAsync(imageId, imagem);
+            var response = await _imagemService.UpdateImageAsync(itemId, index, imagem, userFromJwt.Id);
             return Ok(response);
         }
 

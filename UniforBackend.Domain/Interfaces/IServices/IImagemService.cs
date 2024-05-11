@@ -11,7 +11,7 @@ namespace UniforBackend.Domain.Interfaces.IServices
     public interface IImagemService
     {
         public IEnumerable<ImagemDTO> GetAllImagesFromItem(string itemId);
-        public Task<UpdateImagemDTO> UpdateImageAsync(string imageId, IFormFile imagem);
+        public Task<UpdateImagemDTO> UpdateImageAsync(string itemId, int index, IFormFile novaImagem, string anuncianteId);
         public Task DeleteImageAsync(string imageId);
     }
 }

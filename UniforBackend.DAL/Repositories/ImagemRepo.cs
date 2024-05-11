@@ -55,6 +55,17 @@ namespace UniforBackend.DAL.Repositories
             return query;
         }
 
+        public ImagemDTO GetByIndex(string itemId, int index)
+        {
+            var imagem = _dbContext.Imagens.FirstOrDefault(x => x.ItemId == itemId && x.Index == index);
+            return new ImagemDTO()
+            {
+                Id = imagem.Id,
+                URL = $"https://uniforbackend-test.s3.amazonaws.com/{imagem.ItemId}_{imagem.Index}{imagem.Extensao}",
+                Index = imagem.Index,
+            };
+        }
+
         public void Delete(string imageId)
         {
             var imagem =  _dbContext.Imagens.FirstOrDefault(x => x.Id == imageId);

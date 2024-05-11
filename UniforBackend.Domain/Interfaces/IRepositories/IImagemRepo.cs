@@ -16,5 +16,6 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
         public ImagemDTO GetById(string imagemId);
         public IEnumerable<ImagemDTO> GetAllByItemId(string itemId);
         public void Delete(string imageId);
+        public ImagemDTO GetByIndex(string itemId, int index);
     }
 }
