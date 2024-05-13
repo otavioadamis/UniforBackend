@@ -22,10 +22,10 @@ namespace UniforBackend.Service
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId);
         }
 
-        public async Task SendMessageToChat(string toChatId, string content, string fromUserId)
+        public async Task SendMessageToChat(SendMensagemDTO mensagem)
         {
-            await _chatService.SaveMessageAsync(toChatId, content, fromUserId);
-            await Clients.Group(toChatId).SendAsync("ReceiveMessage", content);
+            await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
+            await Clients.Group(mensagem.ToChatId).SendAsync("ReceiveMessage", mensagem.Content);
         }
     }
 }

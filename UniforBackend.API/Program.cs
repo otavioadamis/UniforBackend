@@ -122,8 +122,6 @@ namespace UniforBackend.API
 
         app.UseCors("reactApp");
 
-        //Middlewares (Tratamento de excecoes e autorizacao com jwt)
-
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
 
