@@ -1,6 +1,8 @@
 ﻿using UniforBackend.DAL.Data;
+using UniforBackend.DAL.Helpers;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Models.DTOs.ChatTOs;
+using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.DAL.Repositories
@@ -24,7 +26,7 @@ namespace UniforBackend.DAL.Repositories
             return thisMensagem;
         }
 
-        public IEnumerable<MensagemDTO> GetMessagesFromChatId(string chatId)
+        public PagedResult<MensagemDTO> GetMessagesFromChatId(string chatId, int index)
         {
             var allMessages = from m in _dbContext.Mensagens
                               where m.ChatId == chatId
@@ -36,7 +38,8 @@ namespace UniforBackend.DAL.Repositories
                                   SenderName = senderUser.Nome,
                                   SendedAt = m.SendedAt,
                               };
-            return allMessages.ToList();
+            var pagedResult = PaginationHelper.Paginate(allMessages, index, 30);
+            return pagedResult;
         }
 
         public void Delete(string _id)

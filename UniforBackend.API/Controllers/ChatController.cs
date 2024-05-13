@@ -2,6 +2,7 @@
 using UniforBackend.API.Authorization;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ChatTOs;
+using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.API.Controllers
@@ -37,9 +38,10 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpGet("{chatId}")]
-        public ActionResult<IEnumerable<MensagemDTO>> GetAllMessagesFromChat(string chatId)
+        public ActionResult<PagedResult<MensagemDTO>> GetAllMessagesFromChat(string chatId, int index = 1)
         {
-            var allChatMessages = _chatService.GetMessagesFromChat(chatId);
+            if(index < 1) { index = 1; }
+            var allChatMessages = _chatService.GetMessagesFromChat(chatId, index);
             return Ok(allChatMessages);
         }
     }

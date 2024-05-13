@@ -3,6 +3,7 @@ using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ChatTOs;
+using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Service
@@ -62,9 +63,9 @@ namespace UniforBackend.Service
             return recentChats;
         }
 
-        public IEnumerable<MensagemDTO> GetMessagesFromChat(string chatId)
+        public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index)
         {
-            var allMessages = _mensagemRepo.GetMessagesFromChatId(chatId);
+            var allMessages = _mensagemRepo.GetMessagesFromChatId(chatId, index);
             return allMessages;
         }
 
