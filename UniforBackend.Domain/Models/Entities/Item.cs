@@ -35,5 +35,3 @@ namespace UniforBackend.Domain.Models.Entities
         public string SubCategoriaId { get; set; } = null!;
     }
 }
-
-//TODO -> Adicionar imagens futuramente

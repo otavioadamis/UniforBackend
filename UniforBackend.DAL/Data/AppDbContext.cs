@@ -19,6 +19,9 @@ namespace UniforBackend.DAL.Data
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<SubCategoria> SubCategorias { get; set; }
         public DbSet<Imagem> Imagens { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Mensagem> Mensagens { get; set; }
+        public DbSet<UserChat> UsersChats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,29 +47,36 @@ namespace UniforBackend.DAL.Data
                 .Property(c => c.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
 
+            modelBuilder.Entity<Chat>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            modelBuilder.Entity<Mensagem>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            modelBuilder.Entity<UserChat>()
+                .Property(uc => uc.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
             //------Setando relacoes de entidades-------//
 
-            // 1 pra n 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Itens)
                 .WithOne(i => i.User)
                 .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 1 pra n
-
             modelBuilder.Entity<Venda>()
                 .HasOne(c => c.Vendedor)
                 .WithMany()
                 .HasForeignKey(c => c.VendedorId);
 
-            // n pra n
             modelBuilder.Entity<Venda>()
                 .HasOne(c => c.Item)
                 .WithOne()
                 .HasForeignKey<Venda>(c => c.ItemId);
 
-            // 1 pra n
             modelBuilder.Entity<SubCategoria>()
                 .HasOne(s => s.Categoria)
                 .WithMany(c => c.SubCategorias)
@@ -81,6 +91,20 @@ namespace UniforBackend.DAL.Data
                 .HasOne(i => i.Item)
                 .WithMany()
                 .HasForeignKey(i => i.ItemId);
+
+            modelBuilder.Entity<Chat>()
+                .HasMany(c => c.Users)
+                .WithMany()
+                .UsingEntity<UserChat>();
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(chat => chat.LatestMessage)
+                .WithOne()
+                .HasForeignKey<Chat>(chat => chat.LatestMessageId);
+
+            modelBuilder.Entity<Mensagem>()
+                .HasOne(c => c.Chat)
+                .WithMany();
 
             //------Propriedades auto-generadas-------//
 

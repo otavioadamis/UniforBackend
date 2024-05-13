@@ -39,7 +39,7 @@ namespace UniforBackend.Service
                     StatusCode = (int)HttpStatusCode.NotFound,
                 });
             }
-            string key = imagem.URL.Split("/").Last(); // solução temporária, ajustar o DTO para conter essa informação
+            string key = imagem.URL.Split("/").Last();
             var response = await _storageService.DeleteFileAsync(key);
             if(response.StatusCode != 204)
             {
