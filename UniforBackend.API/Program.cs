@@ -97,6 +97,17 @@ namespace UniforBackend.API
                 });
             });
 
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("reactApp", builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
             var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -109,12 +120,7 @@ namespace UniforBackend.API
             InitialDataHelper.InitializeDatabase(app.Services);
         }
 
-        app.UseCors(builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+        app.UseCors("reactApp");
 
         //Middlewares (Tratamento de excecoes e autorizacao com jwt)
 
