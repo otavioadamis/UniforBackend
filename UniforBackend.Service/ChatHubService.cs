@@ -24,8 +24,8 @@ namespace UniforBackend.Service
 
         public async Task SendMessageToChat(SendMensagemDTO mensagem)
         {
-            var mensagemDTO = await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
-            await Clients.Group(mensagem.ToChatId).SendAsync("ReceiveMessage", mensagemDTO);
+            var mensagemSocketDTO = await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
+            await Clients.Group(mensagem.ToChatId).SendAsync("ReceiveMessage", mensagemSocketDTO);
         }
     }
 }

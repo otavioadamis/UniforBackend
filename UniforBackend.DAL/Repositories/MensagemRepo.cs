@@ -35,6 +35,7 @@ namespace UniforBackend.DAL.Repositories
                               select new MensagemDTO
                               {
                                   Content = m.Content,
+                                  SenderId = senderUser.Id,
                                   SenderName = senderUser.Nome,
                                   SendedAt = m.SendedAt,
                               };
