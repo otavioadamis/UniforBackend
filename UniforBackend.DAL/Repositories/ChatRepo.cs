@@ -58,6 +58,7 @@ namespace UniforBackend.DAL.Repositories
                                    Id = chat.Id,
                                    LastMessage = chat.LatestMessage.Content,
                                    ChatName = otherUser.Nome,
+                                   OtherUserId = otherUser.Id,
                                }).Distinct().ToList();
             return recentChats;
         }
@@ -74,8 +75,8 @@ namespace UniforBackend.DAL.Repositories
                             ChatName = receiverUser.Nome,
                             Id = chat.Id,
                             LastMessage = chat.LatestMessage.Content,
+                            OtherUserId = receiverUser.Id
                         }).FirstOrDefault();
-
             return query;
         }
     }

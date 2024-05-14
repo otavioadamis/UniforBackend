@@ -53,6 +53,7 @@ namespace UniforBackend.Service
             {
                 Id = newChat.Id,
                 ChatName = chatUser.Nome,
+                OtherUserId = chatUser.Id,
             };
             return newChatDTO;
         }
@@ -69,7 +70,7 @@ namespace UniforBackend.Service
             return allMessages;
         }
 
-        public async Task SaveMessageAsync(string toChatId, string message, string senderId)
+        public async Task<MensagemDTO> SaveMessageAsync(string toChatId, string message, string senderId)
         {
             var senderUser = _userRepo.GetById(senderId);
             var chat = _chatRepo.GetById(toChatId);
@@ -95,7 +96,18 @@ namespace UniforBackend.Service
             _mensagemRepo.SaveChanges();
 
             chat.UpdatedAt = newMessage.SendedAt;
+            chat.LatestMessageId = newMessage.Id;
             _chatRepo.SaveChanges();
+
+            var mensagemDTO = new MensagemDTO()
+            {
+                ToChatId = newMessage.ChatId,
+                SenderId = newMessage.Sender,
+                SenderName = senderUser.Nome,
+                Content = newMessage.Content,
+                SendedAt = newMessage.SendedAt,
+            };
+            return mensagemDTO;
         }
     }
 }

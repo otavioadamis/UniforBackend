@@ -8,6 +8,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
         public ChatDTO CreateChat(string currentUserId, string userId);
         public IEnumerable<ChatDTO> GetRecentChats(string userId);
         public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index);
-        public Task SaveMessageAsync(string toChatId, string message, string senderId);
+        public Task<MensagemDTO> SaveMessageAsync(string toChatId, string message, string senderId);
     }
 }

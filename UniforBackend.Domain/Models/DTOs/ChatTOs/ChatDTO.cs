@@ -10,6 +10,7 @@ namespace UniforBackend.Domain.Models.DTOs.ChatTOs
     {
         public string Id { get; set; } = null!;
         public string ChatName { get; set; } = null!;
+        public string OtherUserId { get; set; } = null!;
         public string LastMessage { get; set; } = null!;
     }
 }

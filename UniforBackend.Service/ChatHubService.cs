@@ -24,12 +24,12 @@ namespace UniforBackend.Service
 
         public async Task SendMessageToChat(SendMensagemDTO mensagem)
         {
-            await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
-            await Clients.Group(mensagem.ToChatId).SendAsync("ReceiveMessage", mensagem.FromUserId, mensagem.Content);
+            var mensagemDTO = await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
+            await Clients.Group(mensagem.ToChatId).SendAsync("ReceiveMessage", mensagemDTO);
         }
     }
 }
 
-//{"type":1, "target":"JoinChat", "arguments":["354e170c-dec1-499c-90e9-ead300396da1"]}
+//{"type":1, "target":"JoinChat", "arguments":["dd3a8550-47c5-4a3a-8bd6-450523a55a3d"]}
 //{"type":1, "target":"SendMessageToChat", "arguments":["354e170c-dec1-499c-90e9-ead300396da1", "mensagem", "User1"]}
 //{"protocol":"json","version":1}
