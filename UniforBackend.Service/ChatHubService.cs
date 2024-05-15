@@ -12,6 +12,11 @@ namespace UniforBackend.Service
             _chatService = chatService;
         }
 
+        public async Task ConnectOnLogin(string userId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, userId);
+        }
+
         public async Task JoinChat(string chatId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
@@ -25,11 +30,11 @@ namespace UniforBackend.Service
         public async Task SendMessageToChat(SendMensagemDTO mensagem)
         {
             var mensagemSocketDTO = await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
-            await Clients.Group(mensagem.ToChatId).SendAsync("ReceiveMessage", mensagemSocketDTO);
+            await Clients.Group(mensagem.ToUserId).SendAsync("ReceiveMessage", mensagemSocketDTO);
         }
     }
 }
 
-//{"type":1, "target":"JoinChat", "arguments":["dd3a8550-47c5-4a3a-8bd6-450523a55a3d"]}
+//{"type":1, "target":"JoinChat", "arguments":["99f7a94f-1441-423d-8ba1-3c2371624c05"]}
 //{"type":1, "target":"SendMessageToChat", "arguments":["354e170c-dec1-499c-90e9-ead300396da1", "mensagem", "User1"]}
 //{"protocol":"json","version":1}
