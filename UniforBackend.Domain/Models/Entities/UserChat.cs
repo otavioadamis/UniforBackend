@@ -19,5 +19,7 @@ namespace UniforBackend.Domain.Models.Entities
 
         public string UserId { get; set; } = null!;
         public User User { get; set; } = null!;
+        
+        public int UnreadMessages { get; set; }
     }
 }

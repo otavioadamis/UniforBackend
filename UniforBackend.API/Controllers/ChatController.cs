@@ -41,7 +41,8 @@ namespace UniforBackend.API.Controllers
         public ActionResult<PagedResult<MensagemDTO>> GetAllMessagesFromChat(string chatId, int index = 1)
         {
             if(index < 1) { index = 1; }
-            var allChatMessages = _chatService.GetMessagesFromChat(chatId, index);
+            var user = (User)HttpContext.Items["User"];
+            var allChatMessages = _chatService.GetMessagesFromChat(chatId, index, user.Id);
             return Ok(allChatMessages);
         }
     }

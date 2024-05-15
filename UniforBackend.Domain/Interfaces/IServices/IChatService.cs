@@ -7,7 +7,7 @@ namespace UniforBackend.Domain.Interfaces.IServices
     {
         public ChatDTO CreateChat(string currentUserId, string userId);
         public IEnumerable<ChatDTO> GetRecentChats(string userId);
-        public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index);
-        public Task<MensagemSocketDTO> SaveMessageAsync(string toChatId, string message, string senderId);
+        public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index, string userId);
+        public Task<MensagemSocketDTO> SaveMessageAsync(SendMensagemDTO mensagem);
     }
 }
