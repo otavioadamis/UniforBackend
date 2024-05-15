@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
 using UniforBackend.API.Authorization;
 using UniforBackend.API.Exceptions;
 using UniforBackend.API.Extensions;
@@ -101,12 +102,14 @@ namespace UniforBackend.API
             {
                 opt.AddPolicy("reactApp", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("http://172.233.19.181")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
             });
+
+	    builder.Services.AddHealthChecks();
 
             var app = builder.Build();
 
@@ -130,6 +133,7 @@ namespace UniforBackend.API
 
         app.MapControllers();
         app.MapHub<ChatHubService>("/chatHub");
+	app.UseHealthChecks("/healthz");
 
         app.Run();
         

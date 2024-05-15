@@ -18,11 +18,11 @@ services:
       - ./UniforBackend.API/.env
     networks:
       - uniforbackendNet
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://uniforbackend_db:5432"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
+        # healthcheck:
+      # test: ["CMD", "curl --fail http://localhost:80/healthz || exit"]
+      # interval: 10s
+      # retries: 5
+      # start_period: 30s
   
   uniforbackend_db:
     image: postgres:15.4
