@@ -75,7 +75,7 @@ namespace UniforBackend.DAL.Repositories
                             ChatName = receiverUser.Nome,
                             Id = chat.Id,
                             LastMessage = chat.LatestMessage.Content,
-                            OtherUserId = receiverUser.Id
+                            OtherUserId = receiverUser.Id,
                         }).FirstOrDefault();
             return query;
         }

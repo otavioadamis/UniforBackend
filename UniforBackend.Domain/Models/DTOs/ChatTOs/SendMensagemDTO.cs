@@ -11,5 +11,6 @@ namespace UniforBackend.Domain.Models.DTOs.ChatTOs
         public string ToChatId { get; set; } = null!;
         public string FromUserId { get; set; } = null!;
         public string Content { get; set; } = null!;
+        public string ToUserId { get; set; } = null!;
     }
 }
