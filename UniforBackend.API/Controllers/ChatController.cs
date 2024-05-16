@@ -45,5 +45,13 @@ namespace UniforBackend.API.Controllers
             var allChatMessages = _chatService.GetMessagesFromChat(chatId, index, user.Id);
             return Ok(allChatMessages);
         }
+
+        [CustomAuthorize]
+        [HttpPatch("resetUnread")]
+        public async Task<ActionResult> ResetUnreadMessagesOfChat(string chatId, string otherUserId)
+        {
+            await _chatService.ResetUnreadMessagesOfChat(chatId, otherUserId);
+            return Ok();
+        }
     }
 }

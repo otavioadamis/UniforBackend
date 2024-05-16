@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNet.SignalR.Messaging;
+using System.Net;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
@@ -117,6 +118,25 @@ namespace UniforBackend.Service
                 SendedAt = newMessage.SendedAt,
             };
             return mensagemDTO;
+        }
+
+        public async Task ResetUnreadMessagesOfChat(string chatId, string otherUserId)
+        {
+            var otherUser = _userRepo.GetById(otherUserId);
+            var chat = _chatRepo.GetById(chatId);
+            
+            if (otherUser == null || chat == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Erro ao desconectar do chat.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
+
+            var otherUserChat = _chatRepo.GetUserChatFromUserIdAndChatId(otherUser.Id, chat.Id);
+            otherUserChat.UnreadMessages = 0;
+            _chatRepo.SaveChanges();
         }
     }
 }
