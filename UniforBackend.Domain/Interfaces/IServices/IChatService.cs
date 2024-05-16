@@ -9,6 +9,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
         public IEnumerable<ChatDTO> GetRecentChats(string userId);
         public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index, string userId);
         public Task<MensagemSocketDTO> SaveMessageAsync(SendMensagemDTO mensagem);
-        public Task ResetUnreadMessagesOfChat(string chatId, string otherUserId);
+        public Task ResetUnreadMessagesOfChat(string chatId, string currentUserId);
     }
 }

@@ -120,12 +120,12 @@ namespace UniforBackend.Service
             return mensagemDTO;
         }
 
-        public async Task ResetUnreadMessagesOfChat(string chatId, string otherUserId)
+        public async Task ResetUnreadMessagesOfChat(string chatId, string currentUserId)
         {
-            var otherUser = _userRepo.GetById(otherUserId);
+            var currentUser = _userRepo.GetById(currentUserId);
             var chat = _chatRepo.GetById(chatId);
             
-            if (otherUser == null || chat == null)
+            if (currentUser == null || chat == null)
             {
                 throw new CustomException(new ErrorResponse
                 {
@@ -134,8 +134,8 @@ namespace UniforBackend.Service
                 });
             }
 
-            var otherUserChat = _chatRepo.GetUserChatFromUserIdAndChatId(otherUser.Id, chat.Id);
-            otherUserChat.UnreadMessages = 0;
+            var currentUserChat = _chatRepo.GetUserChatFromUserIdAndChatId(currentUser.Id, chat.Id);
+            currentUserChat.UnreadMessages = 0;
             _chatRepo.SaveChanges();
         }
     }

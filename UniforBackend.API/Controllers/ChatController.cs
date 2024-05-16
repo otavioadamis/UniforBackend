@@ -48,9 +48,10 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpPatch("resetUnread")]
-        public async Task<ActionResult> ResetUnreadMessagesOfChat(string chatId, string otherUserId)
+        public async Task<ActionResult> ResetUnreadMessagesOfChat(string chatId)
         {
-            await _chatService.ResetUnreadMessagesOfChat(chatId, otherUserId);
+            var user = (User)HttpContext.Items["User"];
+            await _chatService.ResetUnreadMessagesOfChat(chatId, user.Id);
             return Ok();
         }
     }
