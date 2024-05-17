@@ -100,12 +100,18 @@ namespace UniforBackend.API
 
             builder.Services.AddCors(opt =>
             {
-                opt.AddPolicy("reactApp", builder =>
+                opt.AddPolicy("prod", builder =>
                 {
                     builder.WithOrigins("http://172.233.19.181")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
+                });
+                opt.AddPolicy("dev", builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
 
@@ -121,9 +127,10 @@ namespace UniforBackend.API
             app.UseSwaggerUI();
             app.ApplyMigrations();
             InitialDataHelper.InitializeDatabase(app.Services);
+            app.UseCors("dev");
         }
 
-        app.UseCors("reactApp");
+        app.UseCors("prod");
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
