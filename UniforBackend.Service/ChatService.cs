@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNet.SignalR.Messaging;
+using System.Net;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
@@ -64,16 +65,21 @@ namespace UniforBackend.Service
             return recentChats;
         }
 
-        public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index)
+        public PagedResult<MensagemDTO> GetMessagesFromChat(string chatId, int index, string userId)
         {
-            var allMessages = _mensagemRepo.GetMessagesFromChatId(chatId, index);
+            var allMessages = _mensagemRepo.GetMessagesFromChatId(chatId, index); 
+            
+            var currentUserChat = _chatRepo.GetUserChatFromUserIdAndChatId(userId, chatId);
+            currentUserChat.UnreadMessages = 0;
+            _chatRepo.SaveChanges();
+            
             return allMessages;
         }
 
-        public async Task<MensagemSocketDTO> SaveMessageAsync(string toChatId, string message, string senderId)
+        public async Task<MensagemSocketDTO> SaveMessageAsync(SendMensagemDTO mensagem)
         {
-            var senderUser = _userRepo.GetById(senderId);
-            var chat = _chatRepo.GetById(toChatId);
+            var senderUser = _userRepo.GetById(mensagem.FromUserId);
+            var chat = _chatRepo.GetById(mensagem.ToChatId);
 
             if (senderUser == null || chat == null)
             {
@@ -86,9 +92,9 @@ namespace UniforBackend.Service
 
             var newMessage = new Mensagem()
             {
-                ChatId = toChatId,
-                Content = message,
-                Sender = senderId,
+                ChatId = chat.Id,
+                Content = mensagem.Content,
+                Sender = senderUser.Id,
                 SendedAt = DateTime.UtcNow,
             };
 
@@ -97,6 +103,10 @@ namespace UniforBackend.Service
 
             chat.UpdatedAt = newMessage.SendedAt;
             chat.LatestMessageId = newMessage.Id;
+            
+            var otherUserChat = _chatRepo.GetUserChatFromUserIdAndChatId(mensagem.ToUserId, chat.Id);
+            otherUserChat.UnreadMessages++;
+            
             _chatRepo.SaveChanges();
 
             var mensagemDTO = new MensagemSocketDTO()
@@ -108,6 +118,25 @@ namespace UniforBackend.Service
                 SendedAt = newMessage.SendedAt,
             };
             return mensagemDTO;
+        }
+
+        public async Task ResetUnreadMessagesOfChat(string chatId, string currentUserId)
+        {
+            var currentUser = _userRepo.GetById(currentUserId);
+            var chat = _chatRepo.GetById(chatId);
+            
+            if (currentUser == null || chat == null)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Erro ao desconectar do chat.",
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                });
+            }
+
+            var currentUserChat = _chatRepo.GetUserChatFromUserIdAndChatId(currentUser.Id, chat.Id);
+            currentUserChat.UnreadMessages = 0;
+            _chatRepo.SaveChanges();
         }
     }
 }

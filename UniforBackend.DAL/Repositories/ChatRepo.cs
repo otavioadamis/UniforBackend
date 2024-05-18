@@ -59,6 +59,7 @@ namespace UniforBackend.DAL.Repositories
                                    LastMessage = chat.LatestMessage.Content,
                                    ChatName = otherUser.Nome,
                                    OtherUserId = otherUser.Id,
+                                   UnreadMessages = usersChat.UnreadMessages,
                                }).Distinct().ToList();
             return recentChats;
         }
@@ -76,8 +77,15 @@ namespace UniforBackend.DAL.Repositories
                             Id = chat.Id,
                             LastMessage = chat.LatestMessage.Content,
                             OtherUserId = receiverUser.Id,
+                            UnreadMessages = userchat1.UnreadMessages,
                         }).FirstOrDefault();
             return query;
+        }
+
+        public UserChat GetUserChatFromUserIdAndChatId(string userId, string chatId)
+        {
+            var otherUserchat = _dbContext.UsersChats.FirstOrDefault(u => u.UserId == userId && u.ChatId == chatId);
+            return otherUserchat;
         }
     }
 }
