@@ -12,7 +12,7 @@ using UniforBackend.DAL.Data;
 namespace UniforBackend.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240518184828_piloto-v1")]
+    [Migration("20240518191509_piloto-v1")]
     partial class pilotov1
     {
         /// <inheritdoc />
@@ -242,6 +242,9 @@ namespace UniforBackend.DAL.Migrations
                     b.Property<string>("ChatId")
                         .IsRequired()
                         .HasColumnType("varchar(36)");
+
+                    b.Property<int>("UnreadMessages")
+                        .HasColumnType("integer");
 
                     b.Property<string>("UserId")
                         .IsRequired()

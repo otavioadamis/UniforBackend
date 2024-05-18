@@ -183,7 +183,8 @@ namespace UniforBackend.DAL.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(36)", nullable: false, defaultValueSql: "uuid_generate_v4()"),
                     ChatId = table.Column<string>(type: "varchar(36)", nullable: false),
-                    UserId = table.Column<string>(type: "varchar(36)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(36)", nullable: false),
+                    UnreadMessages = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
