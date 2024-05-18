@@ -125,11 +125,11 @@ namespace UniforBackend.API
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.ApplyMigrations();
-            InitialDataHelper.InitializeDatabase(app.Services);
             app.UseCors("dev");
         }
 
+        app.ApplyMigrations();
+        InitialDataHelper.InitializeDatabase(app.Services);
         app.UseCors("prod");
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
@@ -140,7 +140,7 @@ namespace UniforBackend.API
 
         app.MapControllers();
         app.MapHub<ChatHubService>("/chatHub");
-	app.UseHealthChecks("/healthz");
+	    app.UseHealthChecks("/healthz");
 
         app.Run();
         
