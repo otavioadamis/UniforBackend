@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
 using UniforBackend.API.Authorization;
 using UniforBackend.API.Exceptions;
 using UniforBackend.API.Extensions;
@@ -99,14 +100,22 @@ namespace UniforBackend.API
 
             builder.Services.AddCors(opt =>
             {
-                opt.AddPolicy("reactApp", builder =>
+                opt.AddPolicy("prod", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("http://172.233.19.181")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
+                opt.AddPolicy("dev", builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
+
+	    builder.Services.AddHealthChecks();
 
             var app = builder.Build();
 
@@ -116,11 +125,12 @@ namespace UniforBackend.API
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.ApplyMigrations();
-            InitialDataHelper.InitializeDatabase(app.Services);
+            app.UseCors("dev");
         }
 
-        app.UseCors("reactApp");
+        app.ApplyMigrations();
+        InitialDataHelper.InitializeDatabase(app.Services);
+        app.UseCors("prod");
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
@@ -130,6 +140,7 @@ namespace UniforBackend.API
 
         app.MapControllers();
         app.MapHub<ChatHubService>("/chatHub");
+	    app.UseHealthChecks("/healthz");
 
         app.Run();
         

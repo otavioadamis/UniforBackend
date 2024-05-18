@@ -12,8 +12,8 @@ using UniforBackend.DAL.Data;
 namespace UniforBackend.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240430003235_foto-mais-ajustes")]
-    partial class fotomaisajustes
+    [Migration("20240518184828_piloto-v1")]
+    partial class pilotov1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,53 @@ namespace UniforBackend.DAL.Migrations
                     b.ToTable("Categorias");
                 });
 
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Chat", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(36)")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<string>("LatestMessageId")
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("varchar(60)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LatestMessageId")
+                        .IsUnique();
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Imagem", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(36)")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<string>("Extensao")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ItemId")
+                        .IsRequired()
+                        .HasColumnType("varchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Imagens");
+                });
+
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Item", b =>
                 {
                     b.Property<string>("Id")
@@ -47,14 +94,12 @@ namespace UniforBackend.DAL.Migrations
                         .HasColumnType("varchar(36)")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<bool>("AceitaTroca")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Descricao")
+                    b.Property<string>("AceitaTroca")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Foto")
+                    b.Property<string>("Descricao")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("IsVendido")
@@ -93,6 +138,35 @@ namespace UniforBackend.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Itens");
+                });
+
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Mensagem", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(36)")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<string>("ChatId")
+                        .IsRequired()
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("SendedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Sender")
+                        .IsRequired()
+                        .HasColumnType("varchar(60)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("Mensagens");
                 });
 
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.SubCategoria", b =>
@@ -158,6 +232,30 @@ namespace UniforBackend.DAL.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.UserChat", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(36)")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<string>("ChatId")
+                        .IsRequired()
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersChats");
+                });
+
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Venda", b =>
                 {
                     b.Property<string>("Id")
@@ -188,6 +286,26 @@ namespace UniforBackend.DAL.Migrations
                     b.ToTable("Vendas");
                 });
 
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Chat", b =>
+                {
+                    b.HasOne("UniforBackend.Domain.Models.Entities.Mensagem", "LatestMessage")
+                        .WithOne()
+                        .HasForeignKey("UniforBackend.Domain.Models.Entities.Chat", "LatestMessageId");
+
+                    b.Navigation("LatestMessage");
+                });
+
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Imagem", b =>
+                {
+                    b.HasOne("UniforBackend.Domain.Models.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+                });
+
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Item", b =>
                 {
                     b.HasOne("UniforBackend.Domain.Models.Entities.SubCategoria", "SubCategoria")
@@ -207,6 +325,17 @@ namespace UniforBackend.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Mensagem", b =>
+                {
+                    b.HasOne("UniforBackend.Domain.Models.Entities.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+                });
+
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.SubCategoria", b =>
                 {
                     b.HasOne("UniforBackend.Domain.Models.Entities.Categoria", "Categoria")
@@ -216,6 +345,25 @@ namespace UniforBackend.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Categoria");
+                });
+
+            modelBuilder.Entity("UniforBackend.Domain.Models.Entities.UserChat", b =>
+                {
+                    b.HasOne("UniforBackend.Domain.Models.Entities.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniforBackend.Domain.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UniforBackend.Domain.Models.Entities.Venda", b =>
