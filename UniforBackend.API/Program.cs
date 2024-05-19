@@ -111,8 +111,9 @@ namespace UniforBackend.API
                 {
                     builder.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+            });
             });
 
 	    builder.Services.AddHealthChecks();
@@ -122,15 +123,20 @@ namespace UniforBackend.API
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseCors("dev");
         }
+        
+        if (app.Environment.IsProduction())
+        {
+                app.UseCors("prod");
+        }
+
+        app.UseHttpsRedirection();
 
         app.ApplyMigrations();
         InitialDataHelper.InitializeDatabase(app.Services);
-        app.UseCors("prod");
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
