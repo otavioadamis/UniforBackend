@@ -2,6 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+RUN apt-get update \
+	&& apt-get install -y curl
 EXPOSE 80
 EXPOSE 443
 
@@ -25,3 +27,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "UniforBackend.API.dll"]
+HEALTHCHECK CMD curl --fail http://localhost:80/healthz || exit

@@ -12,5 +12,6 @@ namespace UniforBackend.Domain.Models.DTOs.ChatTOs
         public string ChatName { get; set; } = null!;
         public string OtherUserId { get; set; } = null!;
         public string LastMessage { get; set; } = null!;
+        public int UnreadMessages { get; set; }
     }
 }

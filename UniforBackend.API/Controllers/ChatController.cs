@@ -41,8 +41,18 @@ namespace UniforBackend.API.Controllers
         public ActionResult<PagedResult<MensagemDTO>> GetAllMessagesFromChat(string chatId, int index = 1)
         {
             if(index < 1) { index = 1; }
-            var allChatMessages = _chatService.GetMessagesFromChat(chatId, index);
+            var user = (User)HttpContext.Items["User"];
+            var allChatMessages = _chatService.GetMessagesFromChat(chatId, index, user.Id);
             return Ok(allChatMessages);
+        }
+
+        [CustomAuthorize]
+        [HttpPatch("resetUnread")]
+        public async Task<ActionResult> ResetUnreadMessagesOfChat(string chatId)
+        {
+            var user = (User)HttpContext.Items["User"];
+            await _chatService.ResetUnreadMessagesOfChat(chatId, user.Id);
+            return Ok();
         }
     }
 }

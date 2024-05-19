@@ -240,6 +240,9 @@ namespace UniforBackend.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(36)");
 
+                    b.Property<int>("UnreadMessages")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(36)");

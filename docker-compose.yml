@@ -18,11 +18,7 @@ services:
       - ./UniforBackend.API/.env
     networks:
       - uniforbackendNet
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://uniforbackend_db:5432"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
+    mem_limit: 1.5gb
   
   uniforbackend_db:
     image: postgres:15.4
@@ -43,6 +39,7 @@ services:
       interval: 10s
       retries: 5
       start_period: 30s
+    mem_limit: 1.5gb
 
 volumes:
   uniforbackend_data:

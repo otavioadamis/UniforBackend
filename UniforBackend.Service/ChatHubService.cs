@@ -17,19 +17,19 @@ namespace UniforBackend.Service
             await Groups.AddToGroupAsync(Context.ConnectionId, userId);
         }
 
-        public async Task JoinChat(string chatId)
+        public async Task JoinChat(string otherUserId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, otherUserId);
         }
 
-        public async Task LeaveChat(string chatId)
+        public async Task LeaveChat(string otherUserId)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, otherUserId);
         }
 
         public async Task SendMessageToChat(SendMensagemDTO mensagem)
         {
-            var mensagemSocketDTO = await _chatService.SaveMessageAsync(mensagem.ToChatId, mensagem.Content, mensagem.FromUserId);
+            var mensagemSocketDTO = await _chatService.SaveMessageAsync(mensagem);
             await Clients.Group(mensagem.ToUserId).SendAsync("ReceiveMessage", mensagemSocketDTO);
         }
     }

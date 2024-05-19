@@ -16,5 +16,6 @@ namespace UniforBackend.Domain.Interfaces.IRepositories
         public Chat GetById(string _id);
         public void Delete(string _id);
         public ChatDTO GetDTOByUsers(string senderUserId, string receiverId);
+        public UserChat GetUserChatFromUserIdAndChatId(string userId, string chatId);
     }
 }
