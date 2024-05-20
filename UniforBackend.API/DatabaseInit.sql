@@ -70,4 +70,4 @@ INSERT INTO "SubCategorias"(
 
 INSERT INTO "Users"(
 	"Id", "Nome", "Email", "Matricula", "Foto", "Password", "Tipo", "Contato", "CriadoEm")
-	VALUES ('Admin1', 'UsuarioAdminSQLscript', 'admin@admin.com', '123456789', '', '$2a$11$AFDxQBUYbazjRGIRW9yrQe4lIzfKoHWgd1OSWT9D6oBiQsC/Dhq36', 1, '123456789', CURRENT_TIMESTAMP);
+	VALUES ('Admin', 'Admin', 'bazaruniversitario@admin.com', '123456789', '', '$2a$11$aZCWkyOO/NA/48nMA2nwOu09ZBlDIxf3QRMqQWB1SA74ynX88PHIq', 1, '123456789', CURRENT_TIMESTAMP);

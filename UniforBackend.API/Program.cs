@@ -113,12 +113,12 @@ namespace UniforBackend.API
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
-            });
+                });
             });
 
 	    builder.Services.AddHealthChecks();
 
-            var app = builder.Build();
+        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -130,7 +130,7 @@ namespace UniforBackend.API
         
         if (app.Environment.IsProduction())
         {
-                app.UseCors("prod");
+            app.UseCors("prod");
         }
 
         app.UseHttpsRedirection();
