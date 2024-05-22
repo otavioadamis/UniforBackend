@@ -102,7 +102,7 @@ namespace UniforBackend.API
             {
                 opt.AddPolicy("prod", builder =>
                 {
-                    builder.WithOrigins("http://172.233.19.181")
+                    builder.WithOrigins("https://bazaruniversitario.com.br")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
