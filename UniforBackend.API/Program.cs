@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
 using UniforBackend.API.Authorization;
 using UniforBackend.API.Exceptions;
 using UniforBackend.API.Extensions;
@@ -47,6 +48,7 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IStorageService, StorageService>();
             builder.Services.AddScoped<IImagemService, ImagemService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
 
             // Adicionando repositorios e suas abstracoes
 
@@ -55,8 +57,12 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IVendaRepo, VendaRepo>();
             builder.Services.AddScoped<ICategoriaRepo, CategoriaRepo>();
             builder.Services.AddScoped<IImagemRepo, ImagemRepo>();
+            builder.Services.AddScoped<IChatRepo, ChatRepo>();
+            builder.Services.AddScoped<IMensagemRepo, MensagemRepo>();
 
-        builder.Services.AddControllers();
+            builder.Services.AddSignalR();
+
+            builder.Services.AddControllers();
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -92,26 +98,45 @@ namespace UniforBackend.API
                 });
             });
 
-            var app = builder.Build();
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("prod", builder =>
+                {
+                    builder.WithOrigins("https://bazaruniversitario.com.br")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+                opt.AddPolicy("dev", builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
+	    builder.Services.AddHealthChecks();
+
+        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.ApplyMigrations();
-            InitialDataHelper.InitializeDatabase(app.Services);
+            app.UseCors("dev");
+        }
+        
+        if (app.Environment.IsProduction())
+        {
+            app.UseCors("prod");
         }
 
-        app.UseCors(builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+        app.UseHttpsRedirection();
 
-        //Middlewares (Tratamento de excecoes e autorizacao com jwt)
+        app.ApplyMigrations();
+        InitialDataHelper.InitializeDatabase(app.Services);
 
         app.UseMiddleware<GlobalExceptionMiddleware>();
         app.UseMiddleware<JwtMiddleware>();
@@ -120,6 +145,8 @@ namespace UniforBackend.API
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<ChatHubService>("/chatHub");
+	    app.UseHealthChecks("/healthz");
 
         app.Run();
         

@@ -29,7 +29,7 @@ namespace UniforBackend.Domain.Models.DTOs.ItemTOs
             item.Preco = Preco;
             item.AceitaTroca = AceitaTroca;
             item.MostrarContato = MostrarContato;
+            item.isAprovado = false;
         }
-
     }
 }
