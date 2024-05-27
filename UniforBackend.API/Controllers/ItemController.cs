@@ -76,9 +76,9 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize]
         [HttpDelete("{itemId}")]
-        public IActionResult DeleteItem(string itemId) 
+        public async Task<IActionResult> DeleteItem(string itemId) 
         {
-            _itemService.DeleteItem(itemId);
+            await _itemService.DeleteItem(itemId);
             return Ok("Item deletado com sucesso!");
         }
     }

@@ -6,6 +6,7 @@ using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.DTOs.ItemTOs;
 using UniforBackend.Domain.Models.DTOs.PageTOs;
 using UniforBackend.Domain.Models.Entities;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UniforBackend.Service
 {
@@ -16,18 +17,21 @@ namespace UniforBackend.Service
         private readonly IUserRepo _userRepo;
         private readonly IStorageService _storageService;
         private readonly IImagemRepo _imagemRepo;
+        private readonly IImagemService _imagemService;
 
         public ItemService(IItemRepo itemRepository, 
-            ICategoriaRepo categoriaRepo, 
-            IUserRepo userRepo, 
-            IStorageService storageService, 
-            IImagemRepo imagemRepo)
+            ICategoriaRepo categoriaRepo,
+            IUserRepo userRepo,
+            IStorageService storageService,
+            IImagemRepo imagemRepo,
+            IImagemService imagemService)
         {
             _itemRepository = itemRepository;
             _categoriaRepo = categoriaRepo;
             _userRepo = userRepo;
             _storageService = storageService;
             _imagemRepo = imagemRepo;
+            _imagemService = imagemService;
         }
 
         public ItemComImagensDTO GetItemById(string itemId)
@@ -46,15 +50,8 @@ namespace UniforBackend.Service
 
         public async Task<ItemComImagensDTO> AddItem(PostItemDTO item, string userId)
         {
-            if (item.Foto.Count() > 5)
-            {
-                throw new CustomException(new ErrorResponse()
-                {
-                    Message = "Limite máximo de imagens ultrapassado, apenas 5 imagens!",
-                    StatusCode= (int)HttpStatusCode.BadRequest,
-                });
-            }
-
+            _imagemService.ValidarImagens(item.Foto);
+           
             var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
             if(subCategoria == null)
             {
@@ -64,7 +61,6 @@ namespace UniforBackend.Service
                     StatusCode = (int)HttpStatusCode.BadRequest,
                 });
             }
-            var vendedor = _userRepo.GetById(userId);
 
             var addedItem = new Item()
             {
@@ -175,8 +171,9 @@ namespace UniforBackend.Service
             _itemRepository.SaveChanges();
         }
 
-        public void DeleteItem(string itemId)
+        public async Task DeleteItem(string itemId)
         {
+            await _imagemService.DeleteAllImagesOfItem(itemId);
             _itemRepository.Delete(itemId);
             _itemRepository.SaveChanges();
         }
