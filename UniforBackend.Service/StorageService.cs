@@ -31,7 +31,6 @@ namespace UniforBackend.Service
                 AwsKey = configuration["AwsConfiguration:AWSAccessKey"],
                 AwsSecret = configuration["AwsConfiguration:AWSSecretKey"]
             };
-
         }
 
         public async Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt, int index)

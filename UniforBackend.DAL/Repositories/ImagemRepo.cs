@@ -38,7 +38,7 @@ namespace UniforBackend.DAL.Repositories
             };
         }
 
-        public IEnumerable<ImagemDTO> GetAllByItemId(string itemId) 
+        public List<ImagemDTO> GetAllByItemId(string itemId) 
         {
             var query = from imagem in _dbContext.Imagens
                         where imagem.ItemId == itemId
@@ -48,12 +48,12 @@ namespace UniforBackend.DAL.Repositories
                             URL = $"https://{_bucketName}.s3.amazonaws.com/{imagem.ItemId}_{imagem.Index}{imagem.Extensao}",
                             Index = imagem.Index,
                         };
-            return query;
+            return query.ToList();
         }
 
         public void Delete(string imageId)
         {
-            var imagem =  _dbContext.Imagens.FirstOrDefault(x => x.Id == imageId);
+            var imagem = _dbContext.Imagens.FirstOrDefault(x => x.Id == imageId);
             _dbContext.Imagens.Remove(imagem);
         }
     }

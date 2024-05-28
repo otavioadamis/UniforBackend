@@ -62,18 +62,8 @@ namespace UniforBackend.Service
             foreach(ImagemDTO imagem in allImages)
             {
                 string key = imagem.URL.Split("/").Last();
-                var response = await _storageService.DeleteFileAsync(key);
-                if (response.StatusCode != 204)
-                {
-                    throw new CustomException(new ErrorResponse
-                    {
-                        Message = "Erro ao deletar imagem do bucket.",
-                        StatusCode = (int)HttpStatusCode.BadRequest
-                    });
-                }
-                _imagemRepo.Delete(imagem.Id);
+                await _storageService.DeleteFileAsync(key);
             }
-            _imagemRepo.SaveChanges();
         }
 
         public void ValidarImagens(List<IFormFile> imagens)
