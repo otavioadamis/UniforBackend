@@ -18,7 +18,7 @@ namespace UniforBackend.API
 
         public static void Main(string[] args) { 
 
-        var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args);
 
             var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
             var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
