@@ -20,7 +20,7 @@ namespace UniforBackend.Service
             var emailSettings = _configuration.GetSection("EmailSettings");
 
             var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(_configuration.GetSection("EmailSettings:Email").Value);
+            email.From.Add(new MailboxAddress(emailSettings["Displayname"], emailSettings["Email"]));
             email.Subject = subject;
 
             using var smtp = new SmtpClient();
