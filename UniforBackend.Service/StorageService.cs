@@ -19,24 +19,25 @@ namespace UniforBackend.Service
 {
     public class StorageService : IStorageService
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _bucketName;
+        private readonly AwsCredentials _awsCredentials;
 
         public StorageService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _bucketName = configuration["AwsConfiguration:BucketName"];
+
+            _awsCredentials = new AwsCredentials()
+            {
+                AwsKey = configuration["AwsConfiguration:AWSAccessKey"],
+                AwsSecret = configuration["AwsConfiguration:AWSSecretKey"]
+            };
         }
 
         public async Task<S3ResponseDTO> UploadFileAsync(IFormFile image, string nome, string fileExt, int index)
         {
 
-            var awsCredentials = new AwsCredentials()
-            {
-                AwsKey = _configuration["AwsConfiguration:AWSAccessKey"],
-                AwsSecret = _configuration["AwsConfiguration:AWSSecretKey"]
-            };
-
             // Credenciais para acesso
-            var credentials = new BasicAWSCredentials(awsCredentials.AwsKey, awsCredentials.AwsSecret);
+            var credentials = new BasicAWSCredentials(_awsCredentials.AwsKey, _awsCredentials.AwsSecret);
 
             // Definindo a região do bucket
             var config = new AmazonS3Config()
@@ -51,7 +52,7 @@ namespace UniforBackend.Service
 
             S3Objeto s3obj = new S3Objeto()
             {
-                BucketName = "uniforbackend-test",
+                BucketName = _bucketName,
                 InputStream = memoryStream,
                 Name = $"{nome}_{index}{fileExt}"
             };
@@ -88,15 +89,9 @@ namespace UniforBackend.Service
 
         public async Task<S3ResponseDTO> DeleteFileAsync(string key)
         {
-            
-            var awsCredentials = new AwsCredentials()
-            {
-                AwsKey = _configuration["AwsConfiguration:AWSAccessKey"],
-                AwsSecret = _configuration["AwsConfiguration:AWSSecretKey"]
-            };
 
             // Credenciais para acesso
-            var credentials = new BasicAWSCredentials(awsCredentials.AwsKey, awsCredentials.AwsSecret);
+            var credentials = new BasicAWSCredentials(_awsCredentials.AwsKey, _awsCredentials.AwsSecret);
 
             // Definindo a região do bucket
             var config = new AmazonS3Config()
@@ -110,7 +105,7 @@ namespace UniforBackend.Service
             {
                 var deleteObjectRequest = new DeleteObjectRequest()
                 {
-                    BucketName = "uniforbackend-test",
+                    BucketName = _bucketName,
                     Key = key
                 };
 

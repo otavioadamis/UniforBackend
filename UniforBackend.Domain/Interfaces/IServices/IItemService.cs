@@ -15,6 +15,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
         public Task<ItemComImagensDTO> AddItem(PostItemDTO item, string userId);
         public ItemComImagensDTO UpdateItem(UpdateItemDTO newItem, string itemId);
         public void VendeItem(string itemId);
-        void DeleteItem(string itemId);
+        public Task DeleteItem(string itemId);
     }
 }
