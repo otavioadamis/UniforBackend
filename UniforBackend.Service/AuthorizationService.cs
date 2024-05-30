@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
 using UniforBackend.Domain.Models.Entities;
 
@@ -11,9 +12,11 @@ namespace UniforBackend.Service
     public class AuthorizationService : IAuthorizationService
     {
         private readonly IConfiguration _configuration;
-        public AuthorizationService(IConfiguration configuration)
+        private readonly IUserRepo _userRepository;
+        public AuthorizationService(IConfiguration configuration, IUserRepo userRepo)
         {
             _configuration = configuration;
+            _userRepository = userRepo;
         }
 
         public string CreateToken(User thisUser)
@@ -67,6 +70,18 @@ namespace UniforBackend.Service
                 // return null if validation fails
                 return null;
             }
+        }
+
+        public bool ValidarEmail(string userId, string codigoVerificacao)
+        {
+            var user = _userRepository.GetById(userId);
+            if (user != null && user.CodigoVerificacao == codigoVerificacao)
+            {
+                user.IsVerificado = true;
+                _userRepository.SaveChanges();
+                return true;
+            }
+            return false;
         }
     }
 }

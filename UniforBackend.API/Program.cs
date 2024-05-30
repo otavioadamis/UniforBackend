@@ -28,7 +28,7 @@ namespace UniforBackend.API
 
             //Configurando conexao do banco de dados
 
-            string connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");
+            string? connectionString = Environment.GetEnvironmentVariable("DatabaseSettings");
 
             if(connectionString == null)
             {
@@ -37,7 +37,7 @@ namespace UniforBackend.API
             }
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString));
 
             // Adicionando serviços e suas abstracoes
 
@@ -59,13 +59,14 @@ namespace UniforBackend.API
             builder.Services.AddScoped<IImagemRepo, ImagemRepo>();
             builder.Services.AddScoped<IChatRepo, ChatRepo>();
             builder.Services.AddScoped<IMensagemRepo, MensagemRepo>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddSignalR();
 
             builder.Services.AddControllers();
         
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
 
             // Configurando swagger para usar Token jwt de Auth
 
@@ -116,39 +117,39 @@ namespace UniforBackend.API
                 });
             });
 
-	    builder.Services.AddHealthChecks();
+	        builder.Services.AddHealthChecks();
 
-        var app = builder.Build();
+            var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            app.UseCors("dev");
-        }
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+                app.UseCors("dev");
+            }
         
-        if (app.Environment.IsProduction())
-        {
-            app.UseCors("prod");
-        }
+            if (app.Environment.IsProduction())
+            {
+                app.UseCors("prod");
+            }
 
-        app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-        app.ApplyMigrations();
-        InitialDataHelper.InitializeDatabase(app.Services);
+            app.ApplyMigrations();
+            InitialDataHelper.InitializeDatabase(app.Services);
 
-        app.UseMiddleware<GlobalExceptionMiddleware>();
-        app.UseMiddleware<JwtMiddleware>();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
 
-        app.UseAuthentication();
-        app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-        app.MapControllers();
-        app.MapHub<ChatHubService>("/chatHub");
-	    app.UseHealthChecks("/healthz");
+            app.MapControllers();
+            app.MapHub<ChatHubService>("/chatHub");
+	        app.UseHealthChecks("/healthz");
 
-        app.Run();
+            app.Run();
         
         }
     }

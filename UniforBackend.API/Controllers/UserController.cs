@@ -27,7 +27,7 @@ namespace UniforBackend.API.Controllers
 
         [HttpPost()]
         public ActionResult<LoginResponseModel> Signup(PostUserDTO user)
-        {
+        {    
             var addedUser = _userService.Signup(user);
             return Ok(addedUser);
         }

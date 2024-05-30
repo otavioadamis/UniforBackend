@@ -10,13 +10,15 @@ namespace UniforBackend.Service
     public class AdminService : IAdminService
     {
         private readonly IItemRepo _itemRepository;
+        private readonly IItemService _itemService;
 
-        public AdminService(IItemRepo itemRepository)
+        public AdminService(IItemRepo itemRepository, IItemService itemService)
         {
             _itemRepository = itemRepository;
+            _itemService = itemService;
         }
 
-        public void AvaliarItem(AvaliarItemDTO avaliacao)
+        public async Task AvaliarItem(AvaliarItemDTO avaliacao)
         {
             string itemId = avaliacao.Id;
             bool aprovado = avaliacao.Aprovado;
@@ -29,16 +31,14 @@ namespace UniforBackend.Service
                 }
                 else
                 {
-                    _itemRepository.Delete(itemId);
+                    await _itemService.DeleteItem(itemId);
                 }
             }
-            _itemRepository.SaveChanges();
         }
 
-        public void DeleteItem(string itemId)
+        public async Task DeleteItem(string itemId)
         {
-            _itemRepository.Delete(itemId);
-            _itemRepository.SaveChanges();
+            await _itemService.DeleteItem(itemId);
         }
 
         public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize)

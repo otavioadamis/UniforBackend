@@ -4,16 +4,8 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
-using UniforBackend.Domain.Models.DTOs.ImageTOs;
 using UniforBackend.Domain.Models.DTOs.S3TOs;
-using UniforBackend.Domain.Models.Entities;
 
 namespace UniforBackend.Service
 {

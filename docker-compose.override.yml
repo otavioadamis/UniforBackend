@@ -3,7 +3,7 @@ version: '3.4'
 services:
   uniforbackend.api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=${ambiente}
+      - ASPNETCORE_ENVIRONMENT=${ambiente:-Development}
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80"
