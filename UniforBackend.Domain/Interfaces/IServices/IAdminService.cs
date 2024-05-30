@@ -6,8 +6,8 @@ namespace UniforBackend.Domain.Interfaces.IServices
 {
     public interface IAdminService
     {
-        public void AvaliarItem(AvaliarItemDTO avaliacao);
-        public void DeleteItem(string itemId);
+        public Task AvaliarItem(AvaliarItemDTO avaliacao);
+        public Task DeleteItem(string itemId);
         public PagedResult<ItemReviewDTO> GetAllUnauthorized(int pagina, int pageSize);
     }
 }

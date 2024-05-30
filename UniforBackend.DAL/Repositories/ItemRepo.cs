@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using UniforBackend.DAL.Data;
 using UniforBackend.DAL.Helpers;
 using UniforBackend.Domain.Interfaces.IRepositories;
@@ -12,9 +13,11 @@ namespace UniforBackend.DAL.Repositories
     public class ItemRepo : IItemRepo
     {
         private readonly AppDbContext _dbContext;
-        public ItemRepo(AppDbContext appDbContext)
+        private readonly string _bucketName;
+        public ItemRepo(AppDbContext appDbContext, IConfiguration configuration)
         {
             _dbContext = appDbContext;
+            _bucketName = configuration["AwsConfiguration:BucketName"];
         }
 
         public void SaveChanges()
@@ -47,7 +50,7 @@ namespace UniforBackend.DAL.Repositories
                            join user in _dbContext.Users on item.UserId equals user.Id
                            join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                            join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
-                           let allImagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray()
+                           let allImagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao, _bucketName)).ToArray()
                            select new ItemComImagensDTO()
                            {
                                Id = item.Id,
@@ -72,13 +75,13 @@ namespace UniforBackend.DAL.Repositories
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = (from item in itemQuery
-                               where 
-                               item.UserId == userId 
-                               && item.isAprovado == true 
+                               where
+                               item.UserId == userId
+                               && item.isAprovado == true
                                && item.IsVendido == false
                                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                join imagens in _dbContext.Imagens.Where(img => img.Index == 1) on item.Id equals imagens.ItemId into imagem
-                               let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).FirstOrDefault()
+                               let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao, _bucketName)).FirstOrDefault()
                                select new ItemCardDTO()
                                {
                                    Id = item.Id,
@@ -104,6 +107,16 @@ namespace UniforBackend.DAL.Repositories
             return response;
         }
 
+        public int CountOfItensFromUserIdFromToday(string userId)
+        {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+            int count = (from item in _dbContext.Itens
+                         where item.UserId == userId && item.PostadoEm == today
+                         select item).Count();
+
+            return count;
+        }
+
         public UserItensDTO GetItensPendentesFromUserId(string userId)
         {
             IQueryable<Item> itemQuery = _dbContext.Itens;
@@ -114,7 +127,7 @@ namespace UniforBackend.DAL.Repositories
                                && item.isAprovado == false
                                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                join imagens in _dbContext.Imagens.Where(img => img.Index == 1) on item.Id equals imagens.ItemId into imagem
-                               let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).FirstOrDefault()
+                               let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao, _bucketName)).FirstOrDefault()
                                select new ItemCardDTO()
                                {
                                    Id = item.Id,
@@ -157,7 +170,7 @@ namespace UniforBackend.DAL.Repositories
                                join user in _dbContext.Users on item.UserId equals user.Id
                                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                join imagens in _dbContext.Imagens.Where(img => img.Index == 1) on item.Id equals imagens.ItemId into imagem
-                               let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).FirstOrDefault()
+                               let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao, _bucketName)).FirstOrDefault()
                                select new ItemDTO()
                                {
                                    Id = item.Id,
@@ -187,7 +200,7 @@ namespace UniforBackend.DAL.Repositories
                               join user in _dbContext.Users on item.UserId equals user.Id
                               join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                               join imagens in _dbContext.Imagens on item.Id equals imagens.ItemId into imagensgroup
-                              let allImagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).ToArray()
+                              let allImagens = imagensgroup.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao, _bucketName)).ToArray()
                               select new ItemReviewDTO()
                               {
                                   Id = item.Id,
@@ -222,7 +235,7 @@ namespace UniforBackend.DAL.Repositories
                                 where subcategory.Nome == name || category.Nome == name
                                 join user in _dbContext.Users on item.UserId equals user.Id
                                 join imagens in _dbContext.Imagens.Where(img => img.Index == 1) on item.Id equals imagens.ItemId into imagem
-                                let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao)).FirstOrDefault()
+                                let imagemDTO = imagem.Select(x => new ImagemDTO(x.Id, x.ItemId, x.Index, x.Extensao, _bucketName)).FirstOrDefault()
                                 select new ItemDTO()
                                 {
                                     Id = item.Id,

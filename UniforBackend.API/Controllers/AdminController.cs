@@ -21,17 +21,17 @@ namespace UniforBackend.API.Controllers
 
         [CustomAuthorize(Role.Admin)]
         [HttpPost("avaliar")]
-        public IActionResult AvaliarItem(AvaliarItemDTO avaliacao)
+        public async Task<IActionResult> AvaliarItem(AvaliarItemDTO avaliacao)
         {
-            _adminService.AvaliarItem(avaliacao);
+            await _adminService.AvaliarItem(avaliacao);
             return Ok();
         }
 
         [CustomAuthorize(Role.Admin)]
         [HttpDelete("delete/{itemId}")]
-        public IActionResult DeleteItem(string itemId)
+        public async Task<IActionResult> DeleteItem(string itemId)
         {
-            _adminService.DeleteItem(itemId);
+            await _adminService.DeleteItem(itemId);
             return Ok();
         }
 

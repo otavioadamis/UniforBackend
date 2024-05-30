@@ -1,4 +1,5 @@
-﻿using UniforBackend.DAL.Data;
+﻿using Microsoft.Extensions.Configuration;
+using UniforBackend.DAL.Data;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Models.DTOs.ImageTOs;
 using UniforBackend.Domain.Models.Entities;
@@ -8,9 +9,11 @@ namespace UniforBackend.DAL.Repositories
     public class ImagemRepo : IImagemRepo
     {
         private readonly AppDbContext _dbContext;
-        public ImagemRepo(AppDbContext appDbContext)
+        private readonly string _bucketName;
+        public ImagemRepo(AppDbContext appDbContext, IConfiguration configuration)
         {
             _dbContext = appDbContext;
+            _bucketName = configuration["AwsConfiguration:BucketName"];
         }
 
         public void SaveChanges()
@@ -30,27 +33,27 @@ namespace UniforBackend.DAL.Repositories
             return new ImagemDTO()
             {
                 Id = imagem.Id,
-                URL = $"https://uniforbackend-test.s3.amazonaws.com/{imagem.ItemId}_{imagem.Index}{imagem.Extensao}",
+                URL = $"https://{_bucketName}.s3.amazonaws.com/{imagem.ItemId}_{imagem.Index}{imagem.Extensao}",
                 Index = imagem.Index,
             };
         }
 
-        public IEnumerable<ImagemDTO> GetAllByItemId(string itemId) 
+        public List<ImagemDTO> GetAllByItemId(string itemId) 
         {
             var query = from imagem in _dbContext.Imagens
                         where imagem.ItemId == itemId
                         select new ImagemDTO()
                         {
                             Id = imagem.Id,
-                            URL = $"https://uniforbackend-test.s3.amazonaws.com/{imagem.ItemId}_{imagem.Index}{imagem.Extensao}",
+                            URL = $"https://{_bucketName}.s3.amazonaws.com/{imagem.ItemId}_{imagem.Index}{imagem.Extensao}",
                             Index = imagem.Index,
                         };
-            return query;
+            return query.ToList();
         }
 
         public void Delete(string imageId)
         {
-            var imagem =  _dbContext.Imagens.FirstOrDefault(x => x.Id == imageId);
+            var imagem = _dbContext.Imagens.FirstOrDefault(x => x.Id == imageId);
             _dbContext.Imagens.Remove(imagem);
         }
     }
