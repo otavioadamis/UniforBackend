@@ -275,7 +275,7 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # AppSettings files
-.env
+./UniforBackend.API/.env
 
 # vs file
 .vs
