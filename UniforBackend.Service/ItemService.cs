@@ -50,6 +50,16 @@ namespace UniforBackend.Service
 
         public async Task<ItemComImagensDTO> AddItem(PostItemDTO item, string userId)
         {
+            int quantityOfItensFromToday = _itemRepository.CountOfItensFromUserIdFromToday(userId);        
+            if (quantityOfItensFromToday == 5)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Quantidade maxima de anúncios diário atingida.",
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                }); 
+            }
+
             _imagemService.ValidarImagens(item.Foto);
            
             var subCategoria = _categoriaRepo.GetSubCategoriaByName(item.SubCategoria);
