@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mail;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
 using UniforBackend.Domain.Interfaces.IServices;
@@ -44,6 +45,16 @@ namespace UniforBackend.Service
 
         public LoginResponseModel Signup(PostUserDTO thisUser)
         {
+            var email = new MailAddress(thisUser.Email);
+            var host = email.Host;
+            if (host != "edu.unifor.br")
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Email inválido.",
+                    StatusCode = (int)HttpStatusCode.BadRequest
+                });
+            }
             var checkEmail = _userRepository.GetByEmail(thisUser.Email);
             if (checkEmail != null)
             {
