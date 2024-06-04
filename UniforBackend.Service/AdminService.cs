@@ -34,7 +34,6 @@ namespace UniforBackend.Service
                     await _itemService.DeleteItem(itemId);
                 }
             }
-            _itemRepository.SaveChanges();
         }
 
         public async Task DeleteItem(string itemId)
