@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Configuration;
+using System.Net;
 using System.Net.Mail;
 using UniforBackend.Domain.Exceptions;
 using UniforBackend.Domain.Interfaces.IRepositories;
@@ -13,11 +14,15 @@ namespace UniforBackend.Service
     {
         private readonly IUserRepo _userRepository;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public UserService(IUserRepo userRepository, IAuthorizationService authorizationService)
+        public UserService(IUserRepo userRepository, IAuthorizationService authorizationService, IEmailService emailService, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _authorizationService = authorizationService;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         public UserDTO GetUserById(string userId)
@@ -43,7 +48,7 @@ namespace UniforBackend.Service
             return response;
         }
 
-        public LoginResponseModel Signup(PostUserDTO thisUser)
+        public UserDTO Signup(PostUserDTO thisUser)
         {
             var email = new MailAddress(thisUser.Email);
             var host = email.Host;
@@ -67,31 +72,32 @@ namespace UniforBackend.Service
 
             thisUser.Password = BCrypt.Net.BCrypt.HashPassword(thisUser.Password);
 
+            string codigoVerificacao = Guid.NewGuid().ToString();
+
             var newUser = new User()
             {
-             Nome = thisUser.Nome,
-             Email = thisUser.Email,
-             Matricula = thisUser.Matricula,
-             Contato = thisUser.Contato,
-             Password = thisUser.Password,
-             Foto = thisUser.Foto,
+                Nome = thisUser.Nome,
+                Email = thisUser.Email,
+                Matricula = thisUser.Matricula,
+                Contato = thisUser.Contato,
+                Password = thisUser.Password,
+                Foto = thisUser.Foto,
+                CodigoVerificacao = codigoVerificacao,
             };
 
             _userRepository.Add(newUser);
             _userRepository.SaveChanges();
 
-            string token = _authorizationService.CreateToken(newUser);
+            string? URL = _configuration["EmailVerification:URL"];
+            string link = $"{URL}/{newUser.Id}/{codigoVerificacao}";
+            string body = $"<p>Bem vindo ao bazar universitário! Você pode verificar seu email clicando <a href=\"{link}\">aqui</a>.</p>";
 
+            _emailService.SendEmailAsync(newUser.Email, body, "Bazar Universitário - Verifique seu email.");
+    
             var userModel = new UserDTO();
             userModel = userModel.CreateModel(newUser);
 
-            var response = new LoginResponseModel
-            {
-                Token = token,
-                User = userModel
-            };
-
-            return response;
+            return userModel;
         }
 
         public LoginResponseModel Login(UserLoginDTO thisUser)
@@ -109,6 +115,15 @@ namespace UniforBackend.Service
                 {
                     Message = "Senha incorreta.",
                     StatusCode = (int)HttpStatusCode.BadRequest
+                });
+            }
+
+            if(user.IsVerificado == false)
+            {
+                throw new CustomException(new ErrorResponse
+                {
+                    Message = "Email ainda não confirmado!",
+                    StatusCode = (int)HttpStatusCode.Unauthorized
                 });
             }
 

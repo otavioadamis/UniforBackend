@@ -11,5 +11,6 @@ namespace UniforBackend.Domain.Interfaces.IServices
     {
         public string CreateToken(User thisUser);
         public string? ValidateJwtToken(string token);
+        public bool ValidarEmail(string userId, string codigoVerificacao);
     }
 }

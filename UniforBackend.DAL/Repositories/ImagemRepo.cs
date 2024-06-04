@@ -9,7 +9,7 @@ namespace UniforBackend.DAL.Repositories
     public class ImagemRepo : IImagemRepo
     {
         private readonly AppDbContext _dbContext;
-        private readonly string _bucketName;
+        private readonly string? _bucketName;
         public ImagemRepo(AppDbContext appDbContext, IConfiguration configuration)
         {
             _dbContext = appDbContext;
