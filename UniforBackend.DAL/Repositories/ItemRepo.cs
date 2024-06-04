@@ -75,9 +75,9 @@ namespace UniforBackend.DAL.Repositories
             IQueryable<Item> itemQuery = _dbContext.Itens;
 
             var queryResult = (from item in itemQuery
-                               where 
-                               item.UserId == userId 
-                               && item.isAprovado == true 
+                               where
+                               item.UserId == userId
+                               && item.isAprovado == true
                                && item.IsVendido == false
                                join subcategory in _dbContext.SubCategorias on item.SubCategoriaId equals subcategory.Id
                                join imagens in _dbContext.Imagens.Where(img => img.Index == 1) on item.Id equals imagens.ItemId into imagem
@@ -105,6 +105,16 @@ namespace UniforBackend.DAL.Repositories
                 Itens = queryResult,
             };
             return response;
+        }
+
+        public int CountOfItensFromUserIdFromToday(string userId)
+        {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+            int count = (from item in _dbContext.Itens
+                         where item.UserId == userId && item.PostadoEm == today
+                         select item).Count();
+
+            return count;
         }
 
         public UserItensDTO GetItensPendentesFromUserId(string userId)
