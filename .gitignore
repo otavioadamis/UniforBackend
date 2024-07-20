@@ -276,6 +276,7 @@ $RECYCLE.BIN/
 
 # AppSettings files
 UniforBackend.API/.env
+appsettings.*.json
 
 # vs file
 .vs
